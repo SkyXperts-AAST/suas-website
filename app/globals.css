@@ -10,6 +10,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* SkyXperts brand palette */
+  --color-navy: #0a1628;
+  --color-offwhite: #f5f5f7;
+  --color-accent: #e31c1c;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +28,27 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Subtle down-chevron nudge for the vehicles hero scroll hint. */
+@keyframes chevron-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+.animate-chevron {
+  animation: chevron-bounce 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-chevron {
+    animation: none;
+  }
 }

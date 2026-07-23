@@ -3,6 +3,9 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   output: "export",
+  images: {
+    unoptimized: true,
+  },
   turbopack: {
     // Prevent Next from picking ~/package-lock.json as the workspace root
     root: path.join(__dirname),

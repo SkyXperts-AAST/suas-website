@@ -34,3 +34,13 @@ export function getSubTeam(slug: string): SubTeam | undefined {
 export function isSubTeamSlug(slug: string): slug is SubTeamSlug {
   return SUB_TEAMS.some((team) => team.slug === slug);
 }
+
+export function getSubTeamIndex(slug: string): number {
+  const index = SUB_TEAMS.findIndex((team) => team.slug === slug);
+  return index >= 0 ? index : 0;
+}
+
+/** Y-axis pose for the hero drone, stepped 90deg per sub-team tab. */
+export function getSubTeamYaw(slug: string): number {
+  return getSubTeamIndex(slug) * (Math.PI / 2);
+}

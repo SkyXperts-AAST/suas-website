@@ -1,20 +1,36 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ContactShadows, Environment, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import { getSubTeamYaw, isSubTeamSlug } from "@/lib/build-log/teams";
+import { setupPropellerSpinners, spinPropellerPivot } from "@/lib/vehicle/findPropellerPivots";
 
 const MODEL_URL = "/models/skyxperts-strom-optimized.glb";
 const DRACO_DECODER_PATH = "/draco/";
 const MODEL_YAW = Math.PI;
 const MODEL_SCALE = 3;
 const INTRO_DURATION = 2.4;
+const PROPELLER_SPEED = 22;
+const TEAM_YAW_SMOOTH = 1.8;
+const TEAM_SWAY_Y = 0.06;
 
 useGLTF.preload(MODEL_URL, DRACO_DECODER_PATH);
 
+function getActiveTeamSlug(pathname: string): string {
+  const slug = pathname.split("/").pop() ?? "";
+  return isSubTeamSlug(slug) ? slug : "computer-vision";
+}
+
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
+}
+
+function lerpAngle(start: number, end: number, t: number): number {
+  const delta = THREE.MathUtils.euclideanModulo(end - start + Math.PI, Math.PI * 2) - Math.PI;
+  return start + delta * t;
 }
 
 function CinematicCamera({ reducedMotion }: { reducedMotion: boolean }) {
@@ -54,25 +70,40 @@ function CinematicCamera({ reducedMotion }: { reducedMotion: boolean }) {
 }
 
 function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
+  const pathname = usePathname();
+  const targetTeamYaw = useMemo(
+    () => getSubTeamYaw(getActiveTeamSlug(pathname)),
+    [pathname],
+  );
   const { scene } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
   const rigRef = useRef<THREE.Group>(null);
   const introProgress = useRef(0);
+  const currentTeamYaw = useRef(targetTeamYaw);
   const shadowRef = useRef<THREE.Group>(null);
 
-  const { model, shadowScale, groundY } = useMemo(() => {
+  useEffect(() => {
+    if (reducedMotion) {
+      currentTeamYaw.current = targetTeamYaw;
+    }
+  }, [reducedMotion, targetTeamYaw]);
+
+  const { model, shadowScale, groundY, propellerSpinners } = useMemo(() => {
     const clone = scene.clone(true);
     clone.updateMatrixWorld(true);
 
     const bounds = new THREE.Box3().setFromObject(clone);
     const center = bounds.getCenter(new THREE.Vector3());
     clone.position.sub(center);
+    clone.updateMatrixWorld(true);
 
     const size = bounds.getSize(new THREE.Vector3());
+    const spinners = setupPropellerSpinners(clone);
 
     return {
       model: clone,
       shadowScale: Math.max(size.x, size.z) * MODEL_SCALE * 1.15,
       groundY: (-size.y * MODEL_SCALE) / 2 - 0.02,
+      propellerSpinners: spinners,
     };
   }, [scene]);
 
@@ -82,11 +113,18 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
     }
 
     if (reducedMotion) {
-      rigRef.current.rotation.set(0, MODEL_YAW, 0);
+      currentTeamYaw.current = targetTeamYaw;
+      rigRef.current.rotation.set(0, MODEL_YAW + targetTeamYaw, 0);
       rigRef.current.position.set(0, 0, 0);
       rigRef.current.scale.setScalar(MODEL_SCALE);
       return;
     }
+
+    currentTeamYaw.current = lerpAngle(
+      currentTeamYaw.current,
+      targetTeamYaw,
+      1 - Math.exp(-delta / TEAM_YAW_SMOOTH),
+    );
 
     introProgress.current = Math.min(
       1,
@@ -97,7 +135,7 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
 
     rigRef.current.rotation.set(
       Math.sin(t * 0.42 + 0.4) * 0.035 * intro,
-      MODEL_YAW + Math.sin(t * 0.28) * 0.22 * intro,
+      MODEL_YAW + currentTeamYaw.current + Math.sin(t * 0.28) * TEAM_SWAY_Y * intro,
       Math.cos(t * 0.36 + 0.2) * 0.022 * intro,
     );
 
@@ -112,6 +150,10 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
 
     if (shadowRef.current) {
       shadowRef.current.position.y = groundY + rigRef.current.position.y * 0.35;
+    }
+
+    for (const { pivot, direction } of propellerSpinners) {
+      spinPropellerPivot(pivot, direction, PROPELLER_SPEED * intro, delta);
     }
   });
 

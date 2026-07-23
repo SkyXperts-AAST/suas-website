@@ -34,7 +34,7 @@ export default function TeamHeader({ team, entryCount }: TeamHeaderProps) {
             >
               {theme.label}
             </p>
-            <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
+            <h2 className="mt-2 text-3xl leading-[1.02] text-white md:text-4xl">
               {team.name}
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-7 text-white/80">

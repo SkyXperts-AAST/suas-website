@@ -16,10 +16,10 @@ export default function HeroOverlay({ dimmed = false }: { dimmed?: boolean }) {
     >
       {/* Bottom-left hero content */}
       <div className="absolute bottom-14 left-6 max-w-md sm:left-12">
-        <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#E31C1C]">
+        <p className="font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
           SUAS · USA
         </p>
-        <h1 className="mt-3 text-6xl font-bold leading-none tracking-tight text-[#F5F5F7] sm:text-7xl">
+        <h1 className="mt-3 text-6xl leading-[0.92] tracking-tight text-[#F5F5F7] sm:text-7xl">
           Strom
         </h1>
         <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#F5F5F7]/70">

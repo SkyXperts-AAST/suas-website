@@ -216,7 +216,7 @@ export default function BuildLogTimeline({
 
                   {isLatest ? (
                     <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-                      <h3 className="max-w-3xl text-2xl font-semibold leading-tight text-offwhite md:text-3xl">
+                      <h3 className="max-w-3xl text-2xl leading-[1.05] text-offwhite md:text-3xl">
                         {entry.title}
                       </h3>
                       <span className="text-sm font-semibold uppercase tracking-[0.18em] text-offwhite/40">
@@ -231,7 +231,7 @@ export default function BuildLogTimeline({
                       className="mt-4 flex w-full items-start justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
                     >
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-xl font-semibold leading-tight text-offwhite md:text-2xl">
+                        <h3 className="text-xl leading-[1.05] text-offwhite md:text-2xl">
                           {entry.title}
                         </h3>
                         {!isExpanded && (

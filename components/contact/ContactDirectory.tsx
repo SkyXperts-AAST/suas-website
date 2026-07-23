@@ -27,7 +27,7 @@ export default function ContactDirectory() {
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-offwhite/50">
           Direct contact
         </p>
-        <h2 className="mt-2 text-2xl font-semibold text-offwhite md:text-3xl">
+        <h2 className="mt-2 text-2xl leading-[1.05] text-offwhite md:text-3xl">
           Reach the team directly
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-offwhite/70 md:text-base">

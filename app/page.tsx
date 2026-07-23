@@ -16,10 +16,10 @@ export default function Home() {
           className="h-16 w-auto max-w-[min(90vw,36rem)] object-contain sm:h-20 md:h-24"
           priority
         />
-        <p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+        <p className="font-display mt-8 text-xs font-bold uppercase tracking-[0.14em] text-accent">
           SUAS · USA
         </p>
-        <h1 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-offwhite md:text-5xl">
+        <h1 className="mt-4 max-w-2xl text-3xl leading-[1.02] text-offwhite md:text-5xl">
           Engineering autonomous flight,
           <span className="block text-offwhite/85">one subsystem at a time.</span>
         </h1>

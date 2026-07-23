@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Optional: drop Header-Regular.otf in public/fonts/ to use Header Sans Serif. */
+@font-face {
+  font-family: "Header Sans Serif";
+  src: url("/fonts/Header-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
 :root {
   --background: #0a1628;
   --foreground: #f5f5f7;
@@ -8,8 +17,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Header Sans Serif", var(--font-header-sans), var(--font-plus-jakarta),
+    ui-sans-serif, system-ui, sans-serif;
 
   /* SkyXperts brand palette */
   --color-navy: #0a1628;
@@ -20,8 +31,17 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 html {

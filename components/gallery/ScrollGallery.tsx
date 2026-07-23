@@ -122,7 +122,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
         <div className="relative z-10 flex h-full min-w-0 flex-col justify-between px-6 py-8 md:px-10 md:py-10">
           <div>
             <PageBadge label="Gallery" />
-            <h1 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:text-5xl">
+            <h1 className="mt-5 max-w-3xl text-3xl leading-[1.02] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:text-5xl">
               Moments from the
               <span className="block text-offwhite/85">build and the field.</span>
             </h1>
@@ -141,7 +141,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
                   {activeItem.category}
                 </p>
               ) : null}
-              <h2 className="mt-2 text-2xl font-semibold leading-tight text-offwhite md:text-3xl">
+              <h2 className="mt-2 text-2xl leading-[1.05] text-offwhite md:text-3xl">
                 {activeItem.title}
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-7 text-offwhite/80 md:text-base">

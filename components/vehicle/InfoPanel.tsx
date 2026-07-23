@@ -23,7 +23,7 @@ export default function InfoPanel({ selectedGroup, onClose }: InfoPanelProps) {
           >
             Close ✕
           </button>
-          <h2 className="text-2xl font-semibold text-[#E31C1C]">
+          <h2 className="text-2xl leading-[1.05] text-[#E31C1C]">
             {subsystemLabel(selectedGroup.subsystem)}
           </h2>
           {selectedGroup.armIndex !== undefined && (

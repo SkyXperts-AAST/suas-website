@@ -29,7 +29,7 @@ export function PageShell({ children, className = "" }: PageShellProps) {
 
 export function PageBadge({ label }: { label: string }) {
   return (
-    <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-[#0a1628]/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-accent backdrop-blur-sm">
+    <p className="font-display inline-flex items-center gap-2 rounded-full border border-accent/30 bg-[#0a1628]/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
       <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
       {label}
     </p>
@@ -55,7 +55,7 @@ export function PageHeroContent({
     <>
       <PageBadge label={label} />
       <h1
-        className={`mt-5 max-w-3xl text-4xl font-semibold leading-tight md:text-6xl ${titleClassName}`.trim()}
+        className={`mt-5 max-w-3xl text-4xl leading-[1.02] md:text-6xl ${titleClassName}`.trim()}
       >
         {title}
       </h1>

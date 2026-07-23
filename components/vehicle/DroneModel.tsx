@@ -53,18 +53,17 @@ export default function DroneModel({
   const { scene } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
   const readyRef = useRef(false);
 
-  // Tag every mesh with its subsystem (and arm index for the arm-mounted
-  // subsystems), and group them for lookup. Pure derivation from `scene` —
-  // mutating its mesh userData here is tagging metadata on a foreign
-  // (non-React) object graph, not React state.
-  const { groups, armCenters, overallBounds } = useMemo(() => {
-    scene.rotation.set(0, MODEL_YAW, 0);
-    scene.updateMatrixWorld(true);
+  // Clone before any transforms or tagging so the shared useGLTF cache stays
+  // pristine for other pages (e.g. build-log propeller pivots).
+  const { model, groups, armCenters, overallBounds } = useMemo(() => {
+    const model = scene.clone(true);
+    model.rotation.set(0, MODEL_YAW, 0);
+    model.updateMatrixWorld(true);
 
     const groups = new Map<string, TaggedGroup>();
     const armMeshes: THREE.Mesh[] = [];
 
-    scene.traverse((obj) => {
+    model.traverse((obj) => {
       if (!(obj instanceof THREE.Mesh)) return;
       // Resolve the subsystem from the owning GLTF node, not the leaf mesh name.
       // The optimized GLB deduplicates geometry, so a multi-primitive part's
@@ -105,9 +104,9 @@ export default function DroneModel({
       for (const mesh of group.meshes) group.bounds.expandByObject(mesh);
     }
 
-    const overallBounds = new THREE.Box3().setFromObject(scene);
+    const overallBounds = new THREE.Box3().setFromObject(model);
 
-    return { groups, armCenters, overallBounds };
+    return { model, groups, armCenters, overallBounds };
   }, [scene]);
 
   // One-time side effects once tagging/clustering has run: log the arm
@@ -201,7 +200,7 @@ export default function DroneModel({
 
   return (
     <primitive
-      object={scene}
+      object={model}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
       onClick={handleClick}

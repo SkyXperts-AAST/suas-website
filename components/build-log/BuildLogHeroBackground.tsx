@@ -89,6 +89,9 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
 
   const { model, shadowScale, groundY, propellerSpinners } = useMemo(() => {
     const clone = scene.clone(true);
+    clone.rotation.set(0, 0, 0);
+    clone.position.set(0, 0, 0);
+    clone.scale.setScalar(1);
     clone.updateMatrixWorld(true);
 
     const bounds = new THREE.Box3().setFromObject(clone);

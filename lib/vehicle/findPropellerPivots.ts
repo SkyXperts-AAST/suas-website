@@ -29,8 +29,6 @@ const PROPELLER_MESH_NAMES = new Set(
   ].map(normalizeMeshName),
 );
 
-// Quadcopter motor shafts are vertical on this airframe (model Y axis).
-const MOTOR_SHAFT_AXIS = new THREE.Vector3(0, 1, 0);
 
 function normalizeMeshName(name: string): string {
   return name.replace(/[[\].:/]/g, "").replace(/_\d+$/, "");
@@ -141,5 +139,6 @@ export function spinPropellerPivot(
   speed: number,
   delta: number,
 ) {
-  pivot.rotateOnAxis(MOTOR_SHAFT_AXIS, direction * speed * delta);
+  // Spin around the pivot's local Y axis (vertical motor shaft in model space).
+  pivot.rotation.y += direction * speed * delta;
 }

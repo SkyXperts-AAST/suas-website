@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local agent / planning tooling
+/.claude/
+/.planning/
+
+# source CAD models — not served at runtime (only public/models/ is loaded);
+# kept out of git history to avoid bloat. models/subsystem-map.json is tracked.
+/models/*.glb

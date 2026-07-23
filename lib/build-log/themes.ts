@@ -15,6 +15,59 @@ export type TeamTheme = {
   date: string;
 };
 
+export type HeroSceneTheme = {
+  radialGlow: string;
+  ambientLight: string;
+  keyLight: string;
+  fillLight: string;
+  rimLight: string;
+  hemisphereTop: string;
+  hemisphereBottom: string;
+};
+
+export const HERO_SCENE_THEMES: Record<SubTeamSlug, HeroSceneTheme> = {
+  "computer-vision": {
+    radialGlow:
+      "radial-gradient(circle at 50% 38%, rgba(56,189,248,0.24), transparent 54%)",
+    ambientLight: "#dbeafe",
+    keyLight: "#bae6fd",
+    fillLight: "#7dd3fc",
+    rimLight: "#38bdf8",
+    hemisphereTop: "#e0f2fe",
+    hemisphereBottom: "#0f172a",
+  },
+  control: {
+    radialGlow:
+      "radial-gradient(circle at 50% 38%, rgba(167,139,250,0.24), transparent 54%)",
+    ambientLight: "#ede9fe",
+    keyLight: "#ddd6fe",
+    fillLight: "#c4b5fd",
+    rimLight: "#a78bfa",
+    hemisphereTop: "#f5f3ff",
+    hemisphereBottom: "#1e1033",
+  },
+  electrical: {
+    radialGlow:
+      "radial-gradient(circle at 50% 38%, rgba(251,191,36,0.22), transparent 54%)",
+    ambientLight: "#fef3c7",
+    keyLight: "#fde68a",
+    fillLight: "#fcd34d",
+    rimLight: "#f59e0b",
+    hemisphereTop: "#fffbeb",
+    hemisphereBottom: "#1c1408",
+  },
+  mechanical: {
+    radialGlow:
+      "radial-gradient(circle at 50% 38%, rgba(251,113,133,0.22), transparent 54%)",
+    ambientLight: "#ffe4e6",
+    keyLight: "#fecdd3",
+    fillLight: "#fda4af",
+    rimLight: "#fb7185",
+    hemisphereTop: "#fff1f2",
+    hemisphereBottom: "#1a0a10",
+  },
+};
+
 export const TEAM_THEMES: Record<SubTeamSlug, TeamTheme> = {
   "computer-vision": {
     label: "Perception",
@@ -76,4 +129,8 @@ export const TEAM_THEMES: Record<SubTeamSlug, TeamTheme> = {
 
 export function getTeamTheme(slug: SubTeamSlug): TeamTheme {
   return TEAM_THEMES[slug];
+}
+
+export function getHeroSceneTheme(slug: SubTeamSlug): HeroSceneTheme {
+  return HERO_SCENE_THEMES[slug];
 }

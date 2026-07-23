@@ -23,7 +23,7 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="relative z-50 bg-navy">
+    <header className="sticky top-0 z-50 bg-navy">
       <nav className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-6">
         {/* Brand — links home */}
         <Link

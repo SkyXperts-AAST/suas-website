@@ -55,6 +55,26 @@ body {
   .build-log-dot {
     animation: none;
   }
+
+  .gallery-caption-in {
+    animation: none;
+  }
+}
+
+@keyframes gallery-caption-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gallery-caption-in {
+  animation: gallery-caption-in 0.5s ease-out;
 }
 
 @keyframes build-log-pulse {

@@ -9,9 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function GalleryPage() {
-  return (
-    <div className="bg-navy text-offwhite">
-      <ScrollGallery items={GALLERY_ITEMS} />
-    </div>
-  );
+  return <ScrollGallery items={GALLERY_ITEMS} />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
@@ -21,22 +21,43 @@ function isActive(pathname: string, href: string) {
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 bg-navy">
-      <nav className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-6">
-        {/* Brand — links home */}
+    <header
+      className={`nav-glass sticky top-0 z-50 overflow-x-clip border-b transition-[background-color,box-shadow,border-color] duration-300 ${
+        scrolled ? "nav-glass-scrolled" : ""
+      }`}
+    >
+      <nav className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-5 sm:px-6">
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+          className="flex h-10 w-[5.25rem] shrink-0 items-center rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-11 sm:w-[5.75rem]"
           aria-label="SkyXperts home"
         >
-          <Logo />
+          <Logo
+            variant="small"
+            className="size-full object-contain object-left"
+            priority
+          />
         </Link>
 
-        {/* Desktop links */}
-        <ul className="hidden items-center gap-7 md:flex lg:gap-9">
+        <ul className="hidden items-center gap-1 md:flex">
           {LINKS.map((link) => {
             const active = isActive(pathname, link.href);
             return (
@@ -44,10 +65,10 @@ export default function Nav() {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative text-[0.8125rem] font-semibold uppercase tracking-[0.12em] transition-colors after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:rounded-full after:bg-accent after:transition-all after:duration-300 focus:outline-none focus-visible:text-accent ${
+                  className={`rounded-full px-3.5 py-2 text-[0.6875rem] font-bold uppercase tracking-[0.14em] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
                     active
-                      ? "text-accent after:w-full"
-                      : "text-offwhite/80 after:w-0 hover:text-offwhite hover:after:w-full"
+                      ? "border border-accent/35 bg-white/12 text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-sm"
+                      : "border border-transparent text-offwhite/80 hover:border-white/14 hover:bg-white/8 hover:text-offwhite"
                   }`}
                 >
                   {link.label}
@@ -57,18 +78,17 @@ export default function Nav() {
           })}
         </ul>
 
-        {/* Mobile hamburger */}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-offwhite transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/14 bg-white/8 text-offwhite transition-all hover:border-white/22 hover:bg-white/12 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 md:hidden"
         >
           <svg
-            width="24"
-            height="24"
+            width="22"
+            height="22"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -86,35 +106,42 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Mobile menu — overlays content so it never affects layout height */}
-      {open && (
-        <div
-          id="mobile-menu"
-          className="absolute inset-x-0 top-full border-t border-white/10 bg-navy shadow-lg md:hidden"
-        >
-          <ul className="flex flex-col px-6 py-2">
-            {LINKS.map((link) => {
-              const active = isActive(pathname, link.href);
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={active ? "page" : undefined}
-                    className={`block border-b border-white/5 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition-colors last:border-b-0 ${
-                      active
-                        ? "text-accent"
-                        : "text-offwhite/80 hover:text-accent"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+      {open ? (
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            className="fixed inset-0 top-[72px] z-40 bg-[#05071e]/45 backdrop-blur-sm md:hidden"
+            onClick={() => setOpen(false)}
+          />
+          <div
+            id="mobile-menu"
+            className="nav-glass absolute inset-x-3 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-2xl border shadow-2xl shadow-black/35 md:hidden"
+          >
+            <ul className="flex flex-col p-2">
+              {LINKS.map((link) => {
+                const active = isActive(pathname, link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className={`block rounded-xl border px-4 py-3 text-sm font-bold uppercase tracking-[0.14em] transition-colors ${
+                        active
+                          ? "border-accent/35 bg-white/12 text-accent"
+                          : "border-transparent text-offwhite/80 hover:border-white/14 hover:bg-white/8 hover:text-offwhite"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </>
+      ) : null}
     </header>
   );
 }

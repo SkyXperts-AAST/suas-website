@@ -17,6 +17,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SkyXperts",
   description: "SkyXperts SUAS team website",
+  icons: {
+    icon: "/small logo.png",
+    apple: "/small logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -29,9 +33,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col bg-navy text-offwhite">
         <Nav />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 overflow-x-clip">{children}</main>
         <Footer />
       </body>
     </html>

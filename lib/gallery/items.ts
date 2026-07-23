@@ -1,6 +1,6 @@
 import type { GalleryItem } from "./types";
 
-// Drop image files in public/gallery/ — use .jpg or .png (match the path for each entry).
+// Only list photos that exist in public/gallery/.
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: "flight-test",
@@ -10,33 +10,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     image: "/gallery/flight-test.jpg",
     imageAlt: "Quadcopter hovering during an outdoor flight test",
     category: "Field test",
-  },
-  {
-    id: "workshop",
-    title: "Late-night integration",
-    description:
-      "Mechanical and electrical sub-teams aligning payload mounts before the next test window.",
-    image: "/gallery/workshop.jpg",
-    imageAlt: "Engineers working on drone hardware in a workshop",
-    category: "Build",
-  },
-  {
-    id: "payload",
-    title: "Payload checkout",
-    description:
-      "Running sensor calibration and verifying data links before mission simulation runs.",
-    image: "/gallery/payload.jpg",
-    imageAlt: "Camera and sensor payload mounted on a drone frame",
-    category: "Systems",
-  },
-  {
-    id: "ground-station",
-    title: "Ground control setup",
-    description:
-      "Telemetry, video feed, and mission planning tools staged for live operator oversight.",
-    image: "/gallery/ground-station.jpg",
-    imageAlt: "Operator workstation with monitors displaying flight data",
-    category: "Operations",
   },
   {
     id: "field-day",
@@ -57,21 +30,12 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     category: "Team",
   },
   {
-    id: "detail",
-    title: "Precision assembly",
+    id: "field-capture",
+    title: "Field operations",
     description:
-      "Fine-tuning motor mounts and prop balance to keep vibration out of the vision pipeline.",
-    image: "/gallery/detail.jpg",
-    imageAlt: "Close-up of drone motor and propeller assembly",
-    category: "Mechanical",
-  },
-  {
-    id: "competition",
-    title: "Competition ready",
-    description:
-      "Final systems check and packed airframes before heading to the SUAS competition field.",
-    image: "/gallery/competition.jpg",
-    imageAlt: "Technology and aviation themed competition preparation scene",
-    category: "Competition",
+      "Live capture from a recent field session — checking systems behavior between mission runs.",
+    image: "/gallery/vlcsnap-2026-06-28-17h30m02s086.png",
+    imageAlt: "Field operations capture from a recent SkyXperts test session",
+    category: "Operations",
   },
 ];

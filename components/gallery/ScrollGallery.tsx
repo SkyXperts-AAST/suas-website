@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { PageBadge } from "@/components/layout/PageShell";
 import type { GalleryItem } from "@/lib/gallery/types";
 
 type ScrollGalleryProps = {
@@ -36,7 +37,8 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     }
 
     const rect = container.getBoundingClientRect();
-    const scrollStep = window.innerHeight * 0.92;
+    const viewport = window.innerHeight - 72;
+    const scrollStep = Math.max(viewport * 0.92, 1);
     const scrolled = Math.max(0, -rect.top);
     const nextIndex = clamp(
       Math.floor(scrolled / scrollStep),
@@ -60,9 +62,11 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
 
   if (items.length === 0) {
     return (
-      <p className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-offwhite/70">
-        Gallery photos coming soon.
-      </p>
+      <div className="relative bg-navy px-6 py-20 text-offwhite">
+        <p className="mx-auto max-w-lg rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-offwhite/70">
+          Gallery photos coming soon.
+        </p>
+      </div>
     );
   }
 
@@ -72,15 +76,23 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
   return (
     <div
       ref={containerRef}
-      className="relative bg-navy"
+      className="relative overflow-x-clip bg-navy text-offwhite"
       style={{ height: scrollHeight }}
     >
-      <div className="sticky top-[72px] z-0 h-[calc(100vh-72px)] overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.16),transparent_60%)]"
-        />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
+      />
 
+      <div className="sticky top-[72px] z-10 h-[calc(100vh-72px)] overflow-hidden">
         {items.map((item, index) => {
           const isActive = index === activeIndex;
 
@@ -107,22 +119,19 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
           );
         })}
 
-        <div className="relative z-10 flex h-full flex-col justify-between px-6 py-8 md:px-10 md:py-10">
+        <div className="relative z-10 flex h-full min-w-0 flex-col justify-between px-6 py-8 md:px-10 md:py-10">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-[#0a1628]/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-accent backdrop-blur-sm">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Gallery
-            </p>
+            <PageBadge label="Gallery" />
             <h1 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:text-5xl">
               Moments from the
               <span className="block text-offwhite/85">build and the field.</span>
             </h1>
           </div>
 
-          <div className="flex items-end justify-between gap-6">
+          <div className="flex min-w-0 items-end justify-between gap-6">
             <div
               key={activeItem.id}
-              className={`max-w-2xl ${reducedMotion ? "" : "gallery-caption-in"}`}
+              className={`min-w-0 max-w-2xl ${reducedMotion ? "" : "gallery-caption-in"}`}
             >
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
                 {formatIndex(activeIndex, items.length)}

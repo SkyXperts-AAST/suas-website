@@ -9,7 +9,7 @@ export default function BuildLogLayout({
 }>) {
   return (
     <PageShell className="overflow-x-clip">
-      <section className="relative z-20 min-h-[34rem] overflow-hidden border-b border-white/10 md:min-h-[38rem]">
+      <section className="relative z-20 min-h-[34rem] overflow-hidden md:min-h-[38rem]">
         <BuildLogHeroBackground />
 
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-14 md:py-20">
@@ -31,9 +31,14 @@ export default function BuildLogLayout({
             <SubTeamNav />
           </div>
         </div>
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-40 bg-gradient-to-b from-transparent via-[#0a1628]/70 to-[#0a1628] md:h-52"
+        />
       </section>
 
-      <PageSection>{children}</PageSection>
+      <PageSection className="relative z-30 -mt-24 pt-0 md:-mt-28">{children}</PageSection>
     </PageShell>
   );
 }

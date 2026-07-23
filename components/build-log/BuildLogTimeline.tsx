@@ -141,10 +141,10 @@ export default function BuildLogTimeline({
   }
 
   return (
-    <div className="relative isolate">
+    <div className="relative isolate -mx-6 -mb-10 min-h-[calc(100dvh-12rem)] md:-mb-16">
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+        className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen min-h-full -translate-x-1/2 overflow-hidden"
       >
         {entries.map((entry) => {
           const isActive = activeEntryId === entry.id;
@@ -171,9 +171,10 @@ export default function BuildLogTimeline({
             </div>
           );
         })}
+        <div className="absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-[#0a1628] via-[#0a1628]/80 to-transparent md:h-40" />
       </div>
 
-      <ol className="relative z-10 ml-4 space-y-8 md:ml-6 md:space-y-10">
+      <ol className="relative z-10 mx-6 ml-10 space-y-8 pb-10 md:ml-12 md:space-y-10 md:pb-16">
         <span
           aria-hidden="true"
           className={`absolute bottom-4 left-0 top-4 w-px bg-gradient-to-b ${theme.timelineLine}`}

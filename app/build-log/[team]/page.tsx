@@ -44,9 +44,11 @@ export default async function BuildLogTeamPage({ params }: BuildLogTeamPageProps
   }
 
   return (
-    <div className="relative isolate space-y-10 md:space-y-12">
+    <div className="relative z-30 isolate space-y-10 md:space-y-12">
       <TeamHeader team={team} entryCount={entries.length} />
-      <BuildLogTimeline entries={entries} teamSlug={teamSlug} />
+      <div className="relative z-10">
+        <BuildLogTimeline entries={entries} teamSlug={teamSlug} />
+      </div>
     </div>
   );
 }

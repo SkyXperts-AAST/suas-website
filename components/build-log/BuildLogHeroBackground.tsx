@@ -61,7 +61,7 @@ function TeamHeroOverlays({
         );
       })}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#05071e]/95 via-[#0a1628]/72 to-[#05071e]/95" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a1628]/92 via-[#0a1628]/55 to-[#0a1628]/25" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/45 to-transparent" />
     </>
   );
 }

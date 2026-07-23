@@ -11,16 +11,16 @@ export default function TeamHeader({ team, entryCount }: TeamHeaderProps) {
   const theme = getTeamTheme(team.slug);
 
   return (
-    <header className="relative z-20 overflow-hidden rounded-2xl border border-white/15 bg-[#0a1628] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] md:p-8">
+    <header className="relative z-30 overflow-hidden rounded-2xl border border-white/15 bg-[#0a1628]/88 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-8">
       <div
-        className={`pointer-events-none absolute inset-0 bg-gradient-to-br opacity-80 ${theme.gradient}`}
+        className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br opacity-80 ${theme.gradient}`}
       />
       <div
         aria-hidden="true"
-        className={`pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full blur-3xl ${theme.iconBg}`}
+        className={`pointer-events-none absolute -right-8 -top-8 z-0 h-40 w-40 rounded-full blur-3xl ${theme.iconBg}`}
       />
 
-      <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-start gap-4">
           <span
             className={`inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/20 ${theme.iconBg} ${theme.iconText} ${theme.glow}`}

@@ -11,41 +11,39 @@ export default function TeamHeader({ team, entryCount }: TeamHeaderProps) {
   const theme = getTeamTheme(team.slug);
 
   return (
-    <header className="relative z-30 overflow-hidden rounded-2xl border border-white/15 bg-[#0a1628]/88 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-8">
+    <header className="relative z-30 overflow-hidden border border-white/15 bg-[#0a1628]/90">
       <div
-        className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br opacity-80 ${theme.gradient}`}
-      />
-      <div
-        aria-hidden="true"
-        className={`pointer-events-none absolute -right-8 -top-8 z-0 h-40 w-40 rounded-full blur-3xl ${theme.iconBg}`}
+        className={`pointer-events-none absolute inset-0 z-0 bg-gradient-to-br opacity-70 ${theme.gradient}`}
       />
 
-      <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <div className="relative z-10 flex flex-col gap-5 px-5 py-6 md:flex-row md:items-stretch md:justify-between md:px-8 md:py-7">
         <div className="flex items-start gap-4">
           <span
-            className={`inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/20 ${theme.iconBg} ${theme.iconText} ${theme.glow}`}
+            className={`inline-flex h-14 w-14 shrink-0 items-center justify-center border border-white/15 ${theme.iconBg} ${theme.iconText}`}
           >
-            <TeamIcon slug={team.slug} className="h-8 w-8" />
+            <TeamIcon slug={team.slug} className="h-7 w-7" />
           </span>
 
           <div>
             <p
-              className={`text-xs font-bold uppercase tracking-[0.2em] ${theme.iconText}`}
+              className={`text-[0.625rem] font-black uppercase tracking-[0.18em] ${theme.iconText}`}
             >
               {theme.label}
             </p>
-            <h2 className="mt-2 text-3xl leading-[1.02] text-white md:text-4xl">
+            <h2 className="mt-1.5 text-2xl font-bold leading-tight text-white md:text-3xl">
               {team.name}
             </h2>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-white/80">
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-white/70 md:text-base md:leading-7">
               {team.description}
             </p>
           </div>
         </div>
 
-        <div className="shrink-0 rounded-xl border border-white/15 bg-[#07101f]/80 px-5 py-4 text-center">
-          <p className={`text-3xl font-semibold ${theme.date}`}>{entryCount}</p>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/60">
+        <div className="flex shrink-0 items-center gap-4 border border-white/10 bg-[#07101f]/80 px-5 py-4 md:flex-col md:justify-center md:px-6 md:text-center">
+          <p className={`text-3xl font-black tabular-nums ${theme.date}`}>
+            {entryCount}
+          </p>
+          <p className="text-[0.625rem] font-black uppercase tracking-[0.16em] text-white/50">
             Timeline entries
           </p>
         </div>

@@ -22,15 +22,15 @@ type BuildLogTimelineProps = {
 function ChevronIcon({ expanded }: { expanded: boolean }) {
   return (
     <svg
-      className={`h-5 w-5 shrink-0 text-offwhite/50 transition-transform duration-300 ${
+      className={`h-4 w-4 shrink-0 text-offwhite/50 transition-transform duration-200 ${
         expanded ? "rotate-180" : ""
       }`}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeWidth="2.5"
+      strokeLinecap="square"
+      strokeLinejoin="miter"
       aria-hidden="true"
     >
       <path d="m6 9 6 6 6-6" />
@@ -134,7 +134,7 @@ export default function BuildLogTimeline({
 
   if (entries.length === 0) {
     return (
-      <p className="rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-offwhite/70">
+      <p className="border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-offwhite/70">
         No build log entries yet. Check back soon.
       </p>
     );
@@ -195,32 +195,32 @@ export default function BuildLogTimeline({
             >
               <span
                 aria-hidden="true"
-                className={`build-log-dot absolute -left-[0.4rem] top-8 h-4 w-4 rounded-full border-2 md:-left-[0.45rem] md:top-9 md:h-[1.125rem] md:w-[1.125rem] ${theme.timelineDot} ${
+                className={`build-log-dot absolute -left-[0.4rem] top-8 h-4 w-4 border-2 md:-left-[0.45rem] md:top-9 md:h-[1.125rem] md:w-[1.125rem] ${theme.timelineDot} ${
                   isExpanded || isLatest ? theme.timelineDotGlow : ""
                 }`}
               />
 
               <article
-                className={`overflow-hidden rounded-[1.75rem] border bg-navy/55 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md transition-all duration-500 motion-reduce:transition-none ${
+                className={`overflow-hidden border bg-navy/75 transition-all duration-300 motion-reduce:transition-none ${
                   isActive
                     ? `border-white/20 ${theme.glow}`
                     : "border-white/10 opacity-95"
                 }`}
               >
-                <div className="border-b border-white/10 px-6 py-5 md:px-10 md:py-6">
+                <div className="border-b border-white/10 px-5 py-5 md:px-8 md:py-6">
                   <time
                     dateTime={entry.date}
-                    className={`text-lg font-bold uppercase tracking-[0.14em] md:text-2xl ${theme.date}`}
+                    className={`text-base font-bold uppercase tracking-[0.12em] md:text-xl ${theme.date}`}
                   >
                     {formatDate(entry.date)}
                   </time>
 
                   {isLatest ? (
                     <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-                      <h3 className="max-w-3xl text-2xl leading-[1.05] text-offwhite md:text-3xl">
+                      <h3 className="max-w-3xl text-xl font-bold leading-[1.05] text-offwhite md:text-2xl">
                         {entry.title}
                       </h3>
-                      <span className="text-sm font-semibold uppercase tracking-[0.18em] text-offwhite/40">
+                      <span className="text-xs font-black uppercase tracking-[0.16em] text-offwhite/40">
                         Latest · #{entryNumber}
                       </span>
                     </div>
@@ -229,10 +229,10 @@ export default function BuildLogTimeline({
                       type="button"
                       onClick={() => toggleEntry(entry.id)}
                       aria-expanded={isExpanded}
-                      className="mt-4 flex w-full items-start justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+                      className="mt-4 flex w-full items-start justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
                     >
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-xl leading-[1.05] text-offwhite md:text-2xl">
+                        <h3 className="text-lg font-bold leading-[1.05] text-offwhite md:text-xl">
                           {entry.title}
                         </h3>
                         {!isExpanded && (
@@ -242,7 +242,7 @@ export default function BuildLogTimeline({
                         )}
                       </div>
                       <div className="flex shrink-0 items-center gap-3 pt-1">
-                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-offwhite/40">
+                        <span className="text-xs font-black uppercase tracking-[0.16em] text-offwhite/40">
                           #{entryNumber}
                         </span>
                         <ChevronIcon expanded={isExpanded} />
@@ -252,7 +252,7 @@ export default function BuildLogTimeline({
                 </div>
 
                 <div
-                  className={`grid transition-[grid-template-rows] duration-500 ease-in-out motion-reduce:transition-none ${
+                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${
                     isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                   }`}
                 >
@@ -268,38 +268,25 @@ export default function BuildLogTimeline({
                       <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/10 to-transparent" />
                     </div>
 
-                    <div className="space-y-5 px-6 py-8 md:space-y-6 md:px-10 md:py-10">
-                      {isLatest && (
-                        <div className="flex flex-wrap items-start justify-between gap-4">
-                          <span
-                            className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] ${theme.tag}`}
-                          >
-                            Latest update
-                          </span>
-                        </div>
-                      )}
+                    <div className="space-y-4 px-5 py-6 md:space-y-5 md:px-8 md:py-8">
+                      <span
+                        className={`inline-block border px-2 py-0.5 text-[0.625rem] font-black uppercase tracking-[0.14em] ${theme.tag}`}
+                      >
+                        {isLatest ? "Latest update" : "Update"}
+                      </span>
 
-                      {!isLatest && (
-                        <div className="flex flex-wrap items-start justify-between gap-4">
-                          <h3 className="sr-only">{entry.title}</h3>
-                          <span
-                            className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] ${theme.tag}`}
-                          >
-                            Update
-                          </span>
-                        </div>
-                      )}
+                      {!isLatest && <h3 className="sr-only">{entry.title}</h3>}
 
-                      <p className="max-w-4xl text-lg leading-9 text-offwhite/78 md:text-xl md:leading-9">
+                      <p className="max-w-4xl text-base leading-7 text-offwhite/78 md:text-lg md:leading-8">
                         {entry.summary}
                       </p>
 
                       {entry.tags && entry.tags.length > 0 && (
-                        <ul className="flex flex-wrap gap-2 pt-1">
+                        <ul className="flex flex-wrap gap-1.5 pt-1">
                           {entry.tags.map((tag) => (
                             <li
                               key={tag}
-                              className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] ${theme.tag}`}
+                              className={`border px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.08em] ${theme.tag}`}
                             >
                               {tag}
                             </li>

@@ -100,29 +100,29 @@ html {
    reads as one material. Saturate is kept modest — the panel doesn't use one,
    and a high value re-tints whatever scrolls underneath. */
 .nav-glass {
-  background-color: rgba(10, 14, 63, 0.55);
-  border-color: rgba(255, 255, 255, 0.08);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
+  background-color: rgba(5, 8, 22, 0.62);
+  border-color: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
 }
 
 /* Once content is scrolling underneath, the bar densifies and casts a shadow so
    it stays legible over bright imagery. */
 .nav-glass-scrolled {
-  background-color: rgba(10, 14, 63, 0.72);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+  background-color: rgba(5, 8, 22, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.32);
 }
 
 /* No backdrop-filter (older Firefox, some embedded webviews): the translucent
    fill alone would let text collide with page content, so go near-opaque. */
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .nav-glass {
-    background-color: rgba(10, 14, 63, 0.94);
+    background-color: rgba(5, 8, 22, 0.94);
   }
 
   .nav-glass-scrolled {
-    background-color: rgba(10, 14, 63, 0.97);
+    background-color: rgba(5, 8, 22, 0.97);
   }
 }
 

@@ -1,22 +1,27 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { usePathname } from "next/navigation";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ContactShadows, Environment, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import {
+  computeDroneAimQuaternion,
+  raycastScreenToTeamAimPlane,
+} from "@/lib/build-log/drone-yaw";
 import { getHeroSceneTheme } from "@/lib/build-log/themes";
-import { SUB_TEAMS, getSubTeamYaw, isSubTeamSlug } from "@/lib/build-log/teams";
+import { SUB_TEAMS, isSubTeamSlug } from "@/lib/build-log/teams";
 import type { SubTeamSlug } from "@/lib/build-log/types";
-import { setupPropellerSpinners, spinPropellerPivot } from "@/lib/vehicle/findPropellerPivots";
+import { setupPropellerSpinners } from "@/lib/vehicle/findPropellerPivots";
 
 const MODEL_URL = "/models/skyxperts-strom-optimized.glb";
 const DRACO_DECODER_PATH = "/draco/";
+/** Baked into the cloned model — same 180° correction as DroneModel. */
 const MODEL_YAW = Math.PI;
 const MODEL_SCALE = 3;
 const INTRO_DURATION = 2.4;
 const PROPELLER_SPEED = 22;
-const TEAM_YAW_SMOOTH = 1.8;
+const TEAM_AIM_SMOOTH = 1.8;
 const TEAM_SWAY_Y = 0.06;
 
 useGLTF.preload(MODEL_URL, DRACO_DECODER_PATH);
@@ -28,11 +33,6 @@ function getActiveTeamSlug(pathname: string): SubTeamSlug {
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
-}
-
-function lerpAngle(start: number, end: number, t: number): number {
-  const delta = THREE.MathUtils.euclideanModulo(end - start + Math.PI, Math.PI * 2) - Math.PI;
-  return start + delta * t;
 }
 
 function TeamHeroOverlays({
@@ -101,7 +101,7 @@ function TeamLighting({
   const hemiRef = useRef<THREE.HemisphereLight>(null);
 
   useFrame((_, delta) => {
-    const t = reducedMotion ? 1 : 1 - Math.exp(-delta / TEAM_YAW_SMOOTH);
+    const t = reducedMotion ? 1 : 1 - Math.exp(-delta / TEAM_AIM_SMOOTH);
 
     current.current.ambient.lerp(target.ambient, t);
     current.current.key.lerp(target.key, t);
@@ -168,23 +168,25 @@ function CinematicCamera({ reducedMotion }: { reducedMotion: boolean }) {
   return null;
 }
 
-function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
-  const pathname = usePathname();
-  const targetTeamYaw = useMemo(
-    () => getSubTeamYaw(getActiveTeamSlug(pathname)),
-    [pathname],
-  );
+function CinematicDrone({
+  pointerRef,
+  reducedMotion,
+}: {
+  pointerRef: RefObject<{ x: number; y: number } | null>;
+  reducedMotion: boolean;
+}) {
   const { scene } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
   const rigRef = useRef<THREE.Group>(null);
   const introProgress = useRef(0);
-  const currentTeamYaw = useRef(targetTeamYaw);
+  const aimInitialized = useRef(false);
+  const currentAimQuat = useRef(new THREE.Quaternion());
+  const targetAimQuat = useRef(new THREE.Quaternion());
   const shadowRef = useRef<THREE.Group>(null);
-
-  useEffect(() => {
-    if (reducedMotion) {
-      currentTeamYaw.current = targetTeamYaw;
-    }
-  }, [reducedMotion, targetTeamYaw]);
+  const dronePosition = useMemo(() => new THREE.Vector3(), []);
+  const worldTarget = useMemo(() => new THREE.Vector3(), []);
+  const swayEuler = useRef(new THREE.Euler());
+  const swayQuat = useRef(new THREE.Quaternion());
+  const propSpinAxis = useMemo(() => new THREE.Vector3(0, 1, 0), []);
 
   const { model, shadowScale, groundY, propellerSpinners } = useMemo(() => {
     const clone = scene.clone(true);
@@ -209,60 +211,92 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
     };
   }, [scene]);
 
-  useFrame(({ clock }, delta) => {
+  useFrame(({ camera, clock, gl }, delta) => {
     if (!rigRef.current) {
       return;
     }
 
     if (reducedMotion) {
-      currentTeamYaw.current = targetTeamYaw;
-      rigRef.current.rotation.set(0, MODEL_YAW + targetTeamYaw, 0);
       rigRef.current.position.set(0, 0, 0);
       rigRef.current.scale.setScalar(MODEL_SCALE);
+    } else {
+      introProgress.current = Math.min(
+        1,
+        introProgress.current + delta / INTRO_DURATION,
+      );
+      const intro = easeOutCubic(introProgress.current);
+      const t = clock.elapsedTime;
+
+      rigRef.current.position.set(
+        Math.sin(t * 0.19) * 0.012 * intro,
+        (Math.sin(t * 0.52) * 0.028 + Math.sin(t * 1.15) * 0.009) * intro,
+        Math.cos(t * 0.23) * 0.008 * intro,
+      );
+
+      const scale = MODEL_SCALE * (0.93 + 0.07 * intro);
+      rigRef.current.scale.setScalar(scale);
+
+      if (shadowRef.current) {
+        shadowRef.current.position.y = groundY + rigRef.current.position.y * 0.35;
+      }
+
+      for (const { pivot, direction } of propellerSpinners) {
+        pivot.rotateOnWorldAxis(
+          propSpinAxis,
+          direction * PROPELLER_SPEED * intro * delta,
+        );
+      }
+    }
+
+    rigRef.current.getWorldPosition(dronePosition);
+
+    const screenPoint = pointerRef.current;
+    if (screenPoint) {
+      const canvasRect = gl.domElement.getBoundingClientRect();
+      const hit = raycastScreenToTeamAimPlane(
+        screenPoint.x,
+        screenPoint.y,
+        canvasRect,
+        camera,
+        worldTarget,
+      );
+      if (hit) {
+        computeDroneAimQuaternion(dronePosition, hit, targetAimQuat.current);
+      }
+    }
+
+    const aimBlend = reducedMotion ? 1 : 1 - Math.exp(-delta / TEAM_AIM_SMOOTH);
+    if (!aimInitialized.current && screenPoint) {
+      currentAimQuat.current.copy(targetAimQuat.current);
+      aimInitialized.current = true;
+    } else {
+      currentAimQuat.current.slerp(targetAimQuat.current, aimBlend);
+    }
+
+    if (reducedMotion) {
+      rigRef.current.quaternion.copy(currentAimQuat.current);
       return;
     }
 
-    currentTeamYaw.current = lerpAngle(
-      currentTeamYaw.current,
-      targetTeamYaw,
-      1 - Math.exp(-delta / TEAM_YAW_SMOOTH),
-    );
-
-    introProgress.current = Math.min(
-      1,
-      introProgress.current + delta / INTRO_DURATION,
-    );
     const intro = easeOutCubic(introProgress.current);
     const t = clock.elapsedTime;
-
-    rigRef.current.rotation.set(
+    swayEuler.current.set(
       Math.sin(t * 0.42 + 0.4) * 0.035 * intro,
-      MODEL_YAW + currentTeamYaw.current + Math.sin(t * 0.28) * TEAM_SWAY_Y * intro,
+      Math.sin(t * 0.28) * TEAM_SWAY_Y * intro,
       Math.cos(t * 0.36 + 0.2) * 0.022 * intro,
     );
-
-    rigRef.current.position.set(
-      Math.sin(t * 0.19) * 0.012 * intro,
-      (Math.sin(t * 0.52) * 0.028 + Math.sin(t * 1.15) * 0.009) * intro,
-      Math.cos(t * 0.23) * 0.008 * intro,
-    );
-
-    const scale = MODEL_SCALE * (0.93 + 0.07 * intro);
-    rigRef.current.scale.setScalar(scale);
-
-    if (shadowRef.current) {
-      shadowRef.current.position.y = groundY + rigRef.current.position.y * 0.35;
-    }
-
-    for (const { pivot, direction } of propellerSpinners) {
-      spinPropellerPivot(pivot, direction, PROPELLER_SPEED * intro, delta);
-    }
+    swayQuat.current.setFromEuler(swayEuler.current);
+    rigRef.current.quaternion
+      .copy(currentAimQuat.current)
+      .multiply(swayQuat.current);
   });
 
   return (
     <>
       <group ref={rigRef}>
-        <primitive object={model} />
+        <group rotation={[0, MODEL_YAW, 0]}>
+          <primitive object={model} />
+        </group>
       </group>
       <group ref={shadowRef} position={[0, groundY, 0]}>
         <ContactShadows
@@ -280,9 +314,11 @@ function CinematicDrone({ reducedMotion }: { reducedMotion: boolean }) {
 
 function HeroScene({
   teamSlug,
+  pointerRef,
   reducedMotion,
 }: {
   teamSlug: SubTeamSlug;
+  pointerRef: RefObject<{ x: number; y: number } | null>;
   reducedMotion: boolean;
 }) {
   return (
@@ -291,7 +327,7 @@ function HeroScene({
       <Environment preset="studio" environmentIntensity={0.42} />
       <CinematicCamera reducedMotion={reducedMotion} />
       <Suspense fallback={null}>
-        <CinematicDrone reducedMotion={reducedMotion} />
+        <CinematicDrone pointerRef={pointerRef} reducedMotion={reducedMotion} />
       </Suspense>
     </>
   );
@@ -300,6 +336,7 @@ function HeroScene({
 export default function BuildLogHeroBackground() {
   const pathname = usePathname();
   const activeSlug = getActiveTeamSlug(pathname);
+  const pointerRef = useRef<{ x: number; y: number } | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -308,6 +345,20 @@ export default function BuildLogHeroBackground() {
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    pointerRef.current = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", handlePointerMove);
   }, []);
 
   return (
@@ -325,7 +376,11 @@ export default function BuildLogHeroBackground() {
             scene.background = null;
           }}
         >
-          <HeroScene teamSlug={activeSlug} reducedMotion={reducedMotion} />
+          <HeroScene
+            teamSlug={activeSlug}
+            pointerRef={pointerRef}
+            reducedMotion={reducedMotion}
+          />
         </Canvas>
       </div>
 

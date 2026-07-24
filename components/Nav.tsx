@@ -18,25 +18,6 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/**
- * The sliding indicator under a desktop nav link. Active and hover are given
- * deliberately different weights — 2px Accent Red versus a 1px translucent
- * off-white — so that hovering an inactive link never looks like it selected
- * the page. Both animate from the left edge rather than fading in place.
- */
-function LinkIndicator({ active }: { active: boolean }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`pointer-events-none absolute inset-x-3 bottom-1 origin-left rounded-full transition-[transform,opacity] duration-200 ease-out ${
-        active
-          ? "h-0.5 scale-x-100 bg-accent opacity-100"
-          : "h-px scale-x-0 bg-offwhite opacity-0 group-hover:scale-x-100 group-hover:opacity-45"
-      }`}
-    />
-  );
-}
-
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -58,15 +39,15 @@ export default function Nav() {
 
   return (
     <header
-      className={`nav-glass sticky top-0 z-50 overflow-x-clip border-b transition-[background-color,box-shadow,border-color] duration-300 ${
+      className={`nav-glass sticky top-0 z-50 overflow-x-clip border-b border-white/[0.06] transition-[background-color,box-shadow,border-color] duration-300 ${
         scrolled ? "nav-glass-scrolled" : ""
       }`}
     >
-      <nav className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-5 sm:px-6">
+      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-10">
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="flex h-10 w-[5.25rem] shrink-0 items-center rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-11 sm:w-[5.75rem]"
+          className="flex h-9 w-[5rem] shrink-0 items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:h-10 sm:w-[5.5rem]"
           aria-label="SkyXperts home"
         >
           <Logo
@@ -76,13 +57,7 @@ export default function Nav() {
           />
         </Link>
 
-        {/* Hairline divider separating the brand mark from navigation. */}
-        <div
-          aria-hidden="true"
-          className="ml-5 mr-auto hidden h-6 w-px bg-white/15 md:block"
-        />
-
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-8 lg:gap-10 md:flex">
           {LINKS.map((link) => {
             const active = isActive(pathname, link.href);
             return (
@@ -90,14 +65,13 @@ export default function Nav() {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`group relative block px-3.5 pt-2 pb-3 text-sm font-medium tracking-[0.04em] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
+                  className={`text-sm font-bold tracking-[0.01em] transition-colors duration-200 focus:outline-none focus-visible:text-accent ${
                     active
                       ? "text-accent"
-                      : "text-offwhite/75 hover:text-white"
+                      : "text-white/75 hover:text-white"
                   }`}
                 >
                   {link.label}
-                  <LinkIndicator active={active} />
                 </Link>
               </li>
             );
@@ -110,7 +84,7 @@ export default function Nav() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/14 bg-white/8 text-offwhite transition-all hover:border-white/22 hover:bg-white/12 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 md:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center text-white/80 transition-colors hover:text-white focus:outline-none focus-visible:text-accent md:hidden"
         >
           <svg
             width="22"
@@ -137,14 +111,14 @@ export default function Nav() {
           <button
             type="button"
             aria-label="Close menu"
-            className="fixed inset-0 top-[72px] z-40 bg-[#05071e]/45 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 top-16 z-40 bg-[#05071e]/50 backdrop-blur-sm md:hidden"
             onClick={() => setOpen(false)}
           />
           <div
             id="mobile-menu"
-            className="nav-glass absolute inset-x-3 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-2xl border shadow-2xl shadow-black/35 md:hidden"
+            className="nav-glass absolute inset-x-4 top-[calc(100%+0.375rem)] z-50 overflow-hidden border border-white/10 shadow-2xl shadow-black/40 md:hidden"
           >
-            <ul className="flex flex-col p-2">
+            <ul className="flex flex-col py-1">
               {LINKS.map((link) => {
                 const active = isActive(pathname, link.href);
                 return (
@@ -153,13 +127,10 @@ export default function Nav() {
                       href={link.href}
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
-                      // A stacked menu has no room for an underline, so the
-                      // active state becomes a left accent bar — same 2px red
-                      // marker, rotated to suit the layout.
-                      className={`block rounded-xl border-l-2 px-4 py-3 text-sm font-medium tracking-[0.04em] transition-colors duration-200 ${
+                      className={`block px-5 py-3.5 text-sm font-bold transition-colors duration-200 focus:outline-none focus-visible:text-accent ${
                         active
-                          ? "border-accent bg-white/10 text-accent"
-                          : "border-transparent text-offwhite/75 hover:bg-white/5 hover:text-white"
+                          ? "text-accent"
+                          : "text-white/70 hover:text-white"
                       }`}
                     >
                       {link.label}

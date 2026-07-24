@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa6";
-import HeroDroneExperience  from "@/components/HeroDroneExperience";
+import HeroDroneExperience from "@/components/HeroDroneExperience";
 import VehicleScrollReveal from "@/components/VehicleScrollReveal";
 import Link from "next/link";
 import VerticalJourney from "@/components/VerticalJourney";
 import EventCountdown from "@/components/EventCountdown";
+import SponsorLogoGrid from "@/components/sponsors/SponsorLogoGrid";
+
 export default function Home() {
   return (
     <main>
@@ -92,26 +94,15 @@ export default function Home() {
       {/* SPONSORS */}
 <section className="border-b border-gray-200 bg-white px-6 py-8 text-center">
   <p className="mb-4 text-xs font-medium uppercase tracking-wide text-gray-500">
-    Proudly supported by
+    Backed by
   </p>
-  <div className="flex flex-wrap items-center justify-center gap-10">
-    <Image
-      src="/sponsor-makers.png"
-      alt="Makers"
-      width={140}
-      height={60}
-      className="h-10 w-auto"
-      //className="h-10 w-auto object-contain grayscale transition hover:grayscale-0"
-    />
-    <Image
-      src="/sponsor-pcbway.webp"
-      alt="PCBWay"
-      width={140}
-      height={60}
-      className="h-10 w-auto"
-      //className="h-10 w-auto object-contain grayscale transition hover:grayscale-0"
-    />
-  </div>
+  <SponsorLogoGrid compact />
+  <Link
+    href="/sponsorships"
+    className="mt-5 inline-block text-sm font-medium text-[#0A1A33] underline-offset-2 transition hover:underline"
+  >
+    See our sponsors
+  </Link>
 </section>
 {/* SOCIAL LINKS */}
 <section className="flex items-center justify-center gap-6 bg-white px-6 py-6">

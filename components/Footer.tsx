@@ -1,18 +1,17 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0a1628] px-6 py-8 text-center text-gray-300">
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-4">
-        <Link
-          href="mailto:SkyXperts@aast.edu"
-          className="text-sm text-white/80 transition hover:text-white"
-        >
-          SkyXperts@aast.edu
-        </Link>
-
-        <p className="text-xs text-white/50">© 2026 SkyXperts</p>
-      </div>
+    <footer className="relative border-t border-white/10 bg-[#0a1628]/90 px-6 py-8 text-center backdrop-blur-sm">
+      <Link
+        href="/"
+        className="mx-auto inline-flex h-9 w-[min(100%,18rem)] items-center rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/80 sm:h-10"
+        aria-label="SkyXperts home"
+      >
+        <Logo variant="big" className="size-full object-contain object-center opacity-90" />
+      </Link>
+      <p className="mt-4 text-sm text-offwhite/50">© 2026 SkyXperts</p>
     </footer>
   );
 }

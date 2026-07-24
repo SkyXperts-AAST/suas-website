@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
+/* Optional: drop Header-Regular.otf in public/fonts/ to use Header Sans Serif. */
+@font-face {
+  font-family: "Header Sans Serif";
+  src: url("/fonts/Header-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a1628;
+  --foreground: #f5f5f7;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Header Sans Serif", var(--font-header-sans), var(--font-plus-jakarta),
+    ui-sans-serif, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* SkyXperts brand palette */
+  --color-navy: #0a1628;
+  --color-offwhite: #f5f5f7;
+  --color-accent: #e31c1c;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+html {
+  overflow-x: clip;
+}
+
+/* Subtle down-chevron nudge for the vehicles hero scroll hint. */
+@keyframes chevron-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+.animate-chevron {
+  animation: chevron-bounce 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-chevron {
+    animation: none;
+  }
+
+  .build-log-dot {
+    animation: none;
+  }
+
+  .gallery-caption-in {
+    animation: none;
+  }
+}
+
+@keyframes gallery-caption-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gallery-caption-in {
+  animation: gallery-caption-in 0.5s ease-out;
+}
+
+/* Frosted nav surface. Deliberately the same recipe as the vehicles InfoPanel
+   (translucent Primary Navy + blur) so every floating glass surface on the site
+   reads as one material. Saturate is kept modest — the panel doesn't use one,
+   and a high value re-tints whatever scrolls underneath. */
+.nav-glass {
+  background-color: rgba(10, 14, 63, 0.55);
+  border-color: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Once content is scrolling underneath, the bar densifies and casts a shadow so
+   it stays legible over bright imagery. */
+.nav-glass-scrolled {
+  background-color: rgba(10, 14, 63, 0.72);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+}
+
+/* No backdrop-filter (older Firefox, some embedded webviews): the translucent
+   fill alone would let text collide with page content, so go near-opaque. */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .nav-glass {
+    background-color: rgba(10, 14, 63, 0.94);
+  }
+
+  .nav-glass-scrolled {
+    background-color: rgba(10, 14, 63, 0.97);
+  }
+}
+
+@keyframes build-log-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+}
+
+.build-log-dot {
+  animation: build-log-pulse 2.8s ease-in-out infinite;
 }

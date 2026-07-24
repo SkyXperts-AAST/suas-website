@@ -18,6 +18,25 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+/**
+ * The sliding indicator under a desktop nav link. Active and hover are given
+ * deliberately different weights — 2px Accent Red versus a 1px translucent
+ * off-white — so that hovering an inactive link never looks like it selected
+ * the page. Both animate from the left edge rather than fading in place.
+ */
+function LinkIndicator({ active }: { active: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-x-3 bottom-1 origin-left rounded-full transition-[transform,opacity] duration-200 ease-out ${
+        active
+          ? "h-0.5 scale-x-100 bg-accent opacity-100"
+          : "h-px scale-x-0 bg-offwhite opacity-0 group-hover:scale-x-100 group-hover:opacity-45"
+      }`}
+    />
+  );
+}
+
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -57,6 +76,12 @@ export default function Nav() {
           />
         </Link>
 
+        {/* Hairline divider separating the brand mark from navigation. */}
+        <div
+          aria-hidden="true"
+          className="ml-5 mr-auto hidden h-6 w-px bg-white/15 md:block"
+        />
+
         <ul className="hidden items-center gap-1 md:flex">
           {LINKS.map((link) => {
             const active = isActive(pathname, link.href);
@@ -65,13 +90,14 @@ export default function Nav() {
                 <Link
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-full px-3.5 py-2 text-sm font-medium tracking-normal transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
+                  className={`group relative block px-3.5 pt-2 pb-3 text-sm font-medium tracking-[0.04em] transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
                     active
-                      ? "border border-accent/35 bg-white/12 text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-sm"
-                      : "border border-transparent text-offwhite/80 hover:border-white/14 hover:bg-white/8 hover:text-offwhite"
+                      ? "text-accent"
+                      : "text-offwhite/75 hover:text-white"
                   }`}
                 >
                   {link.label}
+                  <LinkIndicator active={active} />
                 </Link>
               </li>
             );
@@ -127,10 +153,13 @@ export default function Nav() {
                       href={link.href}
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
-                      className={`block rounded-xl border px-4 py-3 text-sm font-medium tracking-normal transition-colors ${
+                      // A stacked menu has no room for an underline, so the
+                      // active state becomes a left accent bar — same 2px red
+                      // marker, rotated to suit the layout.
+                      className={`block rounded-xl border-l-2 px-4 py-3 text-sm font-medium tracking-[0.04em] transition-colors duration-200 ${
                         active
-                          ? "border-accent/35 bg-white/12 text-accent"
-                          : "border-transparent text-offwhite/80 hover:border-white/14 hover:bg-white/8 hover:text-offwhite"
+                          ? "border-accent bg-white/10 text-accent"
+                          : "border-transparent text-offwhite/75 hover:bg-white/5 hover:text-white"
                       }`}
                     >
                       {link.label}

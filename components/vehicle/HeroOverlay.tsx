@@ -7,7 +7,20 @@
  * drone keeps working. `dimmed` fades the hero back while a component is being
  * inspected.
  */
-export default function HeroOverlay({ dimmed = false }: { dimmed?: boolean }) {
+interface HeroOverlayProps {
+  dimmed?: boolean;
+  /** True while the guided tour runs — swaps the primary CTA's label. */
+  tourActive?: boolean;
+  onExplore: () => void;
+  onMoreInfo: () => void;
+}
+
+export default function HeroOverlay({
+  dimmed = false,
+  tourActive = false,
+  onExplore,
+  onMoreInfo,
+}: HeroOverlayProps) {
   return (
     <div
       className={`pointer-events-none absolute inset-0 z-10 transition-opacity duration-500 ${
@@ -20,17 +33,24 @@ export default function HeroOverlay({ dimmed = false }: { dimmed?: boolean }) {
           SUAS · USA
         </p>
         <h1 className="mt-3 text-6xl leading-[0.92] tracking-tight text-[#F5F5F7] sm:text-7xl">
-          Strom
+          Storm
         </h1>
         <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#F5F5F7]/70">
-          An autonomous heavy-lift quadcopter engineered for the SUAS
-          competition — every subsystem built and tuned in-house.
+          Autonomous heavy-lift quadcopter. Built in-house, subsystem by
+          subsystem.
         </p>
         <div className="pointer-events-auto mt-7 flex flex-wrap gap-3">
-          <button className="rounded-full bg-[#E31C1C] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#E31C1C]/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E3F]">
-            Explore Components
+          <button
+            onClick={onExplore}
+            disabled={tourActive}
+            className="rounded-full bg-[#E31C1C] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#E31C1C]/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E3F] disabled:cursor-default disabled:bg-[#E31C1C]/50"
+          >
+            {tourActive ? "Tour Running…" : "Explore Components"}
           </button>
-          <button className="rounded-full border border-[#F5F5F7]/40 px-6 py-2.5 text-sm font-semibold text-[#F5F5F7] backdrop-blur-sm transition hover:border-[#F5F5F7] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60">
+          <button
+            onClick={onMoreInfo}
+            className="rounded-full border border-[#F5F5F7]/40 px-6 py-2.5 text-sm font-semibold text-[#F5F5F7] backdrop-blur-sm transition hover:border-[#F5F5F7] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60"
+          >
             More Info
           </button>
         </div>

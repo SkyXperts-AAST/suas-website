@@ -17,10 +17,14 @@ const DRACO_DECODER_PATH = "/draco/";
 // consistent with what's rendered.
 const MODEL_YAW = Math.PI;
 
-// SkyXperts Accent Red — the highlight tint for hover/selection.
-const HIGHLIGHT_COLOR = "#E31C1C";
-const HOVER_EMISSIVE_INTENSITY = 0.55;
-const SELECTED_EMISSIVE_INTENSITY = 1.1;
+// Hover/selection tint. Deliberately NOT Accent Red: most of Storm's bodywork
+// is already red, so a red emissive was invisible against the parts it was
+// meant to call out. This cyan is the same one the site's frosted nav gradient
+// uses (.nav-glass in globals.css), and it separates hard from both the red
+// panels and the black carbon.
+const HIGHLIGHT_COLOR = "#38BDF8";
+const HOVER_EMISSIVE_INTENSITY = 0.7;
+const SELECTED_EMISSIVE_INTENSITY = 1.5;
 
 // Subsystems whose parts live on the 4 propulsion arms and therefore carry a
 // per-arm index, grouped as `${subsystem}:${armIndex}`. Only the motors are
@@ -38,14 +42,29 @@ interface TaggedGroup {
 interface DroneModelProps {
   hoveredGroup: GroupId | null;
   selectedGroup: GroupId | null;
+  /**
+   * When false, clicking the model does nothing. Used while the guided tour
+   * owns the camera, so a stray click can't fight the tour for a target.
+   * Hover highlighting stays live — `selectedGroup` outranks it anyway.
+   */
+  interactive?: boolean;
   onHoverGroup: Dispatch<SetStateAction<GroupId | null>>;
   onSelectGroup: (group: GroupId, bounds: THREE.Box3) => void;
-  onReady: (overallBounds: THREE.Box3) => void;
+  /**
+   * Fires once, after tagging and arm clustering. `groupBounds` is keyed by
+   * `groupIdKey` so the parent can fly to any subsystem it wasn't clicked into
+   * — the guided tour needs targets for groups the user never touched.
+   */
+  onReady: (
+    overallBounds: THREE.Box3,
+    groupBounds: Map<string, THREE.Box3>
+  ) => void;
 }
 
 export default function DroneModel({
   hoveredGroup,
   selectedGroup,
+  interactive = true,
   onHoverGroup,
   onSelectGroup,
   onReady,
@@ -127,7 +146,10 @@ export default function DroneModel({
 
     if (!readyRef.current) {
       readyRef.current = true;
-      onReady(overallBounds);
+      const groupBounds = new Map(
+        [...groups].map(([key, group]) => [key, group.bounds])
+      );
+      onReady(overallBounds, groupBounds);
     }
   }, [groups, armCenters, overallBounds, onReady]);
 
@@ -203,7 +225,7 @@ export default function DroneModel({
       object={model}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
-      onClick={handleClick}
+      onClick={interactive ? handleClick : undefined}
     />
   );
 }

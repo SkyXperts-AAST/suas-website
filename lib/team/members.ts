@@ -10,16 +10,13 @@ export type TeamMember = {
 export type SubTeamGroup = {
   blurb: string;
   members: TeamMember[];
-  /** Optional group photo for list layouts (e.g. Mechanical). */
+  /** Group photo path under /public. */
   groupPhoto?: string;
 };
 
-function placeholderMembers(
-  count: number,
-  labelPrefix = "Member",
-): TeamMember[] {
-  return Array.from({ length: count }, (_, i) => ({
-    name: `${labelPrefix} ${i + 1}`,
+function membersFromNames(names: string[]): TeamMember[] {
+  return names.map((name) => ({
+    name,
     role: "Team Member",
   }));
 }
@@ -64,12 +61,29 @@ export const softwareGroups = {
   computerVision: {
     blurb:
       "Computer Vision builds the detection and mapping pipeline for Storm's Risk Mapping and Search, Detect, and Deliver tasks — stitching aerial imagery into high-resolution maps and running object detection models to locate the mannequin and tent targets within the Search Boundary in real time.",
-    members: placeholderMembers(5),
+    groupPhoto: "/team/vision.JPG",
+    members: membersFromNames([
+      "Abdulla Mahar",
+      "Hossam Koshok",
+      "Gomana Hossam",
+      "Salma Khaled",
+      "Farida Khaled",
+      "Leena Gouda",
+    ]),
   } satisfies SubTeamGroup,
   controlAndNavigation: {
     blurb:
       "Control & Navigation develops the flight control and autopilot logic that keeps Storm within 100ft of every waypoint at up to 150ft turn radius, manages autonomous takeoff/landing, and handles failsafes like return-to-home and flight termination on comms loss.",
-    members: placeholderMembers(5),
+    groupPhoto: "/team/control.JPG",
+    members: membersFromNames([
+      "Sameh Walid",
+      "Andrew Ramez",
+      "Youssef Ahmed",
+      "Jana El Wazzan",
+      "Habiba Ghoneim",
+      "Nour Allam",
+      "Darine Elkilany",
+    ]),
   } satisfies SubTeamGroup,
 };
 
@@ -77,14 +91,23 @@ export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
   Mechanical: {
     blurb:
       "The Mechanical team designs Storm's airframe, delivery mechanism, and structural layout — engineering a sub-35lb airframe that survives repeated autonomous landings, packs down to a transportable size, and reliably releases the strobing beacon and water bottle payloads mid-flight.",
-    // TODO: replace with real Mechanical group photo
-    groupPhoto: "/drone.png",
-    members: placeholderMembers(5),
+    groupPhoto: "/team/mechanical.JPG",
+    members: membersFromNames([
+      "Yahia Alaa",
+      "Salma",
+      "Omar El-Sharkawy",
+      "Omar Tawfik",
+    ]),
   },
   Electrical: {
     blurb:
       "Electrical designs Storm's power distribution and avionics wiring — sizing battery packs under the 100Wh-per-cell limit, integrating the flight controller, ESCs, and Remote ID module, and ensuring clean, reliable power delivery from takeoff through a full mission cycle.",
-    members: placeholderMembers(5),
+    groupPhoto: "/team/electrical.JPG",
+    members: membersFromNames([
+      "Aleyeldin",
+      "Hassan El Shenawy",
+      "Rodaina Ramy",
+    ]),
   },
 };
 

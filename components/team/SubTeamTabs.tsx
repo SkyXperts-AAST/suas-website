@@ -1,93 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { useId, useState } from "react";
-import MemberCard from "@/components/team/MemberCard";
+import GroupPhotoRoster from "@/components/team/GroupPhotoRoster";
 import {
   softwareGroups,
   subteams,
   SUB_TEAM_TABS,
   type SubTeamTab,
-  type TeamMember,
 } from "@/lib/team/members";
-
-function MemberGrid({ members }: { members: TeamMember[] }) {
-  return (
-    <ul className="mt-6 grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {members.map((member) => (
-        <li key={member.name} className="w-full max-w-[280px]">
-          <MemberCard member={member} />
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function GroupPhotoRoster({
-  members,
-  groupPhoto,
-  blurb,
-}: {
-  members: TeamMember[];
-  groupPhoto?: string;
-  blurb: string;
-}) {
-  const caption = `Picture left to right: ${members.map((m) => m.name).join(", ")}.`;
-
-  return (
-    <div className="mt-6">
-      <p className="text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-        {caption}
-      </p>
-
-      <div className="mt-5 grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
-        <div className="relative min-h-[240px] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] md:min-h-[320px]">
-          {groupPhoto ? (
-            <Image
-              src={groupPhoto}
-              alt="Mechanical sub-team group photo"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          ) : (
-            <div className="flex h-full min-h-[240px] items-center justify-center md:min-h-[320px]">
-              <p className="text-sm font-medium uppercase tracking-[0.14em] text-offwhite/40">
-                Group photo coming soon
-              </p>
-            </div>
-          )}
-        </div>
-
-        <p className="text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-          {blurb}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function SubGroup({
-  title,
-  blurb,
-  members,
-}: {
-  title: string;
-  blurb: string;
-  members: TeamMember[];
-}) {
-  return (
-    <div>
-      <h3 className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
-        {title}
-      </h3>
-      <p className="mt-3 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-        {blurb}
-      </p>
-      <MemberGrid members={members} />
-    </div>
-  );
-}
 
 export default function SubTeamTabs() {
   const [activeTab, setActiveTab] = useState<SubTeamTab>("Software");
@@ -178,15 +98,19 @@ export default function SubTeamTabs() {
                 <p className="max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
                   {softwareGroups.blurb}
                 </p>
-                <SubGroup
+                <GroupPhotoRoster
                   title="Computer Vision"
                   blurb={softwareGroups.computerVision.blurb}
                   members={softwareGroups.computerVision.members}
+                  groupPhoto={softwareGroups.computerVision.groupPhoto}
+                  photoAlt="Computer Vision sub-team group photo"
                 />
-                <SubGroup
+                <GroupPhotoRoster
                   title="Control & Navigation"
                   blurb={softwareGroups.controlAndNavigation.blurb}
                   members={softwareGroups.controlAndNavigation.members}
+                  groupPhoto={softwareGroups.controlAndNavigation.groupPhoto}
+                  photoAlt="Control & Navigation sub-team group photo"
                 />
               </div>
             ) : tab === "Mechanical" ? (
@@ -194,14 +118,15 @@ export default function SubTeamTabs() {
                 members={subteams.Mechanical.members}
                 groupPhoto={subteams.Mechanical.groupPhoto}
                 blurb={subteams.Mechanical.blurb}
+                photoAlt="Mechanical sub-team group photo"
               />
             ) : (
-              <div>
-                <p className="max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-                  {subteams.Electrical.blurb}
-                </p>
-                <MemberGrid members={subteams.Electrical.members} />
-              </div>
+              <GroupPhotoRoster
+                members={subteams.Electrical.members}
+                groupPhoto={subteams.Electrical.groupPhoto}
+                blurb={subteams.Electrical.blurb}
+                photoAlt="Electrical sub-team group photo"
+              />
             )}
           </div>
         );

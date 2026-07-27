@@ -34,14 +34,14 @@ function FlightPathAccent() {
         <path
           d="M12 100 L130 84 L268 50 L396 22 L468 12"
           stroke="currentColor"
-          strokeOpacity="0.22"
-          strokeWidth="1.5"
+          strokeOpacity="0.55"
+          strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeDasharray="2 10"
+          strokeDasharray="3 12"
         />
-        <circle cx="130" cy="84" r="3" fill="currentColor" fillOpacity="0.35" />
-        <circle cx="396" cy="22" r="3" fill="currentColor" fillOpacity="0.35" />
+        <circle cx="130" cy="84" r="5" fill="currentColor" fillOpacity="0.8" />
+        <circle cx="396" cy="22" r="5" fill="currentColor" fillOpacity="0.8" />
       </svg>
     </div>
   );

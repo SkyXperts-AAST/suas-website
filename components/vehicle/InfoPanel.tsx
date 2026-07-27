@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { subsystemLabel } from "@/lib/vehicle/subsystemLookup";
-import { subsystemContent } from "@/lib/vehicle/subsystemContent";
+import {
+  subsystemContent,
+  type SubsystemComponent,
+  type SubsystemSpec,
+} from "@/lib/vehicle/subsystemContent";
 import { groupIdsEqual, type GroupId } from "@/lib/vehicle/groupId";
 
 export interface TourState {
@@ -21,6 +25,129 @@ interface InfoPanelProps {
 }
 
 const HAIRLINE = "rgba(255, 255, 255, 0.08)";
+// Row rule inside the spec grid. Accent Red at low alpha — enough to read as
+// a deliberate brand hairline against the frosted navy, far too faint to
+// compete with the values sitting on it.
+const SPEC_RULE = "rgba(227, 28, 28, 0.18)";
+
+/**
+ * Label/value rows. Labels are muted and sentence case; values are monospace
+ * so figures line up column-wise down the grid. Rows are separated by rules
+ * rather than gaps alone, which is what makes a dense grid scannable.
+ */
+function SpecGrid({ specs }: { specs: SubsystemSpec[] }) {
+  if (specs.length === 0) return null;
+  return (
+    <dl className="flex flex-col">
+      {specs.map((spec, i) => (
+        <div
+          key={spec.label}
+          className="grid grid-cols-[7rem_1fr] items-baseline gap-x-4 gap-y-1 py-2.5"
+          style={i > 0 ? { borderTop: `1px solid ${SPEC_RULE}` } : undefined}
+        >
+          <dt className="text-xs leading-snug text-[#4A4E6E]">{spec.label}</dt>
+          <dd className="font-mono text-[0.8125rem] leading-snug tabular-nums text-[#F5F5F7]">
+            {spec.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/** The single rationale line under a grid — lighter and italic, never a spec row. */
+function Tagline({ children }: { children: string }) {
+  if (!children) return null;
+  return (
+    <p className="mt-4 text-[0.8125rem] font-light italic leading-[1.6] text-[#F5F5F7]/70">
+      {children}
+    </p>
+  );
+}
+
+/**
+ * Single-open accordion for subsystems that are an enclosure around several
+ * distinct boards. Height is animated with a 0fr→1fr grid row rather than a
+ * measured pixel height, so it transitions smoothly without a ResizeObserver
+ * and without hardcoding a max-height that would clip longer content.
+ */
+function ComponentAccordion({
+  components,
+}: {
+  components: SubsystemComponent[];
+}) {
+  // All rows start collapsed; the panel opens showing the three names only.
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col">
+      {components.map((component, i) => {
+        const isOpen = openId === component.id;
+        const panelId = `subsystem-component-${component.id}`;
+        return (
+          <div
+            key={component.id}
+            style={i > 0 ? { borderTop: `1px solid ${SPEC_RULE}` } : undefined}
+          >
+            <h3>
+              <button
+                type="button"
+                // Toggling to null lets an open row be closed again; picking a
+                // different id closes the previous one implicitly.
+                onClick={() => setOpenId(isOpen ? null : component.id)}
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                className="flex w-full items-center gap-3 rounded-sm py-3 text-left transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C]"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="text-sm font-semibold text-[#F5F5F7]">
+                    {component.name}
+                  </span>
+                  <span className="text-sm text-[#4A4E6E]">
+                    {" — "}
+                    {component.summary}
+                  </span>
+                </span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className={`h-4 w-4 shrink-0 text-[#E31C1C] transition-transform duration-300 ease-out ${
+                    isOpen ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              </button>
+            </h3>
+            <div
+              id={panelId}
+              role="region"
+              aria-label={component.name}
+              // Collapsed rows are removed from the tab order and the
+              // accessibility tree; `grid-template-rows` carries the animation.
+              inert={!isOpen}
+              className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="pb-4">
+                  <SpecGrid specs={component.specs} />
+                  <Tagline>{component.tagline}</Tagline>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function InfoPanel({
   selectedGroup,
@@ -105,30 +232,16 @@ export default function InfoPanel({
 
           <div className="my-5 h-px w-full" style={{ background: HAIRLINE }} />
 
-          {/* Spec block. Fixed row rhythm, so swapping placeholder values for
-              real ones never changes the panel's height budget. */}
-          <dl className="flex flex-col gap-3">
-            {content.specs.map((spec) => (
-              <div
-                key={spec.label}
-                className="flex items-baseline justify-between gap-4"
-              >
-                <dt className="text-xs uppercase tracking-[0.12em] text-[#4A4E6E]">
-                  {spec.label}
-                </dt>
-                <dd className="text-right font-mono text-sm tabular-nums text-[#F5F5F7]">
-                  {spec.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="my-5 h-px w-full" style={{ background: HAIRLINE }} />
-
-          {/* Rationale — lighter and smaller than the headers, generous leading. */}
-          <p className="text-sm font-light leading-[1.6] text-[#F5F5F7]/80">
-            {content.rationale}
-          </p>
+          {/* Either an accordion of sub-components, or this subsystem's own
+              spec grid — never both. */}
+          {content.components ? (
+            <ComponentAccordion components={content.components} />
+          ) : (
+            <>
+              <SpecGrid specs={content.specs} />
+              <Tagline>{content.tagline}</Tagline>
+            </>
+          )}
 
           {/* Tour footer. Only present while the guided tour is running, so the
               panel's normal reading layout is unaffected. */}

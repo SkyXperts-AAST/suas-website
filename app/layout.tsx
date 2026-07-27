@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Barlow_Condensed,
+  JetBrains_Mono,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -15,6 +19,16 @@ const headerSans = Barlow_Condensed({
   variable: "--font-header-sans",
   subsets: ["latin"],
   weight: ["600", "700", "800"],
+});
+
+// Spec values in the vehicle InfoPanel. A real mono (rather than the system
+// `ui-monospace` stack) keeps figures aligned and rendering identically across
+// platforms — the system stack resolves to Menlo/Consolas/Liberation Mono
+// depending on OS, which is a visibly different look for the same table.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -34,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${headerSans.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${headerSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-navy font-sans text-offwhite">
         <CursorDrone />

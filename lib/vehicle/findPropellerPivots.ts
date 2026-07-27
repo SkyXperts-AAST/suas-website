@@ -1,53 +1,27 @@
 import * as THREE from "three";
 import { clusterArms } from "@/lib/vehicle/armClustering";
-import { lookupSubsystem } from "@/lib/vehicle/subsystemLookup";
+import {
+  isPropellerNode,
+  lookupSubsystemForNode,
+} from "@/lib/vehicle/subsystemLookup";
 
 export type PropellerSpinner = {
   pivot: THREE.Group;
   direction: number;
 };
 
-// Propeller-only CAD leaves from subsystem-map motor bucket (3402b-Propeller_*).
-const PROPELLER_MESH_NAMES = new Set(
-  [
-    "Body1.126",
-    "Body1.127",
-    "Body1.128",
-    "Body1.129",
-    "Body1.130",
-    "Body1.131",
-    "Body1.132",
-    "Body1.133",
-    "Body1.134",
-    "Body1.135",
-    "Body1.136",
-    "Body1.137",
-    "Body1.138",
-    "Body1.139",
-    "Body1.140",
-    "Body1.141",
-  ].map(normalizeMeshName),
-);
-
-
-function normalizeMeshName(name: string): string {
-  return name.replace(/[[\].:/]/g, "").replace(/_\d+$/, "");
-}
-
 function isMotorMesh(mesh: THREE.Mesh): boolean {
-  const info =
-    (mesh.parent ? lookupSubsystem(mesh.parent.name) : undefined) ??
-    lookupSubsystem(mesh.name);
-  return info?.key === "motor";
+  return lookupSubsystemForNode(mesh)?.key === "motor";
 }
 
+/**
+ * Propeller blades spin; motor cans and mounts don't. Identified by the
+ * "3402b-Propeller_*" assembly group (models/subsystem-map.json →
+ * propellerGroups) rather than a hardcoded leaf-name list, which pointed at
+ * the previous model's numbering and matches nothing after a CAD re-export.
+ */
 function isPropellerMesh(mesh: THREE.Mesh): boolean {
-  return (
-    PROPELLER_MESH_NAMES.has(normalizeMeshName(mesh.name)) ||
-    (mesh.parent
-      ? PROPELLER_MESH_NAMES.has(normalizeMeshName(mesh.parent.name))
-      : false)
-  );
+  return isPropellerNode(mesh);
 }
 
 function computeMeshCentroid(
@@ -116,8 +90,16 @@ export function setupPropellerSpinners(model: THREE.Object3D): PropellerSpinner[
 
     const shaftCenter = computeShaftCenter(propellerMeshes, hubMeshes, box);
 
+    // `shaftCenter` is a world-space point, but the pivot is parented under
+    // `model` and its `position` is interpreted in `model`'s local space.
+    // Those coincide only when `model` itself has an identity transform; if
+    // it's rotated (as DroneModel's is, 180° about Y), assigning the raw
+    // world point directly places the pivot's rotation axis on the opposite
+    // side of the model, so spinning it sweeps the propeller across the
+    // whole scene instead of spinning it in place. Converting through
+    // `model`'s current matrixWorld keeps this correct for any caller.
     const pivot = new THREE.Group();
-    pivot.position.copy(shaftCenter);
+    pivot.position.copy(model.worldToLocal(shaftCenter.clone()));
     model.add(pivot);
 
     for (const mesh of propellerMeshes) {

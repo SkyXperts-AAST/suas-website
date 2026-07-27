@@ -3,12 +3,13 @@
 import { useEffect, useMemo, useRef, type Dispatch, type SetStateAction } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
-import type { ThreeEvent } from "@react-three/fiber";
-import { lookupSubsystem } from "@/lib/vehicle/subsystemLookup";
+import { useFrame, type ThreeEvent } from "@react-three/fiber";
+import { lookupSubsystemForNode } from "@/lib/vehicle/subsystemLookup";
 import { clusterArms } from "@/lib/vehicle/armClustering";
 import { groupIdKey, groupIdsEqual, type GroupId } from "@/lib/vehicle/groupId";
+import { setupPropellerSpinners, spinPropellerPivot } from "@/lib/vehicle/findPropellerPivots";
 
-const MODEL_URL = "/models/skyxperts-strom-optimized.glb";
+const MODEL_URL = "/models/storm-final-optimized-v2.glb";
 const DRACO_DECODER_PATH = "/draco/";
 
 // The GLB's front faces away from the hero camera, so spin the model 180deg
@@ -16,6 +17,22 @@ const DRACO_DECODER_PATH = "/draco/";
 // clustering are computed (below), so framing and per-group selection stay
 // consistent with what's rendered.
 const MODEL_YAW = Math.PI;
+
+// One-time landing sequence played on mount. The model's raw bounds are ~0.34
+// units tall (see storm-final-optimized-v2.glb), so 0.22 units of lift reads
+// as "hovering just above the landing spot" at this scene's scale without
+// pushing the drone out of the hero camera's framed view. X/Z and rotation
+// are never touched — only Y animates, straight down onto the resting pose
+// the camera is already framed around.
+const LANDING_OFFSET_Y = 0.22;
+const LANDING_DURATION = 1.8;
+// Matches BuildLogHeroBackground's hover-spin rate, for a consistent idle
+// speed across the two drone hero scenes.
+const PROPELLER_IDLE_SPEED = 22;
+
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
 
 // Hover/selection tint. Deliberately NOT Accent Red: most of Storm's bodywork
 // is already red, so a red emissive was invisible against the parts it was
@@ -48,6 +65,11 @@ interface DroneModelProps {
    * Hover highlighting stays live — `selectedGroup` outranks it anyway.
    */
   interactive?: boolean;
+  /**
+   * True once the one-time landing sequence has finished. Hover/click on the
+   * model are suppressed until then, regardless of `interactive`.
+   */
+  hasLanded: boolean;
   onHoverGroup: Dispatch<SetStateAction<GroupId | null>>;
   onSelectGroup: (group: GroupId, bounds: THREE.Box3) => void;
   /**
@@ -59,22 +81,28 @@ interface DroneModelProps {
     overallBounds: THREE.Box3,
     groupBounds: Map<string, THREE.Box3>
   ) => void;
+  /** Fires once, when the landing sequence reaches the resting pose. */
+  onLanded: () => void;
 }
 
 export default function DroneModel({
   hoveredGroup,
   selectedGroup,
   interactive = true,
+  hasLanded,
   onHoverGroup,
   onSelectGroup,
   onReady,
+  onLanded,
 }: DroneModelProps) {
   const { scene } = useGLTF(MODEL_URL, DRACO_DECODER_PATH);
   const readyRef = useRef(false);
+  const landedRef = useRef(false);
+  const landingElapsedRef = useRef(0);
 
   // Clone before any transforms or tagging so the shared useGLTF cache stays
   // pristine for other pages (e.g. build-log propeller pivots).
-  const { model, groups, armCenters, overallBounds } = useMemo(() => {
+  const { model, groups, armCenters, overallBounds, propellerSpinners } = useMemo(() => {
     const model = scene.clone(true);
     model.rotation.set(0, MODEL_YAW, 0);
     model.updateMatrixWorld(true);
@@ -84,16 +112,12 @@ export default function DroneModel({
 
     model.traverse((obj) => {
       if (!(obj instanceof THREE.Mesh)) return;
-      // Resolve the subsystem from the owning GLTF node, not the leaf mesh name.
-      // The optimized GLB deduplicates geometry, so a multi-primitive part's
-      // leaf meshes are named after whatever CAD body they were merged against
-      // (e.g. a payload servo's leaves inherit a motor/esc body name). GLTFLoader
-      // names the parent group with the true node name, so prefer that; single-
-      // primitive parts carry the node name on the mesh itself (their parent is
-      // the scene root, which won't resolve).
-      const info =
-        (obj.parent ? lookupSubsystem(obj.parent.name) : undefined) ??
-        lookupSubsystem(obj.name);
+      // Resolve the subsystem by walking up to the nearest CAD assembly group
+      // ("Motor Mount", "SIYI Camera v1", ...). Leaf mesh names are
+      // auto-generated and get renumbered on every CAD re-export, so they can't
+      // be matched on directly; the group names are stable. See
+      // lib/vehicle/subsystemLookup.ts and models/subsystem-map.json.
+      const info = lookupSubsystemForNode(obj);
       if (!info) return;
       obj.userData.subsystem = info.key;
       obj.userData.subsystemLabel = info.label;
@@ -123,10 +147,55 @@ export default function DroneModel({
       for (const mesh of group.meshes) group.bounds.expandByObject(mesh);
     }
 
+    // Bounds are captured at the resting pose (Y = 0) *before* the airborne
+    // offset below, so the hero camera frames the same shot the drone lands
+    // into rather than the elevated starting position.
     const overallBounds = new THREE.Box3().setFromObject(model);
 
-    return { model, groups, armCenters, overallBounds };
+    // Reparents propeller meshes onto per-arm pivots; done after tagging so
+    // the subsystem lookup above (keyed off original parent names) isn't
+    // affected by the reparenting.
+    const propellerSpinners = setupPropellerSpinners(model);
+
+    return { model, groups, armCenters, overallBounds, propellerSpinners };
   }, [scene]);
+
+  // Landing sequence lives on a wrapper group rather than `model` itself —
+  // `model` comes from useMemo and mutating it directly in a hook callback
+  // isn't safe under the React Compiler; a ref is the sanctioned escape
+  // hatch (same pattern as BuildLogHeroBackground's rigRef).
+  const landingGroupRef = useRef<THREE.Group>(null);
+
+  // Descends from the airborne Y to the resting Y (0) over LANDING_DURATION,
+  // ease-out cubic, with propeller spin-down driven by the same eased
+  // progress so both finish together. Runs once per mount — guarded by
+  // landedRef rather than component state, since it mutates the group/pivots
+  // directly every frame without needing a re-render.
+  useFrame((_, delta) => {
+    if (landedRef.current) return;
+    const group = landingGroupRef.current;
+    if (!group) return;
+
+    landingElapsedRef.current = Math.min(
+      LANDING_DURATION,
+      landingElapsedRef.current + delta
+    );
+    const t = landingElapsedRef.current / LANDING_DURATION;
+    const eased = easeOutCubic(t);
+
+    group.position.y = LANDING_OFFSET_Y * (1 - eased);
+
+    const propSpeed = PROPELLER_IDLE_SPEED * (1 - eased);
+    for (const { pivot, direction } of propellerSpinners) {
+      spinPropellerPivot(pivot, direction, propSpeed, delta);
+    }
+
+    if (t >= 1) {
+      landedRef.current = true;
+      group.position.y = 0;
+      onLanded();
+    }
+  });
 
   // One-time side effects once tagging/clustering has run: log the arm
   // clustering result for sanity-checking, and hand the overall bounds up
@@ -221,11 +290,13 @@ export default function DroneModel({
   };
 
   return (
-    <primitive
-      object={model}
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
-      onClick={interactive ? handleClick : undefined}
-    />
+    <group ref={landingGroupRef} position={[0, LANDING_OFFSET_Y, 0]}>
+      <primitive
+        object={model}
+        onPointerOver={hasLanded ? handlePointerOver : undefined}
+        onPointerOut={hasLanded ? handlePointerOut : undefined}
+        onClick={interactive && hasLanded ? handleClick : undefined}
+      />
+    </group>
   );
 }

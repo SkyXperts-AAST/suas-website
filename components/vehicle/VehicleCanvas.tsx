@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  memo,
   Suspense,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
@@ -288,6 +290,20 @@ interface GroundShadow {
   scale: number;
 }
 
+// drei's ContactShadows re-renders its shadow pass every frame by default, and
+// keeps doing so forever even once the drone stops moving. Each pass is a full
+// re-render of the whole scene into a 1024px target with a depth override,
+// followed by four full-screen blur passes — i.e. it roughly doubles the
+// geometry submitted per frame, permanently.
+//
+// Its `frames` prop caps that, but the installed version tracks the count in a
+// plain render-scope `let`, not a ref, so ANY re-render of the component
+// re-arms it. Hovering the model changes `hoveredGroup`, which re-renders
+// VehicleCanvas, which re-renders this — so the cap silently never held.
+// Memoizing fixes that, but only if every prop is referentially stable, which
+// is why the position tuple below is memoized rather than written inline.
+const FrozenContactShadows = memo(ContactShadows);
+
 // The lighting preset is read from the URL, which React treats as an external
 // store: the server render has no query string, so it falls back to the prop
 // and the client re-reads after hydration.
@@ -319,6 +335,10 @@ export default function VehicleCanvas({
   const [ground, setGround] = useState<GroundShadow | null>(null);
   // Index into TOUR_STOPS while the guided tour runs; null when it isn't.
   const [tourStop, setTourStop] = useState<number | null>(null);
+  // Flips once, when the mount-time landing sequence reaches the resting
+  // pose. Gates the hero text fade-in and all model/tour interactivity so
+  // nothing else in the scene moves until the drone has actually landed.
+  const [hasLanded, setHasLanded] = useState(false);
   const controlsRef = useRef<CameraControls | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overallBoundsRef = useRef<THREE.Box3 | null>(null);
@@ -432,7 +452,20 @@ export default function VehicleCanvas({
     [flyToGroup]
   );
 
-  const startTour = useCallback(() => goToStop(0), [goToStop]);
+  const startTour = useCallback(() => {
+    if (!hasLanded) return;
+    goToStop(0);
+  }, [goToStop, hasLanded]);
+
+  const handleLanded = useCallback(() => setHasLanded(true), []);
+
+  // Referentially stable so FrozenContactShadows' memo actually holds across
+  // unrelated re-renders (hover, selection, tour). An inline array literal here
+  // would be a new object every render and defeat the memo entirely.
+  const groundPosition = useMemo<[number, number, number] | null>(
+    () => (ground ? [ground.x, ground.y, ground.z] : null),
+    [ground]
+  );
 
   // The tour advances only when the viewer asks it to. There is deliberately no
   // dwell timer: reading a stop takes as long as it takes, and a clock that
@@ -462,6 +495,14 @@ export default function VehicleCanvas({
       <Canvas
         camera={{ position: [1.5, 1.8, 0.6], fov: CAMERA_FOV, near: 0.01, far: 100 }}
         gl={{ alpha: true }}
+        // r3f defaults to the display's raw devicePixelRatio with no ceiling.
+        // On a 2x screen that is 4x the fragments of a 1x render, every frame,
+        // over a full-viewport canvas — by far the largest per-frame cost here,
+        // since this scene is fragment-bound (35 materials, image-based
+        // lighting, optional fog) rather than draw-call-bound. Capping at 1.75
+        // keeps edges crisp while cutting worst-case fragment work by ~23% vs
+        // 2x, and much more on 3x phone screens.
+        dpr={[1, 1.75]}
         onPointerMissed={returnToHero}
       >
         <SceneLighting preset={preset} />
@@ -470,22 +511,30 @@ export default function VehicleCanvas({
             hoveredGroup={hoveredGroup}
             selectedGroup={selectedGroup}
             interactive={tourStop === null}
+            hasLanded={hasLanded}
             onHoverGroup={setHoveredGroup}
             onSelectGroup={handleSelectGroup}
             onReady={handleReady}
+            onLanded={handleLanded}
           />
         </Suspense>
         {/* Soft contact shadow anchoring the drone — adds depth and grounding
-            under the legs without a visible ground plane. */}
-        {ground && (
-          <ContactShadows
-            position={[ground.x, ground.y, ground.z]}
+            under the legs without a visible ground plane. Kept live
+            (frames=Infinity) through the landing descent so it sharpens
+            naturally as the drone approaches the ground, then frozen after
+            one more frame once it's landed — nothing under it moves again
+            after that, so continuing to re-render the shadow forever would
+            be pure cost with no visual difference. */}
+        {ground && groundPosition && (
+          <FrozenContactShadows
+            position={groundPosition}
             scale={ground.scale}
             resolution={1024}
             blur={2.6}
             opacity={0.6}
             far={ground.scale}
             color="#000106"
+            frames={hasLanded ? 1 : Infinity}
           />
         )}
         <CameraControls ref={controlsRef} makeDefault />
@@ -493,6 +542,7 @@ export default function VehicleCanvas({
       <HeroOverlay
         dimmed={selectedGroup !== null}
         tourActive={tourStop !== null}
+        hasLanded={hasLanded}
         onExplore={startTour}
         onMoreInfo={scrollToDetails}
       />

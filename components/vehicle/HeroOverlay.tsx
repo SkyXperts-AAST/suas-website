@@ -11,6 +11,12 @@ interface HeroOverlayProps {
   dimmed?: boolean;
   /** True while the guided tour runs — swaps the primary CTA's label. */
   tourActive?: boolean;
+  /**
+   * True once the mount-time landing sequence has reached the resting pose.
+   * The name/subtitle/description/CTA block stays invisible and inert until
+   * then, so it fades in only once the drone has actually landed.
+   */
+  hasLanded: boolean;
   onExplore: () => void;
   onMoreInfo: () => void;
 }
@@ -18,6 +24,7 @@ interface HeroOverlayProps {
 export default function HeroOverlay({
   dimmed = false,
   tourActive = false,
+  hasLanded,
   onExplore,
   onMoreInfo,
 }: HeroOverlayProps) {
@@ -28,7 +35,11 @@ export default function HeroOverlay({
       }`}
     >
       {/* Bottom-left hero content */}
-      <div className="absolute bottom-14 left-6 max-w-md sm:left-12">
+      <div
+        className={`absolute bottom-14 left-6 max-w-md transition-opacity duration-500 sm:left-12 ${
+          hasLanded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <p className="font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
           SUAS · USA
         </p>
@@ -39,10 +50,14 @@ export default function HeroOverlay({
           Autonomous heavy-lift quadcopter. Built in-house, subsystem by
           subsystem.
         </p>
-        <div className="pointer-events-auto mt-7 flex flex-wrap gap-3">
+        <div
+          className={`mt-7 flex flex-wrap gap-3 ${
+            hasLanded ? "pointer-events-auto" : "pointer-events-none"
+          }`}
+        >
           <button
             onClick={onExplore}
-            disabled={tourActive}
+            disabled={tourActive || !hasLanded}
             className="rounded-full bg-[#E31C1C] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#E31C1C]/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E3F] disabled:cursor-default disabled:bg-[#E31C1C]/50"
           >
             {tourActive ? "Tour Running…" : "Explore Components"}

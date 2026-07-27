@@ -13,6 +13,10 @@ import {
 // 30deg), so "behind the drone" is -x/-z and "in front of it" is +x/+z. Every
 // light position below is expressed relative to that.
 
+// Self-hosted copy of what drei's `preset="city"` resolves to. See the
+// <Environment> comment below for why this isn't the `preset` prop.
+const ENVIRONMENT_HDRI = "/hdri/potsdamer_platz_512.hdr";
+
 /**
  * Seeded 32-bit PRNG (mulberry32). Deterministic on purpose: the mote layout
  * is scene dressing, and a fixed seed keeps it identical across re-renders and
@@ -128,8 +132,19 @@ export default function SceneLighting({ preset }: { preset: LightingPreset }) {
       {/* Image-based reflections, for the machined/anodised metal only. This is
           the main thing that greys out black surfaces — a rough black plate
           picks up the whole HDRI as a flat sheen — so it stays well under the
-          directionals and buys specular character rather than brightness. */}
-      <Environment preset="city" environmentIntensity={atmospheric ? 0.24 : 0.2} />
+          directionals and buys specular character rather than brightness.
+          Loaded from `files` rather than `preset`: drei's presets resolve to
+          raw.githack.com, a third-party dev proxy, so `preset` would make the
+          deployed site depend on an external host at runtime for a 1.5MB
+          blocking fetch. Self-hosted, it ships with the static export, and is
+          box-downsampled to 512x256 — at this intensity it contributes a
+          broad specular sheen, not readable reflections, so the full 1k
+          source (4x the bytes) bought nothing. Source kept in
+          models/hdri-source/. */}
+      <Environment
+        files={ENVIRONMENT_HDRI}
+        environmentIntensity={atmospheric ? 0.24 : 0.2}
+      />
 
       {atmospheric && (
         <>

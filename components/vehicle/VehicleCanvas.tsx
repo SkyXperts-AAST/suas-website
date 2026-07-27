@@ -505,7 +505,14 @@ export default function VehicleCanvas({
         dpr={[1, 1.75]}
         onPointerMissed={returnToHero}
       >
-        <SceneLighting preset={preset} />
+        {/* Suspended separately from the model: <Environment> loads a ~1.5MB
+            HDRI, and without its own boundary that fetch suspends this whole
+            subtree, so the drone can't render until the environment map has
+            arrived. Split, the two load in parallel and the scene appears as
+            soon as the geometry is ready. */}
+        <Suspense fallback={null}>
+          <SceneLighting preset={preset} />
+        </Suspense>
         <Suspense fallback={null}>
           <DroneModel
             hoveredGroup={hoveredGroup}

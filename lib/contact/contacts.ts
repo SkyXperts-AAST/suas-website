@@ -6,11 +6,8 @@ export type ContactReason =
   | "join-team"
   | "other";
 
-/** Recipient for the contact form's prefilled mailto. */
-export const TEAM_EMAIL = "contact@skyxperts.org";
-
-/** Shared team inbox listed in the direct-contact section. */
-export const TEAM_INBOX = "SkyXperts@aast.edu";
+/** Shared team inbox: listed directly and used by the contact form's mailto. */
+export const TEAM_EMAIL = "SkyXperts@aast.edu";
 
 export type TeamLead = {
   name: string;

@@ -1,4 +1,4 @@
-import { TEAM_INBOX, TEAM_LEADS } from "@/lib/contact/contacts";
+import { TEAM_EMAIL, TEAM_LEADS } from "@/lib/contact/contacts";
 
 function EmailLink({ address }: { address: string }) {
   return (
@@ -50,7 +50,7 @@ export default function ContactDirectory() {
         <div className="gap-4 py-5 md:flex md:items-baseline md:justify-between">
           <dt className="font-semibold text-offwhite">Team email</dt>
           <dd className="mt-2 md:mt-0 md:text-right">
-            <EmailLink address={TEAM_INBOX} />
+            <EmailLink address={TEAM_EMAIL} />
           </dd>
         </div>
       </dl>

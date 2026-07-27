@@ -36,17 +36,17 @@ export default function EventCountdown() {
   ];
 
   return (
-    <section className="border-b border-gray-200 bg-white px-6 py-8 text-center">
-      <p className="mb-4 text-xs font-medium uppercase tracking-wide text-gray-500">
+    <section className="border-b border-white/10 bg-navy px-6 py-8 text-center">
+      <p className="mb-4 font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
         SUAS 2026 · Sep 14–17 · Tulsa, Oklahoma
       </p>
       <div className="flex justify-center gap-6">
         {units.map((u) => (
           <div key={u.label} className="flex flex-col items-center">
-            <span className="text-2xl font-semibold text-[#0A1A33] tabular-nums">
+            <span className="font-display text-2xl font-bold text-[#F5F5F7] tabular-nums">
               {String(u.value).padStart(2, "0")}
             </span>
-            <span className="text-xs text-gray-500">{u.label}</span>
+            <span className="text-xs text-[#F5F5F7]/60">{u.label}</span>
           </div>
         ))}
       </div>

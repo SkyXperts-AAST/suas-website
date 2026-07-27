@@ -3,6 +3,7 @@ import { Barlow_Condensed, Plus_Jakarta_Sans } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import "./globals.css";
+import CursorDrone from "@/components/CursorDrone";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -36,6 +37,7 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${headerSans.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-navy font-sans text-offwhite">
+        <CursorDrone />
         <Nav />
         <main className="flex-1 overflow-x-clip">{children}</main>
         <Footer />

@@ -66,13 +66,13 @@ export default function ScatteredJourney() {
   }, [pathLength]);
 
   return (
-    <section className="bg-gray-50 px-6 py-16">
-      <p className="mb-2 text-center text-xs font-medium uppercase tracking-wide text-gray-500">
-        Our journey
-      </p>
-      <h2 className="mb-12 text-center text-2xl font-semibold text-gray-900">
-        From first flight to Storm
-      </h2>
+    <section className="bg-[#0a1628] px-6 py-16">
+      <p className="mb-3 text-center font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+  Our journey
+</p>
+<h2 className="mb-12 text-center font-display text-4xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-5xl">
+  From first flight to Storm
+</h2>
 
       <div
         ref={wrapperRef}
@@ -95,7 +95,8 @@ export default function ScatteredJourney() {
           <path
             ref={pathRef}
             d={pathD}
-            stroke="#0A1A33"
+            stroke="white"
+            strokeOpacity={0.5}
             strokeWidth={2}
             strokeDasharray="2 10"
             strokeLinecap="round"
@@ -108,17 +109,17 @@ export default function ScatteredJourney() {
           return (
             <div
               key={i}
-              className={`absolute w-40 -translate-x-1/2 rounded-lg bg-white p-3 text-center shadow-sm transition-opacity duration-500 ${
+              className={`absolute w-40 rounded-lg bg-white/10 p-3 text-center backdrop-blur-sm transition-opacity duration-500 ${
                 active ? "opacity-100" : "opacity-30"
               }`}
               style={{
-  left: `${(m.x / VIEW_W) * 100}%`,
-  top: `${(m.y / VIEW_H) * 100}%`,
-  transform: "translate(-50%, -50%)",
-}}
+                left: `${(m.x / VIEW_W) * 100}%`,
+                top: `${(m.y / VIEW_H) * 100}%`,
+                transform: "translate(-50%, -50%)",
+              }}
             >
-              <p className="text-xs font-semibold text-[#0A1A33]">{m.year}</p>
-              <p className="mt-1 text-xs text-gray-600">{m.text}</p>
+              <p className="text-xs font-semibold text-white">{m.year}</p>
+              <p className="mt-1 text-xs text-white/70">{m.text}</p>
             </div>
           );
         })}

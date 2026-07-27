@@ -31,7 +31,7 @@ export default function VehicleScrollReveal() {
   }, []);
 
   return (
-    <div ref={wrapperRef} style={{ height: "250vh" }} className="relative bg-[#0A1A33]" >
+    <div ref={wrapperRef} style={{ height: "250vh" }} className="relative bg-navy" >
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center px-6 text-center">
         <p className="mb-2 text-xs font-medium uppercase tracking-wide text-white/60">
           Our vehicle

@@ -11,7 +11,7 @@ export const SPONSORS: Sponsor[] = [
     name: "Makers",
     logoSrc: "/sponsor-makers.png",
     // TODO: add sponsor website URL
-    href: "#",
+    href: "https://makerselectronics.com/?srsltid=AfmBOoqR7kv64ba_YOVypyLAAHuTBr_A8cD0e9dlSMks51Lm-p8DWoKk",
   },
   {
     name: "PCBWay",

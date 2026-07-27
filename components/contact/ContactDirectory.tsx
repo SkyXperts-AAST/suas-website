@@ -1,24 +1,4 @@
-import TeamIcon from "@/components/build-log/TeamIcon";
-import { getTeamTheme } from "@/lib/build-log/themes";
-import { TEAM_EMAIL, TEAM_HEADS } from "@/lib/contact/contacts";
-import type { SubTeamSlug } from "@/lib/build-log/types";
-
-function ContactLink({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      className="text-sm text-offwhite/80 transition-colors hover:text-accent focus:outline-none focus-visible:text-accent"
-    >
-      {children}
-    </a>
-  );
-}
+import { TEAM_EMAIL } from "@/lib/contact/contacts";
 
 export default function ContactDirectory() {
   return (
@@ -41,49 +21,6 @@ export default function ContactDirectory() {
           <MailIcon />
           {TEAM_EMAIL}
         </a>
-      </div>
-
-      <div>
-        <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-offwhite/50">
-          Sub-team heads
-        </p>
-        <ul className="mt-5 grid gap-4 sm:grid-cols-2">
-          {TEAM_HEADS.map((head) => {
-            const theme = getTeamTheme(head.slug as SubTeamSlug);
-
-            return (
-              <li
-                key={head.slug}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-white/20 hover:bg-white/[0.05]"
-              >
-                <div className="flex items-start gap-3">
-                  <span
-                    className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/15 ${theme.iconBg} ${theme.iconText}`}
-                  >
-                    <TeamIcon slug={head.slug} className="h-5 w-5" />
-                  </span>
-
-                  <div className="min-w-0 flex-1">
-                    <p className={`text-xs font-bold uppercase tracking-[0.16em] ${theme.iconText}`}>
-                      {theme.label}
-                    </p>
-                    <p className="mt-1 font-semibold text-offwhite">{head.name}</p>
-                    <p className="text-sm text-offwhite/60">{head.role}</p>
-
-                    <div className="mt-3 flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-4">
-                      <ContactLink href={`tel:${head.phone.replace(/\s/g, "")}`}>
-                        {head.phone}
-                      </ContactLink>
-                      <ContactLink href={`mailto:${head.email}`}>
-                        {head.email}
-                      </ContactLink>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
       </div>
     </div>
   );

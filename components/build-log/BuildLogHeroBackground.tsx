@@ -324,7 +324,10 @@ function HeroScene({
   return (
     <>
       <TeamLighting teamSlug={teamSlug} reducedMotion={reducedMotion} />
-      <Environment preset="studio" environmentIntensity={0.42} />
+      {/* Self-hosted rather than drei's `preset="studio"`, which resolves to
+          raw.githack.com — a third-party dev proxy the deployed site would
+          otherwise depend on at runtime. Same asset, served with the export. */}
+      <Environment files="/hdri/studio_small_03_512.hdr" environmentIntensity={0.42} />
       <CinematicCamera reducedMotion={reducedMotion} />
       <Suspense fallback={null}>
         <CinematicDrone pointerRef={pointerRef} reducedMotion={reducedMotion} />

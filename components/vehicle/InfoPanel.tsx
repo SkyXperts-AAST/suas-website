@@ -5,9 +5,9 @@ import { subsystemLabel } from "@/lib/vehicle/subsystemLookup";
 import {
   subsystemContent,
   type SubsystemComponent,
-  type SubsystemSpec,
 } from "@/lib/vehicle/subsystemContent";
 import { groupIdsEqual, type GroupId } from "@/lib/vehicle/groupId";
+import SpecGrid, { SPEC_RULE } from "./SpecGrid";
 
 export interface TourState {
   /** Zero-based index of the current stop. */
@@ -25,35 +25,6 @@ interface InfoPanelProps {
 }
 
 const HAIRLINE = "rgba(255, 255, 255, 0.08)";
-// Row rule inside the spec grid. Accent Red at low alpha — enough to read as
-// a deliberate brand hairline against the frosted navy, far too faint to
-// compete with the values sitting on it.
-const SPEC_RULE = "rgba(227, 28, 28, 0.18)";
-
-/**
- * Label/value rows. Labels are muted and sentence case; values are monospace
- * so figures line up column-wise down the grid. Rows are separated by rules
- * rather than gaps alone, which is what makes a dense grid scannable.
- */
-function SpecGrid({ specs }: { specs: SubsystemSpec[] }) {
-  if (specs.length === 0) return null;
-  return (
-    <dl className="flex flex-col">
-      {specs.map((spec, i) => (
-        <div
-          key={spec.label}
-          className="grid grid-cols-[7rem_1fr] items-baseline gap-x-4 gap-y-1 py-2.5"
-          style={i > 0 ? { borderTop: `1px solid ${SPEC_RULE}` } : undefined}
-        >
-          <dt className="text-xs leading-snug text-[#4A4E6E]">{spec.label}</dt>
-          <dd className="font-mono text-[0.8125rem] leading-snug tabular-nums text-[#F5F5F7]">
-            {spec.value}
-          </dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
 
 /** The single rationale line under a grid — lighter and italic, never a spec row. */
 function Tagline({ children }: { children: string }) {

@@ -9,7 +9,7 @@ import { clusterArms } from "@/lib/vehicle/armClustering";
 import { groupIdKey, groupIdsEqual, type GroupId } from "@/lib/vehicle/groupId";
 import { setupPropellerSpinners, spinPropellerPivot } from "@/lib/vehicle/findPropellerPivots";
 
-const MODEL_URL = "/models/storm-final-optimized-v2.glb";
+const MODEL_URL = "/models/storm-final-optimized-v4.glb";
 const DRACO_DECODER_PATH = "/draco/";
 
 // The GLB's front faces away from the hero camera, so spin the model 180deg
@@ -19,7 +19,7 @@ const DRACO_DECODER_PATH = "/draco/";
 const MODEL_YAW = Math.PI;
 
 // One-time landing sequence played on mount. The model's raw bounds are ~0.34
-// units tall (see storm-final-optimized-v2.glb), so 0.22 units of lift reads
+// units tall (see storm-final-optimized-v4.glb), so 0.22 units of lift reads
 // as "hovering just above the landing spot" at this scene's scale without
 // pushing the drone out of the hero camera's framed view. X/Z and rotation
 // are never touched — only Y animates, straight down onto the resting pose

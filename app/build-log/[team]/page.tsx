@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BuildLogTimeline from "@/components/build-log/BuildLogTimeline";
 import TeamHeader from "@/components/build-log/TeamHeader";
-import { getEntriesForTeam } from "@/lib/build-log/entries";
+import { getEntriesForTeam } from "@/lib/build-log/loadEntries";
 import { getSubTeam, isSubTeamSlug, SUB_TEAMS } from "@/lib/build-log/teams";
 
 type BuildLogTeamPageProps = {
@@ -37,7 +37,7 @@ export default async function BuildLogTeamPage({ params }: BuildLogTeamPageProps
   }
 
   const team = getSubTeam(teamSlug);
-  const entries = getEntriesForTeam(teamSlug);
+  const entries = await getEntriesForTeam(teamSlug);
 
   if (!team) {
     notFound();

@@ -14,7 +14,7 @@ import { SUB_TEAMS, isSubTeamSlug } from "@/lib/build-log/teams";
 import type { SubTeamSlug } from "@/lib/build-log/types";
 import { setupPropellerSpinners } from "@/lib/vehicle/findPropellerPivots";
 
-const MODEL_URL = "/models/skyxperts-strom-optimized.glb";
+const MODEL_URL = "/models/storm-final-optimized-v2.glb";
 const DRACO_DECODER_PATH = "/draco/";
 /** Baked into the cloned model — same 180° correction as DroneModel. */
 const MODEL_YAW = Math.PI;

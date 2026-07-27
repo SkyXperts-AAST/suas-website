@@ -1,0 +1,643 @@
+{
+  "computer-vision": [
+    {
+      "id": "cv-1",
+      "date": "2026-07-15",
+      "title": "Field day: lawnmower search + live geolocation",
+      "summary": "Ran the full search-to-geolocation loop outdoors for the first time \u2014 lawnmower coverage at 50 m AGL feeding real-time target coordinates to the flight controller.",
+      "image": "/build-log/images/field-photo-2.jpeg",
+      "imageAlt": "Field testing of the onboard vision and search pipeline",
+      "tags": ["field-test", "geolocation"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Took Storm out to run the search pipeline start to finish instead of bench-testing the pieces separately. Flew the lawnmower pattern inside the search boundary at 50 m (164 ft) AGL \u2014 the altitude where the A8 Mini's 81\u00b0 horizontal FOV gives roughly an 85.4 m swath per pass, wide enough to set line spacing with real overlap between legs instead of leaving gaps at the pattern edges."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/field-photo-2.jpeg",
+          "alt": "Field session validating search coverage and detection handoff",
+          "caption": "Lawnmower pass over the search grid \u2014 first outdoor run of the full detection-to-reposition loop."
+        },
+        {
+          "type": "paragraph",
+          "text": "Every confirmed detection got run through the geolocation conversion live: pixel position to ground sample distance (about 2.01 cm/pixel at this altitude), then to a real-world offset using GPS position and fused heading, then to a geodetic target coordinate. The flight controller received that as a reposition command ahead of payload release."
+        },
+        {
+          "type": "list",
+          "heading": "Notes from the field",
+          "items": [
+            "Two passes needed a re-fly \u2014 direct sun glare over the tarp targets washed out contrast on the gimbal feed.",
+            "Reposition commands landed within expected tolerance on every run that didn't get re-flown.",
+            "Line spacing held overlap fine at 50 m; haven't pushed the pattern into gustier conditions yet."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: repeat the same run in more wind than we saw today, and start actually logging detection-to-command latency instead of eyeballing it off the video feed."
+        }
+      ]
+    },
+    {
+      "id": "cv-2",
+      "date": "2026-06-02",
+      "title": "Training run: YOLO detector on synthetic + real data",
+      "summary": "Fine-tuned the YOLO detector for the two competition target classes; occlusion and orientation augmentation got cranked up after the last round undercounted partially-covered targets.",
+      "image": "/build-log/images/field-photo-3.jpeg",
+      "imageAlt": "Vision model evaluation during field data collection",
+      "tags": ["training", "detection"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Spent this cycle on the detector instead of the airframe. Sticking with a YOLO single-stage model for the mannequin and tent classes \u2014 looked at DETR early on, but the gains transformer detectors report show up on datasets much larger than our synthetic-plus-real mix, so it wasn't worth the extra training complexity for us."
+        },
+        {
+          "type": "paragraph",
+          "text": "Training set is still mostly synthetic \u2014 target instances composited onto aerial backgrounds with randomized orientation, scale, lighting, and occlusion \u2014 topped up with real field imagery so the model sees actual camera noise and lighting the synthetic pipeline can't fake."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/field-photo-3.jpeg",
+          "alt": "Real aerial imagery used to supplement synthetic training data",
+          "caption": "Real field captures added this round to cover debris clutter the synthetic set was missing."
+        },
+        {
+          "type": "list",
+          "heading": "What changed this round",
+          "items": [
+            "Cranked up occlusion augmentation after last month's model missed mannequins partially buried in debris \u2014 competition rules explicitly allow that, so it has to be covered.",
+            "Added full 0\u2013360\u00b0 orientation sampling instead of the narrower range we started with.",
+            "Real-image share of the training set is still small; want more field captures before the next retrain."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: pull more field photos from upcoming flight days and re-check validation on the occlusion-heavy cases specifically, not just aggregate mAP."
+        }
+      ]
+    },
+    {
+      "id": "cv-3",
+      "date": "2026-04-18",
+      "title": "Camera decision: A8 Mini for mapping + detection",
+      "summary": "Settled on the SIYI A8 Mini as our one camera for both risk mapping and target detection, running inference onboard instead of over the video link.",
+      "image": "/team/vision.JPG",
+      "imageAlt": "SkyXperts computer vision sub-team",
+      "tags": ["hardware", "camera"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Decided early that one gimbal camera has to cover both jobs \u2014 feeding the risk-map stitching pipeline and running target detection \u2014 with all inference happening onboard the Jetson. We looked at running detection on the ground station instead, but that ties the whole detection loop to the RF video link, which gets unreliable fast in a field with a dozen other teams' radios running."
+        },
+        {
+          "type": "paragraph",
+          "text": "Between the A8 Mini and a cheaper fixed action camera, the gimbal won out mainly for the global shutter and built-in stabilization. Keeping the optical axis close to nadir through turns and gust corrections matters a lot for how cleanly stitched mapping frames overlap \u2014 a shaky feed makes that job much harder downstream."
+        },
+        {
+          "type": "image",
+          "src": "/team/vision.JPG",
+          "alt": "Computer vision team working on the perception pipeline",
+          "caption": "Bench-mounting the A8 Mini feed to the Jetson Orin Nano before the first onboard inference test."
+        },
+        {
+          "type": "list",
+          "heading": "Open items",
+          "items": [
+            "Need to confirm gimbal stabilization holds up in the wind speeds we expect on competition day, not just on calm bench tests.",
+            "Global shutter rules out most of the rolling-shutter smear we saw on the old action-cam footage during turns."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: get the A8 Mini feed running through the full onboard detection pipeline end to end, not just verified as a standalone feed."
+        }
+      ]
+    },
+    {
+      "id": "cv-4",
+      "date": "2025-11-08",
+      "title": "Shaking out the vision scripts on the small test rig first",
+      "summary": "Ran flight modes, detection scripts, and payload triggers on the smaller test platform before touching the real airframe \u2014 cheaper to crash.",
+      "image": "/gallery/field-day.png",
+      "imageAlt": "Prototype multirotor used for early vision development",
+      "tags": ["prototype", "validation"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Before anything touches Storm, we run it on the small test platform first. This round covered flight mode switching, the early detection scripts, and the payload deployment trigger logic \u2014 all on hardware that's a lot cheaper to total than the competition airframe."
+        },
+        {
+          "type": "list",
+          "heading": "Results",
+          "items": [
+            "Flight mode transitions behaved as expected across the full test sequence.",
+            "Detection script ran without crashing for the whole test \u2014 accuracy wasn't the focus here, just making sure it doesn't fall over mid-flight.",
+            "Payload trigger fired correctly on command every time it was tested."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing gets promoted to the full-scale build until it's held up on the test platform first \u2014 the point is to catch the dumb software bugs on the unit we don't mind breaking."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: start porting the validated scripts over to the Storm-specific hardware configuration and re-test against the real sensor stack."
+        }
+      ]
+    }
+  ],
+  "control": [
+    {
+      "id": "ctrl-1",
+      "date": "2026-07-10",
+      "title": "Full mission dry run + failsafe trials",
+      "summary": "Flew the complete mission end to end \u2014 takeoff, search, landing \u2014 then spent the rest of the day trying to break the failsafes on purpose.",
+      "image": "/gallery/flight-test.jpg",
+      "imageAlt": "Storm during autonomous field flight testing",
+      "tags": ["field-test", "failsafe"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "First time we ran the complete mission profile back to back instead of testing each phase separately: autonomous takeoff, waypoint navigation out to the search area, the lawnmower search pattern, and landing. No manual intervention needed on any leg."
+        },
+        {
+          "type": "image",
+          "src": "/gallery/flight-test.jpg",
+          "alt": "Quadcopter hovering during outdoor flight testing",
+          "caption": "Waypoint leg during the full-mission trial \u2014 wind was up more than we'd planned for."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spent the second half of the day deliberately triggering failure conditions to check the response: killed telemetry, killed RC, forced a low-battery flag, and flew across the geofence boundary. Every trigger produced the expected response, no missed cases."
+        },
+        {
+          "type": "list",
+          "heading": "Failsafe trial log",
+          "items": [
+            "Telemetry loss \u2192 correct RTH trigger, every run.",
+            "RC loss \u2192 correct RTH trigger, every run.",
+            "Low battery flag \u2192 correct response, every run.",
+            "Geofence breach \u2192 flight termination triggered as expected.",
+            "Hardware kill switch on the RC transmitter disarmed the vehicle reliably on command, tested separately from the automated triggers."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: same test matrix again, but with the safety pilot and GCS operator swapping who calls each failsafe, so it isn't just one person's muscle memory being tested."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-2",
+      "date": "2026-05-22",
+      "title": "SITL first, then HITL, before anything flies",
+      "summary": "Ran the mission software through Gazebo SITL function by function, then onto the real Pixhawk via HITL, before it was allowed anywhere near a real flight.",
+      "image": "/team/control.JPG",
+      "imageAlt": "Control team during software integration",
+      "tags": ["simulation", "PX4"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Two-stage validation before Storm's mission software touches actual hardware. First pass was SITL in Gazebo, tested piece by piece \u2014 searchAreaEntered(), waypoint navigation, the lawnmower search algorithm \u2014 each verified individually before running them together as one simulated mission."
+        },
+        {
+          "type": "paragraph",
+          "text": "Second pass was HITL: same mission code, but now talking to an actual Pixhawk 6C running the real PX4 firmware instead of a simulated flight stack. This is where we've caught driver-level issues before that SITL just can't see, since it isn't exercising the real hardware interfaces."
+        },
+        {
+          "type": "image",
+          "src": "/team/control.JPG",
+          "alt": "Control sub-team integrating autonomy software",
+          "caption": "Reviewing SITL mission logs before handing the same test matrix off to HITL."
+        },
+        {
+          "type": "list",
+          "heading": "Results across both stages",
+          "items": [
+            "All FSM state transitions fired correctly in SITL, no logic changes needed before moving to HITL.",
+            "HITL surfaced one MAVLink timing issue on a state transition that never showed up in simulation \u2014 traced and fixed before going further.",
+            "Flight termination triggers verified in both stages with no discrepancies."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: this code goes to physical flight trials now that both simulation stages are clean."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-3",
+      "date": "2026-03-14",
+      "title": "Locking the autonomy stack and failsafe timers",
+      "summary": "Called it: Pixhawk 6C + PX4, M9N GPS, RFD900A telemetry, and hard numbers on the RTH and termination timers.",
+      "image": "/build-log/images/storm-airframe.jpeg",
+      "imageAlt": "Storm airframe with avionics stack installed",
+      "tags": ["autopilot", "safety"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Locked the core autonomy hardware and software stack today. Going with the Pixhawk 6C running PX4 \u2014 the deciding factor was native ROS 2 and MAVSDK support, which saves us from bolting on extra middleware just to get the autonomy layer talking to the flight controller."
+        },
+        {
+          "type": "paragraph",
+          "text": "GPS is the Holybro M9N \u2014 quad-constellation tracking at 25 Hz, which gets us under 2 m of position error. That's the accuracy margin we need to actually hold waypoint thresholds autonomously instead of hoping for the best."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/storm-airframe.jpeg",
+          "alt": "Storm quadrotor airframe",
+          "caption": "Storm's avionics bay with the Pixhawk 6C stack installed."
+        },
+        {
+          "type": "list",
+          "heading": "Failsafe timers, locked in",
+          "items": [
+            "15 seconds of comms loss \u2192 PX4 autonomously triggers RTH.",
+            "90 seconds \u2192 flight termination.",
+            "Safety pilot retains independent, single-action override to trigger either response at any time.",
+            "GCS operator has the same independent authority from the ground station."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "These numbers aren't final-final \u2014 we'll stress-test them against real comms dropout behavior once RFD900A range testing wraps up."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-4",
+      "date": "2026-01-20",
+      "title": "Wiring PX4, ROS 2, and QGC into one pipeline",
+      "summary": "Got the Jetson's ROS 2 autonomy layer actually talking to PX4 over MAVLink, with QGroundControl sitting on top for the operator.",
+      "image": "/build-log/images/field-photo-1.jpeg",
+      "imageAlt": "Ground control station during mission rehearsal",
+      "tags": ["software", "integration"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "This session was about getting the pieces to actually talk to each other instead of just working standalone. PX4 stays responsible for stabilization, state estimation, and waypoint execution; the Jetson Orin Nano runs the ROS 2 autonomy layer on top, subscribing to vehicle state and publishing mission commands back down over MAVLink."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/field-photo-1.jpeg",
+          "alt": "Field operations with ground control monitoring",
+          "caption": "Ground station monitoring during the first end-to-end pipeline test."
+        },
+        {
+          "type": "paragraph",
+          "text": "QGroundControl is what the GCS operator actually watches during a run \u2014 flight boundary, vehicle position, ground speed, AGL altitude, all live. It's also the only interface we're using for mission upload, so it needs to hold up for the full 45-minute competition window, not just a quick test flight."
+        },
+        {
+          "type": "list",
+          "heading": "First integration test notes",
+          "items": [
+            "MAVLink bridge held a stable connection for the full test duration, no dropped commands.",
+            "One mission upload needed a retry \u2014 QGC timed out on a slow serial handshake, not repeatable so far.",
+            "ROS 2 autonomy commands reached the flight controller with no observed lag."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: keep an eye on that upload timeout if it shows up again, and start running longer sessions to make sure nothing degrades over a full 45-minute window."
+        }
+      ]
+    }
+  ],
+  "electrical": [
+    {
+      "id": "elec-1",
+      "date": "2026-06-28",
+      "title": "Power architecture locked: one battery, two regulated rails",
+      "summary": "Finalized how power gets from the single 6S battery out to everything else \u2014 PM08-CAN for avionics, PDB for propulsion and the Jetson buck.",
+      "image": "/team/electrical.JPG",
+      "imageAlt": "Electrical team wiring Storm's power distribution",
+      "tags": ["power", "architecture"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Settled the full power distribution architecture this week. Everything runs off a single MAD 6S 28 Ah solid-state lithium-ion pack (140 A continuous / 280 A max), routed through a PM08-CAN 14S 200 A power module and a 300 A side-entry PDB."
+        },
+        {
+          "type": "image",
+          "src": "/team/electrical.JPG",
+          "alt": "Electrical sub-team working on avionics integration",
+          "caption": "Harness routing from the PM08-CAN and PDB during power architecture bring-up."
+        },
+        {
+          "type": "list",
+          "heading": "Rail assignments",
+          "items": [
+            "PM08-CAN \u2192 5.1 V rail \u2192 Pixhawk 6C, which in turn powers the RFD900A telemetry radio, RC receiver, Holybro M9N GPS, and the MG995 servo.",
+            "PDB \u2192 22.2 V rail \u2192 all four ESCs and the SIYI A8 Mini gimbal.",
+            "PDB \u2192 300 W buck converter \u2192 18 V \u2192 Jetson Orin Nano."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Kept avionics and propulsion on physically separate rails on purpose, so a propulsion-side current spike doesn't have a path to brown out the flight controller or companion computer."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: bench-verify each rail under simultaneous load before this goes anywhere near the full airframe wiring harness."
+        }
+      ]
+    },
+    {
+      "id": "elec-2",
+      "date": "2026-05-05",
+      "title": "Bench test: pushing the motors to full throttle to size the ESCs",
+      "summary": "Ran each motor to full throttle on the bench to confirm the 80 A ESCs actually have margin \u2014 measured 61.5 A max draw per motor.",
+      "image": "/build-log/images/thrust-current-takeoff.jpeg",
+      "imageAlt": "Thrust versus current curve at takeoff operating point",
+      "tags": ["ESC", "bench-test"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Put each Avenger 4215 V5 on the bench and ran it up to full throttle to get a real current number instead of trusting the datasheet estimate. Measured 61.5 A per motor at full throttle \u2014 that's the number we sized the ESCs against."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/thrust-current-takeoff.jpeg",
+          "alt": "Spline fit of thrust versus current at takeoff",
+          "caption": "Spline fit of the bench data \u2014 takeoff operating point at 2616 gf per motor, ~14.54 A estimated draw."
+        },
+        {
+          "type": "paragraph",
+          "text": "Paired each motor with a Hobbywing Skywalker 80 A V2 ESC, which puts us at roughly 30% current headroom above the worst-case measured draw. Not massive margin, but enough that we're not living right at the ESC's rated limit during takeoff."
+        },
+        {
+          "type": "list",
+          "heading": "Wiring sized against worst case, not typical case",
+          "items": [
+            "Battery output leads: 10 AWG, rated for simultaneous full-throttle draw across all four motors (246 A).",
+            "PM08-CAN leads: 8 AWG, same worst-case basis.",
+            "That worst-case draw is brief \u2014 full-throttle-on-all-four is a takeoff-only condition, not sustained \u2014 but we sized for it anyway."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: re-run this at sustained full throttle for longer than a single spike, since ESC thermal limits are usually a duration problem, not an instantaneous one."
+        }
+      ]
+    },
+    {
+      "id": "elec-3",
+      "date": "2026-03-30",
+      "title": "Endurance math: 29.93 minutes, on paper",
+      "summary": "Built the full endurance model combining avionics draw with phase-specific motor currents \u2014 comes out to just under 30 minutes on the 28 Ah pack.",
+      "image": "/build-log/images/thrust-current-hover.jpeg",
+      "imageAlt": "Thrust versus current curve at cruise operating point",
+      "tags": ["endurance", "analysis"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Put together the endurance model this week instead of just eyeballing flight time. Avionics alone draw a steady 35.4 W \u2014 Pixhawk 6C, A8 Mini, M9N GPS, RFD900A, RadioMaster ER8, and the Jetson Orin Nano combined \u2014 which works out to about 1.59 A off the 22.2 V nominal pack voltage."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/thrust-current-hover.jpeg",
+          "alt": "Spline fit at cruise operating point",
+          "caption": "Cruise operating point from the spline fit \u2014 1962 gf per motor, ~10.12 A estimated draw."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/thrust-current-land.jpeg",
+          "alt": "Spline fit at landing operating point",
+          "caption": "Landing operating point \u2014 1308 gf per motor, ~5.87 A estimated draw."
+        },
+        {
+          "type": "paragraph",
+          "text": "Combined the per-motor current at takeoff, cruise, and landing with that constant avionics draw, and budgeted only 80% of the pack's rated 28 Ah as usable \u2014 didn't want to plan a mission around the last 20% of a lithium pack. Comes out to roughly 29.93 minutes of flight time."
+        },
+        {
+          "type": "list",
+          "heading": "Caveats on this number",
+          "items": [
+            "This is a bench-derived model, not a measured flight time \u2014 haven't run a timed endurance flight to check it against yet.",
+            "Doesn't account for wind loading, which will eat into cruise current on a real mission.",
+            "The 80% usable-capacity assumption is conservative on purpose; the real number is probably a bit higher."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: fly a timed endurance test in calm conditions and see how close the real number lands to 29.93 minutes."
+        }
+      ]
+    },
+    {
+      "id": "elec-4",
+      "date": "2025-12-12",
+      "title": "Chasing down payload release failures that weren't real",
+      "summary": "47 out of 50 bench releases succeeded \u2014 the other 3 turned out to be a test-setup mistake, not a mechanism problem.",
+      "image": "/gallery/vlcsnap-2026-06-28-17h30m02s086.png",
+      "imageAlt": "Bench testing payload release mechanisms",
+      "tags": ["payload", "bench-test"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Ran 50 bench trials of the payload release mechanism and got 47 clean releases. Spent longer than expected chasing down the other 3 failures before realizing it wasn't the mechanism at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "The servo was being bench-tested in isolation without an ESC in the loop. Turns out the servo pulls its power through the ESC's BEC output rather than an independent supply, so testing it standalone with no ESC connected produced power starvation that looked exactly like a mechanical failure."
+        },
+        {
+          "type": "list",
+          "heading": "What we got wrong, and the fix",
+          "items": [
+            "Root cause: servo power path runs through the ESC BEC, not a dedicated rail \u2014 missed that in the original bench setup.",
+            "Fix: added the ESC into every servo bench test from now on, matching the actual airframe wiring.",
+            "Re-ran the 3 failed trials with the ESC connected \u2014 all 3 released cleanly."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Lesson logged for the whole team: any servo-driven subsystem gets bench-tested with its real power path from now on, not powered on its own for convenience."
+        }
+      ]
+    }
+  ],
+  "mechanical": [
+    {
+      "id": "mech-1",
+      "date": "2026-07-20",
+      "title": "Storm is airframe-complete",
+      "summary": "Airframe build is done \u2014 5 kg quadrotor-X, 4.09:1 thrust-to-weight, and it folds down small enough to fit a personal-item bag.",
+      "image": "/build-log/images/storm-airframe.jpeg",
+      "imageAlt": "Storm competition quadrotor airframe",
+      "tags": ["airframe", "SUAS 2026"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Called the airframe build complete this week. Storm comes in at 5 kg without payload \u2014 a from-scratch quadrotor-X built specifically around the five SUAS 2026 mission tasks instead of adapting an off-the-shelf frame."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/storm-airframe.jpeg",
+          "alt": "Storm quadrotor on display",
+          "caption": "Storm, fully assembled and ready for the next round of flight testing."
+        },
+        {
+          "type": "list",
+          "heading": "Where the numbers landed",
+          "items": [
+            "Four Avenger 4215 V5 motors, each rated for 6902 g static thrust, against a 6750 g all-up weight including payload \u2014 4.09:1 max thrust-to-weight.",
+            "Folded footprint: 18 \u00d7 14 \u00d7 8 in, small enough to travel in a personal-item bag for the Design for Rapid Response task.",
+            "That thrust margin is there for gust rejection in wind up to 14 mph and reserve authority during payload drop maneuvers, not just for looking good on paper."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Airframe done just means it's ready for the next round of flight testing \u2014 haven't pushed it anywhere near that 14 mph gust number in real conditions yet."
+        }
+      ]
+    },
+    {
+      "id": "mech-2",
+      "date": "2026-05-18",
+      "title": "Landing gear failed the drop test \u2014 here's what we changed",
+      "summary": "First landing gear design cracked on a 2 m drop test. Redesigned it, dropped it again, and it held.",
+      "image": "/team/mechanical.JPG",
+      "imageAlt": "Mechanical team inspecting structural components",
+      "tags": ["structures", "testing"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Ran the landing gear through a 2 m drop test and it failed on impact. Not the outcome we wanted, but exactly why we test before committing to a design."
+        },
+        {
+          "type": "image",
+          "src": "/team/mechanical.JPG",
+          "alt": "Mechanical sub-team reviewing airframe components",
+          "caption": "Inspecting the failed landing gear before starting the redesign."
+        },
+        {
+          "type": "paragraph",
+          "text": "Reworked the leg geometry and rebuilt it, then dropped it from the same 2 m height again. This time it held with no visible damage."
+        },
+        {
+          "type": "list",
+          "heading": "Same day, motor mount test",
+          "items": [
+            "Ran all four motors at full throttle for a sustained 1-minute ground test.",
+            "No deformation, no loosened fasteners, no mount failure observed afterward.",
+            "Full FEA factor-of-safety analysis is still running in parallel \u2014 the physical test passing doesn't mean we skip that step."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: repeat the landing gear drop test from a greater height to find where the new design actually fails, instead of just confirming it clears the minimum bar."
+        }
+      ]
+    },
+    {
+      "id": "mech-3",
+      "date": "2026-04-02",
+      "title": "Locking the frame material and mass budget",
+      "summary": "Went with sandwich composite plates after tracking mass at the component level \u2014 battery and payload alone are 39% of AUW.",
+      "image": "/build-log/images/storm-airframe.jpeg",
+      "imageAlt": "Carbon fiber frame construction on Storm",
+      "tags": ["materials", "mass-budget"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Tracked mass line by line at the component level this cycle instead of just weighing finished assemblies, and it paid off \u2014 the battery and payload together account for roughly 39% of all-up weight. That's a big enough chunk that it drove material decisions everywhere else on the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "Went with sandwich composite construction for the structural plates: a 600 g fiberglass core between two multi-directional carbon fiber face layers. Gets close to solid carbon fiber stiffness-to-weight without the full material cost, which matters when the battery and payload are already eating that much of the budget."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/storm-airframe.jpeg",
+          "alt": "Carbon fiber frame construction on Storm",
+          "caption": "Sandwich composite plates and carbon fiber arms integrated into the airframe."
+        },
+        {
+          "type": "list",
+          "heading": "Manufacturing notes",
+          "items": [
+            "Built a full-scale mockup before committing to composite manufacturing, just to catch dimension and fitment issues cheaply.",
+            "Frame plates are cut by an outsourced composites shop using vacuum bagging, then CNC-finished to final geometry.",
+            "Arms are carbon fiber for the same stiffness-to-weight reasoning as the plates."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: lock the mockup-validated dimensions with the composites shop and start on the actual production plates."
+        }
+      ]
+    },
+    {
+      "id": "mech-4",
+      "date": "2026-02-10",
+      "title": "Two release mechanisms, one drop test day",
+      "summary": "Trap door for the flare, bracket latch for the water bottle \u2014 first drop tests landed within 30\u201375 ft of target from 10 m.",
+      "image": "/gallery/team.jpg",
+      "imageAlt": "Team reviewing payload mechanism design",
+      "tags": ["payload", "mechanism"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Built two separate release mechanisms since the two payloads don't behave the same way: a servo-actuated trap door for the flare, and a servo-driven bracket latch for the water bottle. Looked at a winch-based delivery system for both early on but dropped it \u2014 extra weight and slower deployment time than a 45-minute mission window can really afford."
+        },
+        {
+          "type": "image",
+          "src": "/gallery/team.jpg",
+          "alt": "Cross-sub-team review before integration milestone",
+          "caption": "Preliminary drop test \u2014 impact points landed within 30\u201375 ft of target from 10 m altitude."
+        },
+        {
+          "type": "list",
+          "heading": "First drop test results",
+          "items": [
+            "All test drops released cleanly from both mechanisms.",
+            "Impact points landed within 30 to 75 ft of the target from a 10 m drop altitude \u2014 usable, but a wider spread than we want for competition scoring.",
+            "Custom non-structural mounts (landing gear connectors, GPS mount, payload housing, camera bracket) are all FDM-printed in PLA+, holding up fine through this round of testing."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "30\u201375 ft is too wide a spread to call this done. Next iteration needs tighter release timing or a better drop-point calculation, not just repeated tests of the same setup."
+        }
+      ]
+    },
+    {
+      "id": "mech-5",
+      "date": "2025-10-25",
+      "title": "Motor and prop trade study \u2014 three options down to one",
+      "summary": "Bench-compared three motor options and two props before settling on the Avenger 4215 V5 and the 15558 folding tri-blade.",
+      "image": "/build-log/images/thrust-current-hover.jpeg",
+      "imageAlt": "Propulsion analysis thrust-current curves",
+      "tags": ["propulsion", "trade-study"],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Bench-tested three motor candidates before picking one. The AT4125 Long Shaft pulled 72 A at full throttle versus 61.5 A for the Avenger 4215 V5 \u2014 worse on current draw and more expensive, an easy cut. The T-Motor U7 V2.0 got ruled out too, mostly on cost and because it doesn't fold down well for transport."
+        },
+        {
+          "type": "paragraph",
+          "text": "Prop comparison came down to two folding tri-blades. The 1248 only made 6676 g of thrust per motor at 3.21 g/W, while the 15558 hit 6902 g at 3.79 g/W \u2014 more thrust and meaningfully better efficiency, so that one was the clear pick."
+        },
+        {
+          "type": "image",
+          "src": "/build-log/images/thrust-current-hover.jpeg",
+          "alt": "Spline fit at cruise operating point",
+          "caption": "Thrust-current curves from the motor and prop bench comparison."
+        },
+        {
+          "type": "list",
+          "heading": "Other changes made off the back of this round",
+          "items": [
+            "Motor arms switched from aluminum to carbon fiber for better strength-to-weight over the previous platform.",
+            "Landing gear stance widened for better lateral stability landing in gusty conditions."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Next: get the selected motor/prop combo mounted on the actual airframe and re-run the thrust-current bench test in that configuration, not just on the test stand."
+        }
+      ]
+    }
+  ]
+}

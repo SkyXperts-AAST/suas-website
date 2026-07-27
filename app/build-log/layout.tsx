@@ -38,7 +38,9 @@ export default function BuildLogLayout({
         />
       </section>
 
-      <PageSection className="relative z-30 -mt-24 pt-0 md:-mt-28">{children}</PageSection>
+      <PageSection className="relative z-30 -mt-24 pt-0 md:-mt-28 !max-w-7xl">
+        {children}
+      </PageSection>
     </PageShell>
   );
 }

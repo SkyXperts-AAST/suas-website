@@ -66,74 +66,80 @@ export default function ScatteredJourney() {
   }, [pathLength]);
 
   return (
-    <section className="bg-[#0a1628] px-6 py-16">
-      <p className="mb-3 text-center font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
-  Our journey
-</p>
-<h2 className="mb-12 text-center font-display text-4xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-5xl">
-  From first flight to Storm
-</h2>
+    <div
+      ref={wrapperRef}
+      className="relative mx-auto mt-16 w-full max-w-[560px] sm:max-w-[640px] lg:max-w-[720px]"
+      style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}` }}
+    >
+      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="absolute inset-0 h-full w-full" fill="none">
+        <defs>
+          <mask id="reveal-mask">
+            <path
+              d={pathD}
+              stroke="white"
+              strokeWidth={26}
+              strokeLinecap="round"
+              strokeDasharray={pathLength}
+              strokeDashoffset={pathLength * (1 - progress)}
+            />
+          </mask>
+        </defs>
+        <path
+          d={pathD}
+          stroke="white"
+          strokeOpacity={0.15}
+          strokeWidth={2}
+          strokeDasharray="2 10"
+          strokeLinecap="round"
+        />
+        <path
+          ref={pathRef}
+          d={pathD}
+          stroke="#E31C1C"
+          strokeOpacity={0.75}
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          mask="url(#reveal-mask)"
+        />
+      </svg>
+
+      {milestones.map((m, i) => {
+        const active = progress >= i / (milestones.length - 1) - 0.03;
+        return (
+          <div
+            key={i}
+            className={`absolute w-48 rounded-xl border p-4 text-center backdrop-blur-sm transition-all duration-500 sm:w-52 ${
+              active
+                ? "scale-100 border-accent/40 bg-accent/[0.08] opacity-100 shadow-[0_0_30px_-8px_rgba(227,28,28,0.5)]"
+                : "scale-95 border-white/10 bg-white/[0.04] opacity-40"
+            }`}
+            style={{
+              left: `${(m.x / VIEW_W) * 100}%`,
+              top: `${(m.y / VIEW_H) * 100}%`,
+              transform: `translate(-50%, -50%) scale(${active ? 1 : 0.95})`,
+            }}
+          >
+            <p
+              className={`font-display text-sm font-bold uppercase tracking-[0.1em] ${
+                active ? "text-accent" : "text-white/50"
+              }`}
+            >
+              {m.year}
+            </p>
+            <p className="mt-1.5 text-sm leading-snug text-white/80">{m.text}</p>
+          </div>
+        );
+      })}
 
       <div
-        ref={wrapperRef}
-        className="relative mx-auto"
-        style={{ maxWidth: VIEW_W, aspectRatio: `${VIEW_W} / ${VIEW_H}` }}
+        className="absolute z-20 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_18px_rgba(227,28,28,0.65)]"
+        style={{
+          left: `${(dronePoint.x / VIEW_W) * 100}%`,
+          top: `${(dronePoint.y / VIEW_H) * 100}%`,
+        }}
       >
-        <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="absolute inset-0 h-full w-full" fill="none">
-          <defs>
-            <mask id="reveal-mask">
-              <path
-                d={pathD}
-                stroke="white"
-                strokeWidth={20}
-                strokeLinecap="round"
-                strokeDasharray={pathLength}
-                strokeDashoffset={pathLength * (1 - progress)}
-              />
-            </mask>
-          </defs>
-          <path
-            ref={pathRef}
-            d={pathD}
-            stroke="white"
-            strokeOpacity={0.5}
-            strokeWidth={2}
-            strokeDasharray="2 10"
-            strokeLinecap="round"
-            mask="url(#reveal-mask)"
-          />
-        </svg>
-
-        {milestones.map((m, i) => {
-          const active = progress >= i / (milestones.length - 1) - 0.03;
-          return (
-            <div
-              key={i}
-              className={`absolute w-40 rounded-lg bg-white/10 p-3 text-center backdrop-blur-sm transition-opacity duration-500 ${
-                active ? "opacity-100" : "opacity-30"
-              }`}
-              style={{
-                left: `${(m.x / VIEW_W) * 100}%`,
-                top: `${(m.y / VIEW_H) * 100}%`,
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <p className="text-xs font-semibold text-white">{m.year}</p>
-              <p className="mt-1 text-xs text-white/70">{m.text}</p>
-            </div>
-          );
-        })}
-
-        <div
-          className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: `${(dronePoint.x / VIEW_W) * 100}%`,
-            top: `${(dronePoint.y / VIEW_H) * 100}%`,
-          }}
-        >
-          <Image src="/drone-nobackground.png" alt="" width={56} height={56} className="drop-shadow-md" />
-        </div>
+        <Image src="/drone-nobackground.png" alt="" width={80} height={80} className="drop-shadow-md" />
       </div>
-    </section>
+    </div>
   );
 }

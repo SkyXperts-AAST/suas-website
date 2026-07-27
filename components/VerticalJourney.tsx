@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const milestones = [
-  { year: "2023", text: "SkyXperts founded", x: 140, y: 60 },
-  { year: "2024–25", text: "Built our first drone and competed at ICMTC", x: 340, y: 190 },
-  { year: "2025–26", text: "Built a small prototype multirotor to begin testing the mission", x: 140, y: 320 },
-  { year: "2026", text: "Returned to ICMTC flying Storm — Best Mission Award, 3rd place overall", x: 340, y: 450 },
-  { year: "2026", text: "Preparing Storm for SUAS 2026: Storm Response", x: 140, y: 580 },
+  { year: "2023", text: "SkyXperts founded", x: 170, y: 60 },
+  { year: "2024–25", text: "Built our first drone and competed at ICMTC", x: 510, y: 190 },
+  { year: "2025–26", text: "Built a small prototype multirotor to begin testing the mission", x: 170, y: 320 },
+  { year: "2026", text: "Returned to ICMTC flying Storm — Best Mission Award, 3rd place overall", x: 510, y: 450 },
+  { year: "2026", text: "Preparing Storm for SUAS 2026: Storm Response", x: 170, y: 580 },
 ];
 
 function smoothPath(points: { x: number; y: number }[]) {
@@ -31,7 +31,7 @@ function smoothPath(points: { x: number; y: number }[]) {
 }
 
 const pathD = smoothPath(milestones);
-const VIEW_W = 500;
+const VIEW_W = 680;
 const VIEW_H = 660;
 
 export default function ScatteredJourney() {
@@ -68,7 +68,7 @@ export default function ScatteredJourney() {
   return (
     <div
       ref={wrapperRef}
-      className="relative mx-auto mt-16 w-full max-w-[560px] sm:max-w-[640px] lg:max-w-[720px]"
+      className="relative mx-auto mt-16 w-full max-w-[620px] sm:max-w-[760px] lg:max-w-[960px]"
       style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}` }}
     >
       <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="absolute inset-0 h-full w-full" fill="none">

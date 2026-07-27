@@ -39,7 +39,7 @@ export default function EventCountdown() {
   return (
     <section className="bg-navy px-6 py-20 text-center md:py-28">
       <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-        Chapter 06 · Mission
+        Chapter 05 · Mission
       </p>
       <h2 className="mx-auto mt-3 max-w-2xl text-balance font-display text-4xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-5xl">
         The mission ahead

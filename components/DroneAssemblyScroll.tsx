@@ -131,8 +131,35 @@ export default function DroneAssemblyScroll() {
       <div className="sticky top-16 h-[calc(100dvh-4rem)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
 
-        <div className="relative z-10 grid h-full grid-rows-[minmax(260px,46dvh)_minmax(0,1fr)] gap-4 px-5 py-4 sm:px-6 sm:py-5 lg:grid-cols-[minmax(0,360px)_1fr] lg:grid-rows-1 lg:gap-8 lg:px-8 lg:py-6">
-          <div className="relative min-h-[260px] overflow-hidden rounded-2xl border border-white/10 bg-[#050d18] lg:col-start-2 lg:row-start-1 lg:min-h-0">
+        <div className="relative z-10 flex h-full flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-8 lg:py-6">
+          <div className="shrink-0 text-center">
+            <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
+              Chapter 04 · Build
+            </p>
+            <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl lg:text-4xl">
+              Scroll to assemble
+            </h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-offwhite/65 sm:text-base">
+              Every subsystem starts separated. Keep scrolling — this view
+              stays pinned while Storm assembles piece by piece. The build
+              order is tracked live on the model itself.
+            </p>
+            <p
+              className={`mt-2 text-sm text-offwhite/70 transition-opacity duration-500 ${
+                isComplete ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Storm is fully assembled.{" "}
+              <Link
+                href="/vehicles"
+                className="pointer-events-auto font-medium text-accent underline-offset-2 hover:underline"
+              >
+                Explore every subsystem →
+              </Link>
+            </p>
+          </div>
+
+          <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
             <Canvas
               className="h-full w-full"
               style={{ touchAction: "pan-y" }}
@@ -232,34 +259,6 @@ export default function DroneAssemblyScroll() {
                     : "Assembling…"}
               </p>
             </div>
-          </div>
-
-          <div className="flex min-h-0 flex-col lg:col-start-1 lg:row-start-1 lg:justify-center">
-            <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-              Chapter 05 · Build
-            </p>
-            <h2 className="mt-3 font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl lg:text-5xl">
-              Scroll to assemble
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-offwhite/65 sm:text-base">
-              Every subsystem starts separated. Keep scrolling — this view
-              stays pinned while Storm assembles piece by piece. The build
-              order is tracked live on the model itself.
-            </p>
-
-            <p
-              className={`mt-4 text-sm text-offwhite/70 transition-opacity duration-500 lg:mt-6 ${
-                isComplete ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              Storm is fully assembled.{" "}
-              <Link
-                href="/vehicles"
-                className="pointer-events-auto font-medium text-accent underline-offset-2 hover:underline"
-              >
-                Explore every subsystem →
-              </Link>
-            </p>
           </div>
         </div>
       </div>

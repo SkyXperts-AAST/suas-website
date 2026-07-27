@@ -10,7 +10,7 @@ import {
   raycastScreenToTeamAimPlane,
 } from "@/lib/build-log/drone-yaw";
 import { getHeroSceneTheme } from "@/lib/build-log/themes";
-import { SUB_TEAMS, isSubTeamSlug } from "@/lib/build-log/teams";
+import { isSubTeamSlug } from "@/lib/build-log/teams";
 import type { SubTeamSlug } from "@/lib/build-log/types";
 import { setupPropellerSpinners } from "@/lib/vehicle/findPropellerPivots";
 
@@ -35,31 +35,17 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-function TeamHeroOverlays({
-  activeSlug,
-  reducedMotion,
-}: {
-  activeSlug: SubTeamSlug;
-  reducedMotion: boolean;
-}) {
+function TeamHeroOverlays() {
+  const theme = getHeroSceneTheme("computer-vision");
+
   return (
     <>
       <div className="pointer-events-none absolute inset-0 bg-[#0a1628]/55" />
-      {SUB_TEAMS.map((team) => {
-        const theme = getHeroSceneTheme(team.slug);
-        const isActive = team.slug === activeSlug;
-
-        return (
-          <div
-            key={team.slug}
-            aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 ${
-              reducedMotion ? "" : "transition-opacity duration-700 ease-in-out"
-            } ${isActive ? "opacity-100" : "opacity-0"}`}
-            style={{ backgroundImage: theme.radialGlow }}
-          />
-        );
-      })}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{ backgroundImage: theme.radialGlow }}
+      />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#05071e]/95 via-[#0a1628]/72 to-[#05071e]/95" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/45 to-transparent" />
     </>
@@ -384,7 +370,7 @@ export default function BuildLogHeroBackground() {
         </Canvas>
       </div>
 
-      <TeamHeroOverlays activeSlug={activeSlug} reducedMotion={reducedMotion} />
+      <TeamHeroOverlays />
     </>
   );
 }

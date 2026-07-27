@@ -21,7 +21,7 @@ export default function SubTeamNav() {
   return (
     <nav
       aria-label="Sub-team build logs"
-      className="grid grid-cols-1 divide-y divide-white/10 border border-white/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4"
+      className="grid w-full grid-cols-2 border-b border-white/10 sm:grid-cols-4"
     >
       {SUB_TEAMS.map((team) => {
         const active = isTeamActive(pathname, team.slug);
@@ -33,46 +33,36 @@ export default function SubTeamNav() {
             href={teamHref(team.slug)}
             data-build-log-team={team.slug}
             aria-current={active ? "page" : undefined}
-            className={`group relative overflow-hidden p-4 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent md:p-5 ${
-              active
-                ? `bg-white/[0.08] ${theme.glow}`
-                : "bg-white/[0.02] hover:bg-white/[0.05]"
+            className={`group relative flex items-center justify-center gap-2.5 px-3 pb-4 pt-1 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:gap-3 sm:px-4 ${
+              active ? "text-offwhite" : "text-offwhite/55 hover:text-offwhite/85"
             }`}
           >
-            {active && (
-              <span
-                aria-hidden="true"
-                className={`absolute inset-y-0 left-0 w-1 bg-gradient-to-b ${theme.timelineLine}`}
-              />
-            )}
-
-            <div
-              className={`pointer-events-none absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-200 ${theme.gradient} ${
-                active ? "opacity-100" : "group-hover:opacity-60"
+            <TeamIcon
+              slug={team.slug}
+              className={`h-7 w-7 shrink-0 transition-colors sm:h-8 sm:w-8 md:h-9 md:w-9 ${
+                active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/65"
               }`}
             />
 
-            <div className="relative flex items-start gap-3">
-              <span
-                className={`inline-flex h-10 w-10 shrink-0 items-center justify-center border border-white/10 ${theme.iconBg} ${theme.iconText}`}
+            <div className="min-w-0 text-left">
+              <p
+                className={`text-[0.5625rem] font-black uppercase tracking-[0.14em] sm:text-[0.625rem] sm:tracking-[0.16em] ${
+                  active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/60"
+                }`}
               >
-                <TeamIcon slug={team.slug} className="h-5 w-5" />
-              </span>
-
-              <div className="min-w-0 flex-1">
-                <p
-                  className={`text-[0.625rem] font-black uppercase tracking-[0.16em] ${theme.iconText}`}
-                >
-                  {theme.label}
-                </p>
-                <p className="mt-1 text-sm font-bold text-offwhite md:text-base">
-                  {team.name}
-                </p>
-                <p className="mt-1 line-clamp-2 text-xs leading-5 text-offwhite/50">
-                  {team.description}
-                </p>
-              </div>
+                {theme.label}
+              </p>
+              <p className="mt-0.5 text-xs font-bold sm:text-sm md:text-base">
+                {team.name}
+              </p>
             </div>
+
+            <span
+              aria-hidden="true"
+              className={`absolute inset-x-0 bottom-0 h-0.5 origin-left transition-transform duration-200 ${
+                active ? "scale-x-100 bg-accent" : "scale-x-0 bg-accent/60 group-hover:scale-x-100"
+              }`}
+            />
           </Link>
         );
       })}

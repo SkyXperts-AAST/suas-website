@@ -100,7 +100,7 @@ export default function ContactForm() {
           Send us a message
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-offwhite/70">
-          Fill in the form and we&apos;ll reply by email.
+          Tell us what&apos;s on your mind — we&apos;ll reply from there.
         </p>
       </div>
 

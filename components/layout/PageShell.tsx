@@ -15,10 +15,6 @@ export function PageShell({ children, className = "" }: PageShellProps) {
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
-      />
       {children}
     </div>
   );

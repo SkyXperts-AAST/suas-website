@@ -10,10 +10,7 @@ export function PageShell({ children, className = "" }: PageShellProps) {
     <div
       className={`relative overflow-x-clip bg-navy text-offwhite ${className}`.trim()}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
-      />
+      <FlightPathAccent />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl"
@@ -23,6 +20,33 @@ export function PageShell({ children, className = "" }: PageShellProps) {
         className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
       />
       {children}
+    </div>
+  );
+}
+
+/**
+ * Background accent: a dotted waypoint route in the upper-right of the page,
+ * echoing a planned flight path. Decorative only.
+ */
+function FlightPathAccent() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute right-0 top-2 hidden w-[30rem] text-accent md:block lg:w-[38rem]"
+    >
+      <svg viewBox="0 0 480 120" fill="none" className="h-auto w-full">
+        <path
+          d="M12 100 L130 84 L268 50 L396 22 L468 12"
+          stroke="currentColor"
+          strokeOpacity="0.22"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="2 10"
+        />
+        <circle cx="130" cy="84" r="3" fill="currentColor" fillOpacity="0.35" />
+        <circle cx="396" cy="22" r="3" fill="currentColor" fillOpacity="0.35" />
+      </svg>
     </div>
   );
 }

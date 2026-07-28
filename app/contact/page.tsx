@@ -17,7 +17,7 @@ export default function ContactPage() {
         title={
           <>
             Get in touch with
-            <span className="block text-offwhite/85">the SkyXperts team.</span>
+            <span className="block text-offwhite/85">SkyXperts.</span>
           </>
         }
         description="Email us directly or send a message below — we'll get back to you."

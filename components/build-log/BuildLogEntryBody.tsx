@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { buildLogImagePositionStyle } from "@/lib/build-log/imagePosition";
 import type { BuildLogContentBlock } from "@/lib/build-log/types";
 
 type BuildLogEntryBodyProps = {
@@ -67,6 +68,7 @@ export default function BuildLogEntryBody({
                 fill
                 sizes="(max-width: 768px) 100vw, 672px"
                 className="object-cover"
+                style={buildLogImagePositionStyle(block.position)}
               />
             </div>
             {block.caption ? (

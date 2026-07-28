@@ -333,7 +333,8 @@
       "date": "2026-07-24",
       "title": "Two kinds of failure, one checklist",
       "summary": "Wrote the power system lessons into an actual pre-power-on checklist — and started logging current on every flight, so the next thermal failure comes with data attached.",
-      "image": "/blogs/electrical/elec-1/hero.svg",
+      "image": "/blogs/electrical/elec-1/toolbar_indicator_expanded.C4qoHX6s.png",
+      "imagePosition": "50% 0%",
       "imageAlt": "Ground station monitoring power telemetry during a mission rehearsal",
       "tags": [
         "process",
@@ -355,6 +356,7 @@
         {
           "type": "image",
           "src": "/blogs/electrical/elec-1/body-1.svg",
+          "position": "top",
           "alt": "Ground control station during a mission rehearsal",
           "caption": "Voltage and current now get logged on every flight instead of just watched on the ground station."
         },

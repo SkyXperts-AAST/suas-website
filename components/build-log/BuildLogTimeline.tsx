@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import BuildLogEntryBody from "@/components/build-log/BuildLogEntryBody";
 import TeamIcon from "@/components/build-log/TeamIcon";
+import { buildLogImagePositionStyle } from "@/lib/build-log/imagePosition";
 import { getTeamTheme } from "@/lib/build-log/themes";
 import type { BuildLogEntry, SubTeamSlug } from "@/lib/build-log/types";
 
@@ -175,7 +176,8 @@ function FeaturedEntry({
             alt={entry.imageAlt}
             fill
             sizes="(max-width: 768px) 100vw, 896px"
-            className="object-cover object-center"
+            className="object-cover"
+            style={buildLogImagePositionStyle(entry.imagePosition)}
             priority
           />
         </div>
@@ -260,7 +262,8 @@ function TimelineUpdateNode({
                 alt=""
                 fill
                 sizes="(max-width: 768px) 240px, 288px"
-                className="object-cover object-center"
+                className="object-cover"
+                style={buildLogImagePositionStyle(entry.imagePosition)}
               />
             </div>
 

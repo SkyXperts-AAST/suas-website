@@ -60,25 +60,28 @@ export default function SpecialThanks() {
           Chapter 05 · Special Thanks
         </p>
         <h2 className="mx-auto mt-3 max-w-2xl text-balance font-display text-3xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-4xl">
-          None of this flies without our sponsors
+          Student-built. Sponsor-backed.
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#F5F5F7]/70 sm:text-base">
-          Storm is built on carbon fiber, code, and the generosity of the
-          organizations below — partners who back student engineering long
-          before it ever leaves the ground.
+          Every vehicle we fly depends on the people backing us with funding,
+          hardware, facilities, and know-how. That support shows up in the
+          build, not just on a page.
         </p>
 
         <div className="mt-10 flex justify-center">
           <SponsorLogoGrid compact />
         </div>
 
-        <Link
-          href="/sponsorships"
-          className="mt-8 inline-flex items-center gap-1 text-sm font-medium text-[#F5F5F7]/75 transition hover:text-accent"
-        >
-          Become a sponsor
-          <span aria-hidden="true">→</span>
-        </Link>
+        <p className="mt-8 text-sm text-[#F5F5F7]/75">
+          Want in?{" "}
+          <Link
+            href="/sponsorships"
+            className="inline-flex items-center gap-1 font-medium transition hover:text-accent"
+          >
+            Get in touch
+            <span aria-hidden="true">→</span>
+          </Link>
+        </p>
       </div>
     </section>
   );

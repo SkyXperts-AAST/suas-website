@@ -34,8 +34,8 @@ export default function Home() {
           <HomeStoryChapter
             chapter="01"
             label="Origin"
-            title="Built by students, flown for the mission"
-            description="SkyXperts is AAST's team competing in the Student Unmanned Aerial Systems (SUAS) Competition, founded in 2023. Our team of 25 students designs, builds, and flies Storm — our entry for SUAS 2026 — tackling this year's Storm Response mission: rapid damage assessment, search and recovery, and environmental monitoring in the aftermath of a disaster."
+            title="We build. We don't just study."
+            description="SkyXperts started at AAST with a handful of students who wanted to build real autonomous aircraft instead of just reading about them. That hasn't changed. We're a full team now — avionics, structures, vision, software — designing and flying vehicles from scratch. Competitions like SUAS and ICMTC aren't the reason we exist. They're where we prove the work."
             className="flex-1"
           />
           <div className="flex-1">

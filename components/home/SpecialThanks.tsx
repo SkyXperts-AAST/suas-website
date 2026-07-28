@@ -57,7 +57,7 @@ export default function SpecialThanks() {
         }`}
       >
         <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-          Chapter 06 · Special Thanks
+          Chapter 05 · Special Thanks
         </p>
         <h2 className="mx-auto mt-3 max-w-2xl text-balance font-display text-3xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-4xl">
           None of this flies without our sponsors

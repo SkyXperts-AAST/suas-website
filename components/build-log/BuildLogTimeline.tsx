@@ -232,9 +232,7 @@ function TimelineUpdateNode({
       tabIndex={-1}
       onClick={onSelect}
       onPointerDown={(event) => {
-        if (event.pointerType !== "keyboard") {
-          event.preventDefault();
-        }
+        event.preventDefault();
       }}
       aria-current={isSelected ? "true" : undefined}
       className={`group relative flex w-full max-w-[13.25rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${

@@ -16,7 +16,7 @@ export default function BuildLogTeamView({
   teamSlug,
 }: BuildLogTeamViewProps) {
   return (
-    <div className="space-y-8 md:space-y-12">
+    <div className="space-y-10 md:space-y-12">
       <TeamHeader team={team} />
       <BuildLogTimeline entries={entries} teamSlug={teamSlug} />
     </div>

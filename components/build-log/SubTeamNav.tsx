@@ -21,7 +21,7 @@ export default function SubTeamNav() {
   return (
     <nav
       aria-label="Sub-team build logs"
-      className="build-log-subteam-nav grid grid-cols-4 gap-0 border-b border-white/10 sm:grid-cols-2 md:grid-cols-4"
+      className="build-log-subteam-nav grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-0 sm:border-b sm:border-white/10 md:grid-cols-4"
     >
       {SUB_TEAMS.map((team) => {
         const active = isTeamActive(pathname, team.slug);
@@ -33,33 +33,35 @@ export default function SubTeamNav() {
             href={teamHref(team.slug)}
             data-build-log-team={team.slug}
             aria-current={active ? "page" : undefined}
-            className={`group relative flex flex-col items-center gap-1 px-1 py-2.5 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:flex-row sm:justify-center sm:gap-2.5 sm:px-3 sm:py-1 sm:pb-4 md:gap-3 md:px-4 ${
-              active ? "text-offwhite" : "text-offwhite/55 hover:text-offwhite/85"
+            className={`group relative flex flex-col items-center gap-2 rounded-xl border border-white/10 px-3 py-3.5 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:flex-row sm:justify-center sm:gap-2.5 sm:rounded-none sm:border-0 sm:px-3 sm:py-1 sm:pb-4 md:gap-3 md:px-4 ${
+              active
+                ? "border-accent/30 bg-accent/10 text-offwhite sm:border-0 sm:bg-transparent"
+                : "text-offwhite/55 hover:border-white/20 hover:text-offwhite/85 sm:hover:border-0"
             }`}
           >
             <TeamIcon
               slug={team.slug}
-              className={`h-5 w-5 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12 ${
+              className={`h-7 w-7 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12 ${
                 active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/65"
               }`}
             />
 
             <div className="min-w-0 w-full sm:w-auto">
               <p
-                className={`text-[0.5rem] font-black uppercase leading-tight tracking-[0.06em] sm:text-[0.625rem] sm:tracking-[0.16em] md:text-xs ${
+                className={`text-[0.5625rem] font-black uppercase leading-tight tracking-[0.1em] sm:text-[0.625rem] sm:tracking-[0.16em] md:text-xs ${
                   active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/60"
                 }`}
               >
                 {theme.label}
               </p>
-              <p className="mt-0.5 hidden text-xs font-bold leading-snug sm:block md:text-base">
+              <p className="mt-1 line-clamp-2 text-[0.6875rem] font-bold leading-snug sm:line-clamp-none sm:mt-0.5 sm:text-xs md:text-base">
                 {team.name}
               </p>
             </div>
 
             <span
               aria-hidden="true"
-              className={`absolute inset-x-0 bottom-0 h-0.5 origin-left transition-transform duration-200 ${
+              className={`absolute inset-x-0 bottom-0 hidden h-0.5 origin-left transition-transform duration-200 sm:block ${
                 active ? "scale-x-100 bg-accent" : "scale-x-0 bg-accent/60 group-hover:scale-x-100"
               }`}
             />

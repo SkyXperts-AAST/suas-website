@@ -122,32 +122,32 @@ function FeaturedEntry({
   onGoOlder,
 }: FeaturedEntryProps) {
   return (
-    <article className="build-log-featured build-log-article overflow-hidden border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
-      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-3 py-6 md:px-4 md:py-10">
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
+    <article className="build-log-featured build-log-article overflow-hidden rounded-xl border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] sm:rounded-none">
+      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-4 py-8 md:px-4 md:py-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <span
-            className={`inline-block border px-2 py-0.5 text-[0.5625rem] font-black uppercase tracking-[0.12em] sm:px-2.5 sm:py-1 sm:text-[0.625rem] sm:tracking-[0.14em] ${theme.tag}`}
+            className={`inline-block border px-2.5 py-1 text-[0.625rem] font-black uppercase tracking-[0.12em] sm:text-[0.625rem] sm:tracking-[0.14em] ${theme.tag}`}
           >
             {isLatest ? "Latest update" : "Update"}
           </span>
           <time
             dateTime={entry.date}
-            className={`text-[0.6875rem] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.12em] md:text-sm ${theme.date}`}
+            className={`text-xs font-semibold uppercase tracking-[0.1em] sm:tracking-[0.12em] md:text-sm ${theme.date}`}
           >
             <span className="md:hidden">{formatShortDate(entry.date)}</span>
             <span className="hidden md:inline">{formatDate(entry.date)}</span>
           </time>
         </div>
 
-        <h1 className="mt-4 font-display text-2xl font-bold leading-[1.1] tracking-tight text-offwhite sm:mt-5 sm:text-3xl md:mt-6 md:text-4xl md:leading-[1.06] lg:text-[2.75rem]">
+        <h1 className="mt-5 font-display text-[1.625rem] font-bold leading-[1.12] tracking-tight text-offwhite sm:mt-5 sm:text-3xl md:mt-6 md:text-4xl md:leading-[1.06] lg:text-[2.75rem]">
           {entry.title}
         </h1>
 
-        <p className="build-log-article-deck mt-4 max-w-[36rem] text-base leading-7 text-offwhite/78 sm:mt-5 sm:text-lg sm:leading-8 md:mt-6 md:text-xl md:leading-9">
+        <p className="build-log-article-deck mt-5 max-w-[36rem] text-[0.9375rem] leading-7 text-offwhite/78 sm:text-lg sm:leading-8 md:mt-6 md:text-xl md:leading-9">
           {entry.summary}
         </p>
 
-        <div className="mt-5 flex w-full items-center justify-between gap-1.5 sm:mt-7 sm:w-auto sm:justify-start sm:gap-2 md:mt-8 md:gap-3">
+        <div className="mt-6 flex w-full items-center justify-between gap-2 sm:mt-7 sm:w-auto sm:justify-start md:mt-8 md:gap-3">
           <NavArrow
             direction="left"
             disabled={!canGoNewer}
@@ -168,7 +168,7 @@ function FeaturedEntry({
         </div>
       </header>
 
-      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-3 py-6 md:px-4 md:py-10">
+      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-4 py-8 md:px-4 md:py-10">
         <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
           <Image
             src={entry.image}
@@ -184,12 +184,12 @@ function FeaturedEntry({
         </figcaption>
       </figure>
 
-      <div className="build-log-article-body mx-auto max-w-4xl px-3 pb-8 md:px-4 md:pb-10 lg:pb-12">
+      <div className="build-log-article-body mx-auto max-w-4xl px-4 pb-10 md:px-4 md:pb-10 lg:pb-12">
         <BuildLogEntryBody blocks={entry.body} summary={entry.summary} />
       </div>
 
       {entry.tags && entry.tags.length > 0 ? (
-        <footer className="build-log-article-footer mx-auto max-w-4xl border-t border-white/10 px-3 py-6 md:px-4 md:py-7">
+        <footer className="build-log-article-footer mx-auto max-w-4xl border-t border-white/10 px-4 py-7 md:px-4 md:py-7">
           <p className="text-[0.625rem] font-black uppercase tracking-[0.16em] text-offwhite/45">
             Topics
           </p>
@@ -231,7 +231,7 @@ function TimelineUpdateNode({
       type="button"
       onClick={onSelect}
       aria-current={isSelected ? "true" : undefined}
-      className={`group relative flex w-full max-w-[13.5rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
+      className={`group relative flex w-full max-w-[14.5rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
         isSelected ? "z-10" : "z-0"
       }`}
     >
@@ -243,7 +243,7 @@ function TimelineUpdateNode({
         }`}
       >
         <div
-          className={`build-log-timeline-card min-h-[12.5rem] border p-2.5 text-left transition-colors duration-300 motion-reduce:transition-none sm:min-h-[14.75rem] sm:p-3 md:min-h-[15.5rem] md:p-4 ${
+          className={`build-log-timeline-card min-h-[13rem] border p-3 text-left transition-colors duration-300 motion-reduce:transition-none sm:min-h-[14.75rem] sm:p-3 md:min-h-[15.5rem] md:p-4 ${
             isSelected
               ? `border-accent/70 bg-accent/10 shadow-[0_0_28px_rgba(227,28,28,0.22)] ring-2 ${theme.ring}`
               : `border-white/10 bg-[#0a1628]/88 ${theme.cardHover}`
@@ -497,7 +497,7 @@ export default function BuildLogTimeline({
   };
 
   return (
-    <div className="build-log-timeline relative isolate -mx-3 -mb-10 min-h-[calc(100dvh-12rem)] md:-mx-4 md:-mb-16">
+    <div className="build-log-timeline relative isolate max-md:mx-0 -mx-4 -mb-10 min-h-[calc(100dvh-12rem)] md:-mx-4 md:-mb-16">
       <div
         aria-hidden="true"
         className="build-log-timeline-bg pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen min-h-full -translate-x-1/2 overflow-hidden bg-navy"
@@ -520,7 +520,7 @@ export default function BuildLogTimeline({
         <div className="absolute inset-x-0 bottom-0 z-[1] h-24 bg-gradient-to-t from-[#0a1628] to-transparent md:h-32" />
       </div>
 
-      <div className="relative z-10 mx-0 space-y-8 pb-16 md:space-y-10 md:pb-16">
+      <div className="relative z-10 mx-0 space-y-10 pb-20 md:space-y-10 md:pb-16">
         <FeaturedEntry
           key={selectedEntry.id}
           entry={selectedEntry}
@@ -535,7 +535,7 @@ export default function BuildLogTimeline({
         {entries.length > 1 ? (
           <section
             aria-label="Update timeline"
-            className="build-log-timeline-section mt-10 space-y-5 md:mt-14 md:space-y-6"
+            className="build-log-timeline-section mt-12 space-y-6 md:mt-14 md:space-y-6"
           >
             <div className="build-log-timeline-divider flex items-center gap-4">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/25 to-white/10" />
@@ -555,7 +555,7 @@ export default function BuildLogTimeline({
 
               <div
                 ref={scrollRef}
-                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-6.75rem)] pr-[calc(50%-6.75rem)] sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-7.25rem)] pr-[calc(50%-7.25rem)] sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 <div className="relative inline-flex items-end py-2">
                   {entries.map((entry) => {
@@ -571,7 +571,7 @@ export default function BuildLogTimeline({
                             slotRefs.current.delete(entry.id);
                           }
                         }}
-                        className="flex h-[18.5rem] w-[13.5rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[16rem] md:h-[21.5rem] md:w-[20rem]"
+                        className="flex h-[19rem] w-[14.5rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[16rem] md:h-[21.5rem] md:w-[20rem]"
                       >
                         <TimelineUpdateNode
                           entry={entry}

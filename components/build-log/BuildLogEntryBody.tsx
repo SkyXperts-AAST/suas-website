@@ -16,13 +16,13 @@ export default function BuildLogEntryBody({
       : [{ type: "paragraph" as const, text: summary }];
 
   return (
-    <div className="build-log-prose space-y-8 font-sans md:space-y-9">
+    <div className="build-log-prose space-y-7 font-sans max-md:space-y-6 md:space-y-9">
       {content.map((block, index) => {
         if (block.type === "paragraph") {
           return (
             <p
               key={`paragraph-${index}`}
-              className="text-[1.0625rem] font-normal leading-[1.85] text-offwhite/90 md:text-lg md:leading-[1.9]"
+              className="text-base font-normal leading-[1.8] text-offwhite/90 md:text-lg md:leading-[1.9]"
             >
               {block.text}
             </p>
@@ -33,7 +33,7 @@ export default function BuildLogEntryBody({
           return (
             <aside
               key={`list-${index}`}
-              className="build-log-prose-aside border border-white/10 bg-white/[0.03] px-5 py-5 md:px-6 md:py-6"
+              className="build-log-prose-aside border border-white/10 bg-white/[0.03] px-4 py-4 md:px-6 md:py-6"
             >
               {block.heading ? (
                 <h3 className="font-display text-lg font-bold leading-snug text-offwhite md:text-xl">

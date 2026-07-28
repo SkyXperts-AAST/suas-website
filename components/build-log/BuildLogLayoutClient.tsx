@@ -18,7 +18,7 @@ export default function BuildLogLayoutClient({
       <BuildLogReadingSwitch />
       <PageShell className="build-log-page-shell overflow-x-clip">
         <PageHero
-          className="build-log-hero"
+          className="build-log-hero max-md:[&>div]:px-4 max-md:[&>div]:py-10"
           label="Build Log"
           title={
             <>
@@ -28,14 +28,15 @@ export default function BuildLogLayoutClient({
               </span>
             </>
           }
+          titleClassName="text-3xl leading-[1.08] md:text-6xl md:leading-[1.02]"
           description="Track each sub-team's build journey through a living timeline of design decisions, integration wins, and field tests."
         >
-          <div className="mt-10">
+          <div className="mt-8 md:mt-10">
             <SubTeamNav />
           </div>
         </PageHero>
 
-        <PageSection className="build-log-section !max-w-7xl !px-3 md:!px-4">
+        <PageSection className="build-log-section !max-w-7xl !px-4 !py-8 md:!px-4 md:!py-16">
           {children}
         </PageSection>
       </PageShell>

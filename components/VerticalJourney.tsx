@@ -63,7 +63,15 @@ export default function ScatteredJourney() {
 
       const rect = wrapper.getBoundingClientRect();
       const vh = window.innerHeight;
-      const raw = (vh - rect.top) / (vh + rect.height);
+      // Reach full progress while the wrapper's bottom edge still has a
+      // margin of viewport below it, not exactly when the whole element has
+      // scrolled past the top. Mapping over the full (vh + rect.height)
+      // range means the last milestone — which sits ~88% of the way down
+      // the wrapper, not at its very bottom edge — crosses off-screen while
+      // progress is still short of 1, so it scrolls away dim, never
+      // reaching its "active" state, and the drone never visually arrives.
+      const endBuffer = vh * 0.3;
+      const raw = (vh - rect.top) / (vh + rect.height - endBuffer);
       const clamped = Math.min(Math.max(raw, 0), 1);
       setProgress(clamped);
 

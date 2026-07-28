@@ -7,7 +7,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { lookupSubsystemForNode } from "@/lib/vehicle/subsystemLookup";
 import { clusterArms } from "@/lib/vehicle/armClustering";
 
-const MODEL_URL = "/models/storm-final-optimized-v2.glb";
+const MODEL_URL = "/models/storm-final-optimized-v4.glb";
 const DRACO_DECODER_PATH = "/draco/";
 const MODEL_YAW = Math.PI;
 const ARM_SUBSYSTEMS = new Set(["motor"]);

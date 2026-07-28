@@ -4,11 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Logo from "@/components/Logo";
 
-// Safety net in case the clip fails to fire `onEnded` (slow network, codec
-// issue, etc.) — the reveal still happens instead of leaving the big logo
-// stuck on screen forever.
-const MAX_INTRO_MS = 8000;
-
 /** Full-screen splash: the landing clip autoplays once behind a big centered
  * logo, then hands off to the normal hero (heading, badge) once it
  * finishes — a one-time "reveal" for the site, not something tied to
@@ -33,11 +28,34 @@ export default function Hero() {
     if (reducedMotion) setIntroDone(true);
   }, [reducedMotion]);
 
+  // Fallback only if `onEnded` never fires (codec/network edge cases).
   useEffect(() => {
-    if (introDone) return;
-    const timeout = window.setTimeout(() => setIntroDone(true), MAX_INTRO_MS);
-    return () => window.clearTimeout(timeout);
-  }, [introDone]);
+    if (introDone || reducedMotion) return;
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    let timeoutId = 0;
+
+    const scheduleFallback = () => {
+      const durationMs =
+        Number.isFinite(video.duration) && video.duration > 0
+          ? video.duration * 1000 + 500
+          : 60000;
+      timeoutId = window.setTimeout(() => setIntroDone(true), durationMs);
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      scheduleFallback();
+    } else {
+      video.addEventListener("loadedmetadata", scheduleFallback, { once: true });
+    }
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      video.removeEventListener("loadedmetadata", scheduleFallback);
+    };
+  }, [introDone, reducedMotion]);
 
   // Kicks the logo's entrance transition off a frame after mount, rather
   // than having it just appear — the zoom-out-and-settle is what reads as a
@@ -87,25 +105,6 @@ export default function Hero() {
           introDone ? "opacity-20" : "opacity-45"
         }`}
       />
-
-      {/* Cinematic letterbox bars — bracket the intro like a title card, then
-          retract as the site reveals itself. */}
-      {!reducedMotion && (
-        <>
-          <div
-            aria-hidden="true"
-            className={`absolute inset-x-0 top-0 z-40 h-8 bg-black transition-transform duration-1000 ease-in-out sm:h-12 ${
-              introDone ? "-translate-y-full" : "translate-y-0"
-            }`}
-          />
-          <div
-            aria-hidden="true"
-            className={`absolute inset-x-0 bottom-0 z-40 h-8 bg-black transition-transform duration-1000 ease-in-out sm:h-12 ${
-              introDone ? "translate-y-full" : "translate-y-0"
-            }`}
-          />
-        </>
-      )}
 
       {/* Big logo reveal — the intro's cinematic centerpiece. */}
       <div

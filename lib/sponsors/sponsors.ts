@@ -18,6 +18,12 @@ export const SPONSORS: Sponsor[] = [
     logoSrc: "/sponsor-pcbway.webp",
     href: "https://www.pcbway.com",
   },
+  {
+    name: "MAD Components",
+    logoSrc: "/sponsor-mad-components.png",
+    // TODO: add sponsor website URL
+    href: "#",
+  },
 ];
 
 export const SPONSORSHIP_PROPOSAL_PDF = "/sponsorship-proposal.pdf";

@@ -6,24 +6,15 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { lookupSubsystemForNode } from "@/lib/vehicle/subsystemLookup";
 import { clusterArms } from "@/lib/vehicle/armClustering";
+import {
+  assemblyProgressForGroup,
+  type AssemblyScrollApi,
+} from "@/lib/vehicle/assemblyOrder";
 
 const MODEL_URL = "/models/storm-final-optimized-v4.glb";
 const DRACO_DECODER_PATH = "/draco/";
 const MODEL_YAW = Math.PI;
 const ARM_SUBSYSTEMS = new Set(["motor"]);
-
-export const ASSEMBLY_ORDER = [
-  "avionicsHousing",
-  "battery",
-  "esc",
-  "companionComputer",
-  "camera",
-  "payload",
-  "motor:0",
-  "motor:1",
-  "motor:2",
-  "motor:3",
-] as const;
 
 const FALLBACK_DIRECTIONS: Record<string, THREE.Vector3> = {
   avionicsHousing: new THREE.Vector3(0, 1, 0.15),
@@ -36,30 +27,6 @@ const FALLBACK_DIRECTIONS: Record<string, THREE.Vector3> = {
 
 useGLTF.preload(MODEL_URL, DRACO_DECODER_PATH);
 
-function easeOutCubic(t: number) {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-function clamp01(t: number) {
-  return Math.min(1, Math.max(0, t));
-}
-
-export function assemblyProgressForGroup(
-  scrollProgress: number,
-  groupKey: string
-): number {
-  const index = ASSEMBLY_ORDER.indexOf(
-    groupKey as (typeof ASSEMBLY_ORDER)[number]
-  );
-  if (index < 0) return scrollProgress;
-
-  const count = ASSEMBLY_ORDER.length;
-  // Sequential windows so fewer parts move through the core at once.
-  const delay = (index / count) * 0.34;
-  const duration = 0.36;
-  return easeOutCubic(clamp01((scrollProgress - delay) / duration));
-}
-
 interface ExplodePart {
   group: THREE.Group;
   direction: THREE.Vector3;
@@ -69,10 +36,6 @@ interface ExplodePart {
   arcAxis: THREE.Vector3;
   /** Peak arc offset at t = 0.5. */
   arcStrength: number;
-}
-
-export interface AssemblyScrollApi {
-  progress: number;
 }
 
 interface DroneAssemblyModelProps {

@@ -1,24 +1,29 @@
 "use client";
 
-import {
-  Suspense,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { Canvas } from "@react-three/fiber";
-import { ContactShadows } from "@react-three/drei";
-import DroneAssemblyModel, {
+import Image from "next/image";
+import dynamic from "next/dynamic";
+import {
   ASSEMBLY_ORDER,
   assemblyProgressForGroup,
   type AssemblyScrollApi,
-} from "@/components/DroneAssemblyModel";
-import SceneLighting from "@/components/vehicle/SceneLighting";
+} from "@/lib/vehicle/assemblyOrder";
 import { subsystemLabel } from "@/lib/vehicle/subsystemLookup";
 
+// Loaded only once we know we're on a large viewport, so phones never pay for
+// three/drei, the Draco decoder or the GLB. `ssr: false` because there is no
+// canvas to prerender in a static export anyway.
+const DroneAssemblyCanvas = dynamic(
+  () => import("@/components/DroneAssemblyCanvas"),
+  { ssr: false }
+);
+
 const SCROLL_HEIGHT = "220vh";
+
+// Tailwind's `md`, which is the breakpoint the rest of the site switches
+// layout on. Below it the scroll assembly is replaced by a static render.
+const DESKTOP_QUERY = "(min-width: 768px)";
 
 function labelForKey(key: string): string {
   if (key.startsWith("motor:")) return `Motor ${Number(key.split(":")[1]) + 1}`;
@@ -51,12 +56,54 @@ function getSectionProgress(section: HTMLElement): number {
   return clamp01(raw / 0.72);
 }
 
-function CanvasLoader() {
+/** Shared heading block, so both paths keep identical spacing and type. */
+function ChapterHeading({ children }: { children: React.ReactNode }) {
   return (
-    <mesh>
-      <boxGeometry args={[0.01, 0.01, 0.01]} />
-      <meshBasicMaterial transparent opacity={0} />
-    </mesh>
+    <div className="shrink-0 text-center">
+      <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
+        Chapter 04 · Build
+      </p>
+      {children}
+    </div>
+  );
+}
+
+/** Mobile: the finished vehicle as a flat image. No canvas, no scroll
+ * listener, no pinned section — the copy describes the build rather than
+ * asking for a scroll gesture that no longer drives anything. */
+function StaticAssembly() {
+  return (
+    <section className="relative bg-navy" aria-label="Storm assembly diagram">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
+
+      <div className="relative z-10 flex flex-col gap-3 px-5 py-10">
+        <ChapterHeading>
+          <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl">
+            Storm, fully assembled
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-offwhite/65 sm:text-base">
+            Avionics, power, vision and propulsion, integrated into one
+            airframe.{" "}
+            <Link
+              href="/vehicles"
+              className="font-medium text-accent underline-offset-2 hover:underline"
+            >
+              Explore every subsystem →
+            </Link>
+          </p>
+        </ChapterHeading>
+
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
+          <Image
+            src="/drone-assembled.webp"
+            alt="Storm, fully assembled"
+            width={1400}
+            height={872}
+            className="h-auto w-full"
+          />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -65,6 +112,17 @@ export default function DroneAssemblyScroll() {
   const scrollApi = useMemo<AssemblyScrollApi>(() => ({ progress: 0 }), []);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  // Starts false so the first paint (and the prerendered HTML) is the cheap
+  // path; upgrades to the canvas only once a large viewport is confirmed.
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_QUERY);
+    const update = () => setIsDesktop(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -75,6 +133,7 @@ export default function DroneAssemblyScroll() {
   }, []);
 
   useEffect(() => {
+    if (!isDesktop) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -106,7 +165,7 @@ export default function DroneAssemblyScroll() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [reducedMotion, scrollApi]);
+  }, [isDesktop, reducedMotion, scrollApi]);
 
   const activeKey = useMemo(
     () => activeAssemblyKey(scrollProgress),
@@ -121,6 +180,8 @@ export default function DroneAssemblyScroll() {
     [scrollProgress]
   );
 
+  if (!isDesktop) return <StaticAssembly />;
+
   return (
     <section
       ref={sectionRef}
@@ -132,10 +193,7 @@ export default function DroneAssemblyScroll() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
 
         <div className="relative z-10 flex h-full flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-8 lg:py-6">
-          <div className="shrink-0 text-center">
-            <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-              Chapter 04 · Build
-            </p>
+          <ChapterHeading>
             <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl lg:text-4xl">
               Scroll to assemble
             </h2>
@@ -157,32 +215,13 @@ export default function DroneAssemblyScroll() {
                 Explore every subsystem →
               </Link>
             </p>
-          </div>
+          </ChapterHeading>
 
           <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
-            <Canvas
-              className="h-full w-full"
-              style={{ touchAction: "pan-y" }}
-              frameloop="always"
-              camera={{ fov: 45, near: 0.01, far: 100 }}
-              gl={{ alpha: true, antialias: true }}
-              dpr={[1, 1.75]}
-            >
-              <SceneLighting preset="studio" />
-              <Suspense fallback={<CanvasLoader />}>
-                <DroneAssemblyModel
-                  scrollApi={scrollApi}
-                  reducedMotion={reducedMotion}
-                />
-                <ContactShadows
-                  position={[0, -0.12, 0]}
-                  opacity={0.45}
-                  scale={2.5}
-                  blur={2.2}
-                  far={1.2}
-                />
-              </Suspense>
-            </Canvas>
+            <DroneAssemblyCanvas
+              scrollApi={scrollApi}
+              reducedMotion={reducedMotion}
+            />
 
             {/* Build checklist — floats directly on the model instead of
                 living in a separate column, so the diagram and the progress

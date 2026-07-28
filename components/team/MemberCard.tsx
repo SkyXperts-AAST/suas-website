@@ -20,7 +20,7 @@ export default function MemberCard({ member }: MemberCardProps) {
 
   return (
     <article
-      className={`relative mx-auto flex w-full max-w-[280px] flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-0.5 ${
+      className={`relative mx-auto flex w-full max-w-[220px] flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-0.5 ${
         supervisor
           ? "border-accent/35 bg-accent/[0.06] hover:border-accent/50"
           : "border-white/10 bg-white/[0.03] hover:border-white/20"
@@ -47,7 +47,7 @@ export default function MemberCard({ member }: MemberCardProps) {
             alt={member.name}
             fill
             className="object-cover object-top"
-            sizes="280px"
+            sizes="220px"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -63,11 +63,11 @@ export default function MemberCard({ member }: MemberCardProps) {
         )}
       </div>
 
-      <div className="px-3 py-3 text-center">
-        <h3 className="text-base font-semibold leading-snug text-offwhite">
+      <div className="px-2.5 py-2.5 text-center">
+        <h3 className="text-sm font-semibold leading-snug text-offwhite">
           {member.name}
         </h3>
-        <p className="mt-1 text-sm leading-6 text-offwhite/60">{member.role}</p>
+        <p className="mt-1 text-xs leading-5 text-offwhite/60">{member.role}</p>
       </div>
     </article>
   );

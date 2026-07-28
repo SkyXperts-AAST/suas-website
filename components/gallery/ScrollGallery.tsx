@@ -5,6 +5,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { PageBadge } from "@/components/layout/PageShell";
 import type { GalleryItem } from "@/lib/gallery/types";
 
+/** Matches sticky nav height (`h-16` in Nav.tsx). */
+const NAV_OFFSET_PX = 64;
+
 type ScrollGalleryProps = {
   items: GalleryItem[];
 };
@@ -37,7 +40,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     }
 
     const rect = container.getBoundingClientRect();
-    const viewport = window.innerHeight - 72;
+    const viewport = window.innerHeight - NAV_OFFSET_PX;
     const scrollStep = Math.max(viewport * 0.92, 1);
     const scrolled = Math.max(0, -rect.top);
     const nextIndex = clamp(
@@ -71,7 +74,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
   }
 
   const activeItem = items[activeIndex] ?? items[0];
-  const scrollHeight = `${items.length * 100}vh`;
+  const scrollHeight = `${items.length * 100}dvh`;
 
   return (
     <div
@@ -92,7 +95,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
         className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
       />
 
-      <div className="sticky top-[72px] z-10 h-[calc(100vh-72px)] overflow-hidden">
+      <div className="sticky top-16 z-10 h-[calc(100dvh-4rem)] overflow-hidden">
         {items.map((item, index) => {
           const isActive = index === activeIndex;
 
@@ -119,16 +122,16 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
           );
         })}
 
-        <div className="relative z-10 flex h-full min-w-0 flex-col justify-between px-6 py-8 md:px-10 md:py-10">
+        <div className="relative z-10 flex h-full min-w-0 flex-col justify-between px-5 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10">
           <div>
             <PageBadge label="Gallery" />
-            <h1 className="mt-5 max-w-3xl text-3xl leading-[1.02] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] md:text-5xl">
+            <h1 className="mt-4 max-w-3xl text-2xl leading-[1.05] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:mt-5 sm:text-3xl md:text-5xl">
               Moments from the
               <span className="block text-offwhite/85">build and the field.</span>
             </h1>
           </div>
 
-          <div className="flex min-w-0 items-end justify-between gap-6">
+          <div className="flex min-w-0 items-end justify-between gap-4 sm:gap-6">
             <div
               key={activeItem.id}
               className={`min-w-0 max-w-2xl ${reducedMotion ? "" : "gallery-caption-in"}`}
@@ -137,14 +140,14 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
                 {formatIndex(activeIndex, items.length)}
               </p>
               {activeItem.category ? (
-                <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                <p className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55 sm:mt-3">
                   {activeItem.category}
                 </p>
               ) : null}
-              <h2 className="mt-2 text-2xl leading-[1.05] text-offwhite md:text-3xl">
+              <h2 className="mt-2 text-xl leading-[1.05] text-offwhite sm:text-2xl md:text-3xl">
                 {activeItem.title}
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-offwhite/80 md:text-base">
+              <p className="mt-2 max-w-xl text-sm leading-6 text-offwhite/80 sm:mt-3 sm:leading-7 md:text-base">
                 {activeItem.description}
               </p>
             </div>
@@ -166,8 +169,25 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
             </div>
           </div>
 
+          {/* Mobile progress dots */}
+          <div
+            aria-hidden="true"
+            className="mt-4 flex justify-center gap-2 md:hidden"
+          >
+            {items.map((item, index) => (
+              <span
+                key={item.id}
+                className={`block h-1.5 rounded-full transition-all duration-300 ${
+                  index === activeIndex
+                    ? "w-5 bg-accent"
+                    : "w-1.5 bg-offwhite/30"
+                }`}
+              />
+            ))}
+          </div>
+
           {activeIndex < items.length - 1 ? (
-            <p className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-xs font-semibold uppercase tracking-[0.18em] text-offwhite/45 md:block animate-chevron">
+            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-offwhite/45 sm:bottom-6 sm:text-xs animate-chevron">
               Scroll
             </p>
           ) : null}

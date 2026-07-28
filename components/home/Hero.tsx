@@ -4,10 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Logo from "@/components/Logo";
 
-/** Full-screen splash: the landing clip autoplays once behind a big centered
- * logo, then hands off to the normal hero (heading, badge) once it
- * finishes — a one-time "reveal" for the site, not something tied to
- * scrolling. */
+/** Full-screen splash: landing clip with a bottom-centered watermark wordmark,
+ * then hands off to the normal hero once the clip finishes. */
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -22,13 +20,10 @@ export default function Hero() {
     return () => media.removeEventListener("change", update);
   }, []);
 
-  // Reduced motion: skip the animated intro entirely and land straight on
-  // the revealed hero.
   useEffect(() => {
     if (reducedMotion) setIntroDone(true);
   }, [reducedMotion]);
 
-  // Fallback only if `onEnded` never fires (codec/network edge cases).
   useEffect(() => {
     if (introDone || reducedMotion) return;
 
@@ -57,19 +52,16 @@ export default function Hero() {
     };
   }, [introDone, reducedMotion]);
 
-  // Kicks the logo's entrance transition off a frame after mount, rather
-  // than having it just appear — the zoom-out-and-settle is what reads as a
-  // cinematic title card instead of a static watermark.
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
   const logoState = !mounted
-    ? "scale-[1.35] opacity-0"
+    ? "translate-y-4 opacity-0"
     : introDone
-      ? "scale-110 opacity-0"
-      : "scale-100 opacity-100";
+      ? "pointer-events-none translate-y-3 opacity-0"
+      : "translate-y-0 opacity-100";
 
   return (
     <section className="relative flex h-[calc(100dvh-4rem)] flex-col items-center justify-center overflow-hidden bg-[#0a1628] px-6 text-center">
@@ -106,16 +98,18 @@ export default function Hero() {
         }`}
       />
 
-      {/* Big logo reveal — the intro's cinematic centerpiece. */}
-      <div
-        className={`pointer-events-none absolute inset-0 z-30 flex items-center justify-center transition-all duration-[1400ms] ease-out ${logoState}`}
-      >
-        <Logo
-          variant="big"
-          className="h-auto w-80 drop-shadow-[0_0_60px_rgba(255,255,255,0.45)] sm:w-[30rem] md:w-[38rem] lg:w-[46rem]"
-          priority
-        />
-      </div>
+      {!reducedMotion && (
+        <div
+          className={`pointer-events-none absolute inset-x-0 bottom-[max(1.75rem,env(safe-area-inset-bottom))] z-30 flex justify-center px-6 transition-all duration-700 ease-out ${logoState}`}
+        >
+          <Logo
+            variant="hero"
+            decorative
+            className="h-auto w-[min(72vw,22rem)] opacity-[0.34] brightness-0 invert sm:w-80 md:w-[28rem]"
+            priority
+          />
+        </div>
+      )}
 
       <div
         className={`relative z-30 flex flex-col items-center transition-all duration-700 ${

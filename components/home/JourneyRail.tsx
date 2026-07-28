@@ -14,8 +14,23 @@ type JourneyRailProps = {
 /** Fixed side rail that tracks scroll position through the home page's
  * chapters and lets visitors jump straight to one — the connective thread
  * that turns a stack of sections into a single guided journey. */
+/** Distance the visitor has to scroll before the rail fades in. Enough to
+ * clear an accidental nudge, short enough to feel like it answers the first
+ * real scroll. */
+const REVEAL_AFTER_PX = 120;
+
 export default function JourneyRail({ chapters }: JourneyRailProps) {
   const [activeId, setActiveId] = useState(chapters[0]?.id);
+  // Stays out of the way over the hero — the rail is a wayfinding aid for the
+  // story below it, not part of the opening frame.
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const update = () => setRevealed(window.scrollY > REVEAL_AFTER_PX);
+    update(); // catches a reload that restores mid-page scroll position
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   useEffect(() => {
     const elements = chapters
@@ -46,7 +61,11 @@ export default function JourneyRail({ chapters }: JourneyRailProps) {
   return (
     <nav
       aria-label="Team journey chapters"
-      className="pointer-events-none fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 xl:block"
+      aria-hidden={revealed ? undefined : true}
+      inert={!revealed}
+      className={`pointer-events-none fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 transition-opacity duration-500 ease-out xl:block ${
+        revealed ? "opacity-100" : "opacity-0"
+      }`}
     >
       <ol className="pointer-events-auto relative flex flex-col gap-7">
         <span

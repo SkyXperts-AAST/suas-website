@@ -30,6 +30,15 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     category: "Team",
   },
   {
+    id: "leadership",
+    title: "Leadership",
+    description:
+      "SkyXperts student leaders guiding the SUAS program.",
+    image: "/gallery/leaders.JPG",
+    imageAlt: "SkyXperts leadership team group photo",
+    category: "Team",
+  },
+  {
     id: "field-capture",
     title: "Field operations",
     description:

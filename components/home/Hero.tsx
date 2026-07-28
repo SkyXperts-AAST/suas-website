@@ -120,7 +120,7 @@ export default function Hero() {
           Meet Storm. Engineered to respond.
         </h1>
         <p className="mt-4 text-xs font-semibold uppercase tracking-[0.35em] text-[#F5F5F7]/70">
-          AAST · SUAS 2026
+          AAST · Student UAS Team
         </p>
       </div>
     </section>

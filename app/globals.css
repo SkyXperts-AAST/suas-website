@@ -329,14 +329,22 @@ html {
   color: rgba(10, 22, 40, 0.55);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-section .bg-gradient-to-r,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-section .bg-gradient-to-l {
+.build-log-timeline-rail {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-section .build-log-timeline-scroll-fade.bg-gradient-to-r {
   background: linear-gradient(to right, #eef1f6, transparent);
 }
 
 .build-log-reading[data-reading-mode="light"]
   .build-log-timeline-section
-  .bg-gradient-to-l {
+  .build-log-timeline-scroll-fade.bg-gradient-to-l {
   background: linear-gradient(to left, #eef1f6, transparent);
 }
 
@@ -416,9 +424,9 @@ html {
 .build-log-reading[data-reading-mode="light"] .build-log-timeline-rail {
   background: linear-gradient(
     to right,
-    rgba(10, 22, 40, 0.04),
-    rgba(10, 22, 40, 0.2),
-    rgba(10, 22, 40, 0.04)
+    rgba(10, 22, 40, 0.08),
+    rgba(10, 22, 40, 0.28),
+    rgba(10, 22, 40, 0.08)
   );
 }
 

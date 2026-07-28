@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import BuildLogEntryBody from "@/components/build-log/BuildLogEntryBody";
 import TeamIcon from "@/components/build-log/TeamIcon";
 import { getTeamTheme } from "@/lib/build-log/themes";
@@ -41,6 +41,7 @@ function scrollElementToCenter(
 
   container.scrollTo({
     left: elementCenter - container.clientWidth / 2,
+    top: 0,
     behavior,
   });
 }
@@ -230,22 +231,27 @@ function TimelineUpdateNode({
     <button
       type="button"
       onClick={onSelect}
+      onPointerDown={(event) => {
+        if (event.pointerType !== "keyboard") {
+          event.preventDefault();
+        }
+      }}
       aria-current={isSelected ? "true" : undefined}
-      className={`group relative flex w-full max-w-[14.5rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
+      className={`group relative flex w-full max-w-[13.25rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
         isSelected ? "z-10" : "z-0"
       }`}
     >
       <div
-        className={`w-full origin-bottom transition-all duration-300 ease-out motion-reduce:transition-none ${
+        className={`w-full origin-bottom transition-all duration-300 ease-out motion-reduce:transition-none max-sm:scale-100 ${
           isSelected
             ? "scale-[1.05] opacity-100"
-            : "scale-[0.97] opacity-75 group-hover:scale-[0.99] group-hover:opacity-90"
+            : "scale-[0.97] opacity-75 group-hover:scale-[0.99] group-hover:opacity-90 max-sm:group-hover:scale-100"
         }`}
       >
         <div
           className={`build-log-timeline-card min-h-[13rem] border p-3 text-left transition-colors duration-300 motion-reduce:transition-none sm:min-h-[14.75rem] sm:p-3 md:min-h-[15.5rem] md:p-4 ${
             isSelected
-              ? `border-accent/70 bg-accent/10 shadow-[0_0_28px_rgba(227,28,28,0.22)] ring-2 ${theme.ring}`
+              ? `border-accent/70 bg-accent/10 shadow-[0_0_28px_rgba(227,28,28,0.22)] ring-2 max-sm:ring-1 ${theme.ring}`
               : `border-white/10 bg-[#0a1628]/88 ${theme.cardHover}`
           }`}
         >
@@ -304,7 +310,7 @@ function TimelineUpdateNode({
         </p>
       </div>
 
-      <div className="mt-3 flex flex-col items-center">
+      <div className="build-log-timeline-dot-row mt-3 flex h-3.5 items-center justify-center">
         <span
           aria-hidden="true"
           className={`build-log-timeline-dot rounded-full border-2 transition-all duration-300 motion-reduce:transition-none ${
@@ -332,13 +338,33 @@ export default function BuildLogTimeline({
   const scrollRafRef = useRef<number | null>(null);
   const scrollStopTimerRef = useRef<number | null>(null);
   const selectedEntryIdRef = useRef(selectedEntryId);
+  const pageScrollLockRef = useRef<number | null>(null);
 
   selectedEntryIdRef.current = selectedEntryId;
 
   const selectEntry = useCallback((id: string, source: "scroll" | "action") => {
+    if (source === "action") {
+      pageScrollLockRef.current = window.scrollY;
+    }
     selectionSourceRef.current = source;
     setSelectedEntryId(id);
   }, []);
+
+  useLayoutEffect(() => {
+    if (pageScrollLockRef.current === null) {
+      return;
+    }
+
+    const lockedScrollY = pageScrollLockRef.current;
+    pageScrollLockRef.current = null;
+
+    const restoreScroll = () => {
+      window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
+    };
+
+    restoreScroll();
+    requestAnimationFrame(restoreScroll);
+  }, [selectedEntryId]);
 
   const snapClosestToCenter = useCallback(
     (behavior: ScrollBehavior = "smooth") => {
@@ -410,11 +436,20 @@ export default function BuildLogTimeline({
       return;
     }
 
+    const lockedScrollY = window.scrollY;
+
     isAutoScrollingRef.current = true;
     scrollElementToCenter(container, node, "smooth");
 
+    const restoreScroll = () => {
+      window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
+    };
+
+    requestAnimationFrame(restoreScroll);
+
     const timer = window.setTimeout(() => {
       isAutoScrollingRef.current = false;
+      restoreScroll();
     }, 450);
 
     return () => window.clearTimeout(timer);
@@ -535,7 +570,7 @@ export default function BuildLogTimeline({
         {entries.length > 1 ? (
           <section
             aria-label="Update timeline"
-            className="build-log-timeline-section mt-12 space-y-6 md:mt-14 md:space-y-6"
+            className="build-log-timeline-section mt-10 space-y-3 sm:mt-12 sm:space-y-4 md:mt-14 md:space-y-5"
           >
             <div className="build-log-timeline-divider flex items-center gap-4">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/25 to-white/10" />
@@ -545,19 +580,21 @@ export default function BuildLogTimeline({
               <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/25 to-white/10" />
             </div>
 
-            <div className="build-log-timeline-scroll-outer relative overflow-visible py-3">
-              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#0a1628] to-transparent md:w-16" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#0a1628] to-transparent md:w-16" />
-              <div
-                aria-hidden="true"
-                className="build-log-timeline-rail pointer-events-none absolute inset-x-10 bottom-[1.55rem] z-0 h-px bg-gradient-to-r from-white/5 via-white/25 to-white/5 md:inset-x-16 md:bottom-[1.7rem]"
-              />
+            <div className="build-log-timeline-scroll-outer relative overflow-visible">
+              <div className="build-log-timeline-scroll-fade pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[#0a1628] to-transparent sm:w-10 md:w-16" />
+              <div className="build-log-timeline-scroll-fade pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-[#0a1628] to-transparent sm:w-10 md:w-16" />
 
               <div
                 ref={scrollRef}
-                className="build-log-timeline-scroll snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pt-4 pl-[calc(50%-7.25rem)] pr-[calc(50%-7.25rem)] sm:pt-5 sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pt-6 md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="build-log-timeline-scroll touch-pan-x snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-y-none scroll-smooth pb-4 pt-1 pl-[calc(50%-6.625rem)] pr-[calc(50%-6.625rem)] sm:pt-4 sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pb-5 md:pt-7 md:pl-[calc(50%-10.5rem)] md:pr-[calc(50%-10.5rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
-                <div className="relative inline-flex items-end pb-2">
+                <div className="relative inline-flex items-end gap-6 pb-2 sm:gap-4 md:gap-4">
+                  <div
+                    aria-hidden="true"
+                    className="build-log-timeline-rail pointer-events-none absolute inset-x-0 z-0 h-px"
+                    style={{ bottom: "calc(0.5rem + 0.4375rem)" }}
+                  />
+
                   {entries.map((entry) => {
                     const isSelected = entry.id === selectedEntryId;
 
@@ -571,7 +608,7 @@ export default function BuildLogTimeline({
                             slotRefs.current.delete(entry.id);
                           }
                         }}
-                        className="flex h-[20.5rem] w-[14.5rem] shrink-0 snap-center snap-always items-end justify-center overflow-visible sm:h-[23rem] sm:w-[16rem] md:h-[24rem] md:w-[20rem]"
+                        className="flex w-[13.25rem] shrink-0 snap-center snap-always items-end justify-center overflow-visible sm:w-[16rem] md:w-[21rem]"
                       >
                         <TimelineUpdateNode
                           entry={entry}

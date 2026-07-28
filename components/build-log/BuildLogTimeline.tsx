@@ -41,7 +41,6 @@ function scrollElementToCenter(
 
   container.scrollTo({
     left: elementCenter - container.clientWidth / 2,
-    top: 0,
     behavior,
   });
 }
@@ -230,6 +229,7 @@ function TimelineUpdateNode({
   return (
     <button
       type="button"
+      tabIndex={-1}
       onClick={onSelect}
       onPointerDown={(event) => {
         if (event.pointerType !== "keyboard") {
@@ -332,38 +332,66 @@ export default function BuildLogTimeline({
   const latestEntryId = entries[0]?.id ?? "";
   const [selectedEntryId, setSelectedEntryId] = useState(latestEntryId);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const timelineSectionRef = useRef<HTMLElement>(null);
   const slotRefs = useRef(new Map<string, HTMLDivElement>());
   const selectionSourceRef = useRef<"scroll" | "action">("action");
   const isAutoScrollingRef = useRef(false);
   const scrollRafRef = useRef<number | null>(null);
   const scrollStopTimerRef = useRef<number | null>(null);
   const selectedEntryIdRef = useRef(selectedEntryId);
-  const pageScrollLockRef = useRef<number | null>(null);
+  const scrollAnchorRef = useRef<
+    { mode: "timeline"; top: number } | { mode: "page"; top: number } | null
+  >(null);
 
   selectedEntryIdRef.current = selectedEntryId;
 
-  const selectEntry = useCallback((id: string, source: "scroll" | "action") => {
-    if (source === "action") {
-      pageScrollLockRef.current = window.scrollY;
-    }
-    selectionSourceRef.current = source;
-    setSelectedEntryId(id);
-  }, []);
+  const selectEntry = useCallback(
+    (id: string, source: "scroll" | "action", anchor: "timeline" | "page" = "page") => {
+      if (source === "action") {
+        if (anchor === "timeline") {
+          const section = timelineSectionRef.current;
+          scrollAnchorRef.current = section
+            ? { mode: "timeline", top: section.getBoundingClientRect().top }
+            : { mode: "page", top: window.scrollY };
+        } else {
+          scrollAnchorRef.current = { mode: "page", top: window.scrollY };
+        }
+      }
+      selectionSourceRef.current = source;
+      setSelectedEntryId(id);
+    },
+    [],
+  );
 
   useLayoutEffect(() => {
-    if (pageScrollLockRef.current === null) {
+    const anchor = scrollAnchorRef.current;
+    if (!anchor) {
       return;
     }
 
-    const lockedScrollY = pageScrollLockRef.current;
-    pageScrollLockRef.current = null;
+    scrollAnchorRef.current = null;
 
-    const restoreScroll = () => {
-      window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
+    const compensateScroll = () => {
+      if (anchor.mode === "timeline") {
+        const timelineSection = timelineSectionRef.current;
+        if (!timelineSection) {
+          return;
+        }
+
+        const delta = timelineSection.getBoundingClientRect().top - anchor.top;
+        if (Math.abs(delta) > 0.5) {
+          window.scrollBy({ top: delta, left: 0, behavior: "auto" });
+        }
+        return;
+      }
+
+      if (Math.abs(window.scrollY - anchor.top) > 0.5) {
+        window.scrollTo({ top: anchor.top, left: 0, behavior: "auto" });
+      }
     };
 
-    restoreScroll();
-    requestAnimationFrame(restoreScroll);
+    compensateScroll();
+    requestAnimationFrame(compensateScroll);
   }, [selectedEntryId]);
 
   const snapClosestToCenter = useCallback(
@@ -436,20 +464,11 @@ export default function BuildLogTimeline({
       return;
     }
 
-    const lockedScrollY = window.scrollY;
-
     isAutoScrollingRef.current = true;
     scrollElementToCenter(container, node, "smooth");
 
-    const restoreScroll = () => {
-      window.scrollTo({ top: lockedScrollY, left: 0, behavior: "auto" });
-    };
-
-    requestAnimationFrame(restoreScroll);
-
     const timer = window.setTimeout(() => {
       isAutoScrollingRef.current = false;
-      restoreScroll();
     }, 450);
 
     return () => window.clearTimeout(timer);
@@ -555,9 +574,8 @@ export default function BuildLogTimeline({
         <div className="absolute inset-x-0 bottom-0 z-[1] h-24 bg-gradient-to-t from-[#0a1628] to-transparent md:h-32" />
       </div>
 
-      <div className="relative z-10 mx-0 space-y-10 pb-20 md:space-y-10 md:pb-16">
+      <div className="relative z-10 mx-0 space-y-10 pb-20 [overflow-anchor:none] md:space-y-10 md:pb-16">
         <FeaturedEntry
-          key={selectedEntry.id}
           entry={selectedEntry}
           isLatest={isLatestSelected}
           theme={theme}
@@ -569,8 +587,9 @@ export default function BuildLogTimeline({
 
         {entries.length > 1 ? (
           <section
+            ref={timelineSectionRef}
             aria-label="Update timeline"
-            className="build-log-timeline-section mt-10 space-y-3 sm:mt-12 sm:space-y-4 md:mt-14 md:space-y-5"
+            className="build-log-timeline-section mt-10 space-y-3 sm:mt-12 sm:space-y-4 md:mt-14 md:space-y-5 [overflow-anchor:none]"
           >
             <div className="build-log-timeline-divider flex items-center gap-4">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/25 to-white/10" />
@@ -616,7 +635,7 @@ export default function BuildLogTimeline({
                           theme={theme}
                           isSelected={isSelected}
                           isLatest={entry.id === latestEntryId}
-                          onSelect={() => selectEntry(entry.id, "action")}
+                          onSelect={() => selectEntry(entry.id, "action", "timeline")}
                         />
                       </div>
                     );

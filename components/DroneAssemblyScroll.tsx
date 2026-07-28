@@ -16,7 +16,7 @@ const DroneAssemblyCanvas = dynamic(
   { ssr: false }
 );
 
-const SCROLL_HEIGHT = "280dvh";
+const SCROLL_HEIGHT = "220vh";
 const DESKTOP_QUERY = "(min-width: 768px)";
 
 function labelForKey(key: string): string {
@@ -136,12 +136,17 @@ export default function DroneAssemblyScroll() {
 
     let rafId = 0;
     let lastUiUpdate = 0;
-    let active = false;
+    // Distinct from `scrollProgress` state: this tracks the last value we
+    // actually applied, so a scroll/resize event that doesn't move the
+    // needle (bounce scroll, a resize with no size change) skips the
+    // scrollApi mutation and the setState below.
+    let lastProgress = -1;
 
     const syncProgress = () => {
-      if (!active) return;
-
       const next = reducedMotion ? 1 : getSectionProgress(section, sticky);
+      if (next === lastProgress) return;
+      lastProgress = next;
+
       scrollApi.progress = next;
 
       const now = performance.now();
@@ -151,29 +156,19 @@ export default function DroneAssemblyScroll() {
       }
     };
 
-    const tick = () => {
-      syncProgress();
-      rafId = requestAnimationFrame(tick);
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(syncProgress);
     };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        active = entry.isIntersecting;
-        if (active) syncProgress();
-      },
-      { rootMargin: "20% 0px" },
-    );
-
-    observer.observe(section);
-    rafId = requestAnimationFrame(tick);
-    window.addEventListener("resize", syncProgress, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     syncProgress();
 
     return () => {
-      active = false;
       cancelAnimationFrame(rafId);
-      observer.disconnect();
-      window.removeEventListener("resize", syncProgress);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [isDesktop, reducedMotion, scrollApi]);
 

@@ -107,7 +107,7 @@ export default function ScatteredJourney() {
     // re-renders queue up faster than React can flush them, so the drone
     // visibly falls behind the scroll position — this keeps it locked to
     // the actual scroll on every frame, same technique used elsewhere in
-    // the codebase for scroll-linked animation (see AwardHighlight).
+    // the codebase for scroll-linked animation (see DroneAssemblyScroll).
     let rafId = 0;
 
     const sync = () => {

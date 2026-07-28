@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-
 type Award = {
   icon: string;
   title: string;
@@ -22,150 +18,48 @@ const AWARDS: Award[] = [
   },
 ];
 
-const SCROLL_HEIGHT = `${AWARDS.length * 110}vh`;
-
-function clamp01(value: number) {
-  return Math.min(1, Math.max(0, value));
-}
-
-function getSectionProgress(section: HTMLElement): number {
-  const rect = section.getBoundingClientRect();
-  const viewport = window.innerHeight;
-  const scrollRange = section.offsetHeight - viewport;
-  if (scrollRange <= 0) return 1;
-  return clamp01(-rect.top / scrollRange);
-}
-
-function RadarBadge({ icon, active }: { icon: string; active: boolean }) {
+/** Concentric accent rings behind the emoji — the badge treatment carried over
+ * from the scroll-driven version, minus the perpetual ping/spin animations
+ * that ran on every card at once. */
+function RadarBadge({ icon }: { icon: string }) {
   return (
-    <div className="relative mx-auto flex h-36 w-36 shrink-0 items-center justify-center sm:mx-0 sm:h-48 sm:w-48">
-      {/* Big outward shockwave on activation — reads as an impact/burst rather
-          than a steady-state pulse, so it only plays while the badge is active. */}
+    <div className="relative flex h-24 w-24 shrink-0 items-center justify-center">
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-full border-2 border-accent/40 motion-reduce:animate-none ${
-          active ? "animate-ping [animation-duration:1.8s]" : "opacity-0"
-        }`}
+        className="absolute inset-0 rounded-full border-2 border-accent/25"
       />
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-full border border-dashed border-accent/30 motion-reduce:animate-none ${
-          active ? "animate-spin [animation-duration:14s]" : ""
-        }`}
+        className="absolute inset-2 rounded-full border border-dashed border-accent/25"
       />
-      <span
-        aria-hidden="true"
-        className={`absolute inset-3 rounded-full border border-accent/40 motion-reduce:animate-none sm:inset-4 ${
-          active ? "animate-ping [animation-duration:2.6s]" : ""
-        }`}
-      />
-      <span
-        className={`relative flex h-24 w-24 items-center justify-center rounded-full bg-accent/15 text-6xl shadow-[0_0_70px_rgba(227,28,28,0.6)] transition-transform duration-[900ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-32 sm:w-32 sm:text-7xl ${
-          active ? "scale-100 rotate-0" : "scale-0 -rotate-45"
-        }`}
-      >
+      <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-accent/15 text-4xl shadow-[0_0_45px_rgba(227,28,28,0.45)]">
         {icon}
       </span>
     </div>
   );
 }
 
-/** Static fallback for reduced-motion visitors — every award laid out and
- * visible at once, no pinning or animated hand-off between them. */
-function StaticAwardList() {
-  return (
-    <section id="award" className="scroll-mt-24 bg-navy px-6 py-20 text-center md:py-28">
-      <div className="mx-auto max-w-3xl">
-        <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-          Chapter 03 · Recognition
-        </p>
-        <p className="mt-2 text-xs uppercase tracking-[0.16em] text-offwhite/50">
-          ICMTC 2026
-        </p>
-
-        <div className="mt-12 flex flex-col gap-16">
-          {AWARDS.map((award) => (
-            <div
-              key={award.title}
-              className="mx-auto flex max-w-2xl flex-col items-center gap-8 sm:flex-row sm:gap-12 sm:text-left"
-            >
-              <RadarBadge icon={award.icon} active />
-              <div>
-                <h3 className="font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl">
-                  {award.title}
-                </h3>
-                <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-offwhite/70 sm:mx-0 sm:text-lg">
-                  {award.detail}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/** Pins the recognition chapter in place while scrolling hands off from one
- * award to the next, one at a time — same "stays put while it plays out"
- * technique as the timeline and build chapters. */
+/**
+ * Recognition chapter: every award on screen at once.
+ *
+ * This used to pin the section for `AWARDS.length * 110vh` and hand off between
+ * awards on scroll, which cost 220vh of page height and a scroll listener to
+ * show two cards. A grid needs neither, so there is no client JS here at all —
+ * adding a third or fourth award is a matter of appending to AWARDS.
+ */
 export default function AwardHighlight() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [progress, setProgress] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let rafId = 0;
-    const sync = () => setProgress(getSectionProgress(section));
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(sync);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    sync();
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [reducedMotion]);
-
-  if (reducedMotion) return <StaticAwardList />;
-
-  const activeIndex = Math.min(
-    AWARDS.length - 1,
-    Math.floor(progress * AWARDS.length)
-  );
-
   return (
     <section
-      ref={sectionRef}
       id="award"
-      style={{ height: SCROLL_HEIGHT }}
-      className="relative scroll-mt-24"
+      className="relative scroll-mt-24 bg-navy px-6 py-20 md:py-28"
     >
-      <div className="sticky top-16 flex h-[calc(100dvh-4rem)] flex-col items-center justify-center overflow-hidden bg-navy px-6 text-center">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_50%_18%,rgba(227,28,28,0.14),transparent_65%)]"
-        />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_18%,rgba(227,28,28,0.14),transparent_65%)]"
+      />
 
-        <div className="absolute top-8 sm:top-10">
+      <div className="relative mx-auto max-w-5xl">
+        <div className="text-center">
           <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
             Chapter 03 · Recognition
           </p>
@@ -174,51 +68,28 @@ export default function AwardHighlight() {
           </p>
         </div>
 
-        <div className="relative mx-auto min-h-[28rem] w-full max-w-2xl sm:min-h-[20rem]">
-          {AWARDS.map((award, index) => {
-            const isActive = index === activeIndex;
-            const isPast = index < activeIndex;
-            return (
-              <div
-                key={award.title}
-                aria-hidden={!isActive}
-                className={`absolute inset-0 flex flex-col items-center gap-8 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:flex-row sm:gap-14 sm:text-left ${
-                  isActive
-                    ? "translate-y-0 scale-100 opacity-100 blur-none"
-                    : isPast
-                      ? "-translate-y-20 scale-90 opacity-0 blur-sm"
-                      : "translate-y-20 scale-90 opacity-0 blur-sm"
-                }`}
-              >
-                <RadarBadge icon={award.icon} active={isActive} />
-                <div>
-                  <p className="font-mono text-sm font-bold tracking-[0.25em] text-accent">
-                    {String(index + 1).padStart(2, "0")} /{" "}
-                    {String(AWARDS.length).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-3 font-display text-5xl leading-[1.02] tracking-tight text-offwhite sm:text-6xl lg:text-7xl">
-                    {award.title}
-                  </h3>
-                  <p className="mx-auto mt-4 max-w-md text-pretty text-base leading-relaxed text-offwhite/70 sm:mx-0 sm:text-lg">
-                    {award.detail}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="absolute bottom-8 flex items-center gap-2.5 sm:bottom-10">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2">
           {AWARDS.map((award, index) => (
-            <span
+            <li
               key={award.title}
-              aria-hidden="true"
-              className={`h-2 rounded-full transition-all duration-500 ${
-                index === activeIndex ? "w-8 bg-accent" : "w-2 bg-white/20"
-              }`}
-            />
+              className="flex flex-col items-center gap-6 rounded-2xl border border-white/10 bg-white/[0.02] p-8 text-center sm:items-start sm:text-left"
+            >
+              <RadarBadge icon={award.icon} />
+              <div>
+                <p className="font-mono text-sm font-bold tracking-[0.25em] text-accent">
+                  {String(index + 1).padStart(2, "0")} /{" "}
+                  {String(AWARDS.length).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl">
+                  {award.title}
+                </h3>
+                <p className="mt-3 text-pretty text-base leading-relaxed text-offwhite/70">
+                  {award.detail}
+                </p>
+              </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

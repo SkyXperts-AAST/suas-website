@@ -21,7 +21,7 @@ export default function SubTeamNav() {
   return (
     <nav
       aria-label="Sub-team build logs"
-      className="build-log-subteam-nav grid w-full grid-cols-2 border-b border-white/10 sm:grid-cols-4"
+      className="build-log-subteam-nav grid grid-cols-4 gap-0 border-b border-white/10 sm:grid-cols-2 md:grid-cols-4"
     >
       {SUB_TEAMS.map((team) => {
         const active = isTeamActive(pathname, team.slug);
@@ -33,26 +33,26 @@ export default function SubTeamNav() {
             href={teamHref(team.slug)}
             data-build-log-team={team.slug}
             aria-current={active ? "page" : undefined}
-            className={`group relative flex items-center justify-center gap-2.5 px-3 pb-4 pt-1 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:gap-3 sm:px-4 ${
+            className={`group relative flex flex-col items-center gap-1 px-1 py-2.5 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:flex-row sm:justify-center sm:gap-2.5 sm:px-3 sm:py-1 sm:pb-4 md:gap-3 md:px-4 ${
               active ? "text-offwhite" : "text-offwhite/55 hover:text-offwhite/85"
             }`}
           >
             <TeamIcon
               slug={team.slug}
-              className={`h-10 w-10 shrink-0 transition-colors sm:h-11 sm:w-11 md:h-12 md:w-12 ${
+              className={`h-5 w-5 shrink-0 sm:h-10 sm:w-10 md:h-12 md:w-12 ${
                 active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/65"
               }`}
             />
 
-            <div className="min-w-0 text-left">
+            <div className="min-w-0 w-full sm:w-auto">
               <p
-                className={`text-[0.5625rem] font-black uppercase tracking-[0.14em] sm:text-[0.625rem] sm:tracking-[0.16em] ${
+                className={`text-[0.5rem] font-black uppercase leading-tight tracking-[0.06em] sm:text-[0.625rem] sm:tracking-[0.16em] md:text-xs ${
                   active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/60"
                 }`}
               >
                 {theme.label}
               </p>
-              <p className="mt-0.5 text-xs font-bold sm:text-sm md:text-base">
+              <p className="mt-0.5 hidden text-xs font-bold leading-snug sm:block md:text-base">
                 {team.name}
               </p>
             </div>

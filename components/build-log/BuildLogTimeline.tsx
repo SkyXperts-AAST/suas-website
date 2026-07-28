@@ -95,10 +95,10 @@ function NavArrow({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/15 bg-[#0a1628]/90 text-offwhite transition-colors hover:border-white/30 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:border-white/5 disabled:text-offwhite/20 disabled:hover:bg-[#0a1628]/90 md:h-10 md:w-10"
+      className="flex h-7 w-7 shrink-0 items-center justify-center border border-white/15 bg-[#0a1628]/90 text-offwhite transition-colors hover:border-white/30 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:border-white/5 disabled:text-offwhite/20 disabled:hover:bg-[#0a1628]/90 sm:h-9 sm:w-9 md:h-10 md:w-10"
     >
       <svg
-        className="h-4 w-4"
+        className="h-3.5 w-3.5 sm:h-4 sm:w-4"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -123,37 +123,38 @@ function FeaturedEntry({
 }: FeaturedEntryProps) {
   return (
     <article className="build-log-featured build-log-article overflow-hidden border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
-      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-3 py-8 md:px-4 md:py-10">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-3 py-6 md:px-4 md:py-10">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
           <span
-            className={`inline-block border px-2.5 py-1 text-[0.625rem] font-black uppercase tracking-[0.14em] ${theme.tag}`}
+            className={`inline-block border px-2 py-0.5 text-[0.5625rem] font-black uppercase tracking-[0.12em] sm:px-2.5 sm:py-1 sm:text-[0.625rem] sm:tracking-[0.14em] ${theme.tag}`}
           >
             {isLatest ? "Latest update" : "Update"}
           </span>
           <time
             dateTime={entry.date}
-            className={`text-xs font-semibold uppercase tracking-[0.12em] md:text-sm ${theme.date}`}
+            className={`text-[0.6875rem] font-semibold uppercase tracking-[0.1em] sm:text-xs sm:tracking-[0.12em] md:text-sm ${theme.date}`}
           >
-            {formatDate(entry.date)}
+            <span className="md:hidden">{formatShortDate(entry.date)}</span>
+            <span className="hidden md:inline">{formatDate(entry.date)}</span>
           </time>
         </div>
 
-        <h1 className="mt-5 font-display text-3xl font-bold leading-[1.08] tracking-tight text-offwhite md:mt-6 md:text-4xl md:leading-[1.06] lg:text-[2.75rem]">
+        <h1 className="mt-4 font-display text-2xl font-bold leading-[1.1] tracking-tight text-offwhite sm:mt-5 sm:text-3xl md:mt-6 md:text-4xl md:leading-[1.06] lg:text-[2.75rem]">
           {entry.title}
         </h1>
 
-        <p className="build-log-article-deck mt-5 max-w-[36rem] text-lg leading-8 text-offwhite/78 md:mt-6 md:text-xl md:leading-9">
+        <p className="build-log-article-deck mt-4 max-w-[36rem] text-base leading-7 text-offwhite/78 sm:mt-5 sm:text-lg sm:leading-8 md:mt-6 md:text-xl md:leading-9">
           {entry.summary}
         </p>
 
-        <div className="mt-7 flex items-center gap-2 md:mt-8 md:gap-3">
+        <div className="mt-5 flex w-full items-center justify-between gap-1.5 sm:mt-7 sm:w-auto sm:justify-start sm:gap-2 md:mt-8 md:gap-3">
           <NavArrow
             direction="left"
             disabled={!canGoNewer}
             onClick={onGoNewer}
             label="Newer update"
           />
-          <span className="min-w-[5.5rem] text-center text-xs font-black uppercase tracking-[0.12em] text-offwhite/40">
+          <span className="min-w-0 flex-1 truncate text-center text-[0.5625rem] font-black uppercase tracking-[0.08em] text-offwhite/40 sm:min-w-[5.5rem] sm:flex-none sm:text-xs sm:tracking-[0.12em]">
             {isLatest
               ? `Latest · ${formatShortDate(entry.date)}`
               : formatShortDate(entry.date)}
@@ -167,7 +168,7 @@ function FeaturedEntry({
         </div>
       </header>
 
-      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-3 py-8 md:px-4 md:py-10">
+      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-3 py-6 md:px-4 md:py-10">
         <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
           <Image
             src={entry.image}
@@ -230,7 +231,7 @@ function TimelineUpdateNode({
       type="button"
       onClick={onSelect}
       aria-current={isSelected ? "true" : undefined}
-      className={`group relative flex w-full max-w-[15rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
+      className={`group relative flex w-full max-w-[13.5rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
         isSelected ? "z-10" : "z-0"
       }`}
     >
@@ -242,14 +243,14 @@ function TimelineUpdateNode({
         }`}
       >
         <div
-          className={`build-log-timeline-card min-h-[14.75rem] border p-3 text-left transition-colors duration-300 motion-reduce:transition-none md:min-h-[15.5rem] md:p-4 ${
+          className={`build-log-timeline-card min-h-[12.5rem] border p-2.5 text-left transition-colors duration-300 motion-reduce:transition-none sm:min-h-[14.75rem] sm:p-3 md:min-h-[15.5rem] md:p-4 ${
             isSelected
               ? `border-accent/70 bg-accent/10 shadow-[0_0_28px_rgba(227,28,28,0.22)] ring-2 ${theme.ring}`
               : `border-white/10 bg-[#0a1628]/88 ${theme.cardHover}`
           }`}
         >
           <div className="flex h-full flex-col space-y-2.5 md:space-y-3">
-            <div className="relative h-16 w-full shrink-0 overflow-hidden border border-white/10 md:h-[4.5rem]">
+            <div className="relative h-14 w-full shrink-0 overflow-hidden border border-white/10 sm:h-16 md:h-[4.5rem]">
               <Image
                 src={entry.image}
                 alt=""
@@ -262,20 +263,20 @@ function TimelineUpdateNode({
             <div className="flex items-start gap-2.5 md:gap-3">
               <TeamIcon
                 slug={teamSlug}
-                className={`h-8 w-8 shrink-0 md:h-9 md:w-9 ${theme.iconText} ${
+                className={`h-7 w-7 shrink-0 sm:h-8 sm:w-8 md:h-9 md:w-9 ${theme.iconText} ${
                   isSelected ? "opacity-100" : "opacity-85"
                 }`}
               />
               <div className="min-w-0 flex-1">
                 <p
-                  className={`text-[0.625rem] font-black uppercase tracking-[0.14em] md:text-xs ${
+                  className={`text-[0.5625rem] font-black uppercase tracking-[0.12em] sm:text-[0.625rem] sm:tracking-[0.14em] md:text-xs ${
                     isSelected ? theme.date : "text-offwhite/50"
                   }`}
                 >
                   {formatShortDate(entry.date)}
                 </p>
                 <p
-                  className={`mt-0.5 line-clamp-2 font-display text-sm font-bold leading-snug md:text-base ${
+                  className={`mt-0.5 line-clamp-2 font-display text-xs font-bold leading-snug sm:text-sm md:text-base ${
                     isSelected ? "text-offwhite" : "text-offwhite/80"
                   }`}
                 >
@@ -285,7 +286,7 @@ function TimelineUpdateNode({
             </div>
 
             <p
-              className={`line-clamp-3 font-sans text-sm leading-6 md:text-[0.9375rem] md:leading-7 ${
+              className={`hidden line-clamp-2 font-sans text-sm leading-6 sm:line-clamp-3 sm:block md:text-[0.9375rem] md:leading-7 ${
                 isSelected ? "text-offwhite/75" : "text-offwhite/60"
               }`}
             >
@@ -519,7 +520,7 @@ export default function BuildLogTimeline({
         <div className="absolute inset-x-0 bottom-0 z-[1] h-24 bg-gradient-to-t from-[#0a1628] to-transparent md:h-32" />
       </div>
 
-      <div className="relative z-10 mx-0 space-y-8 pb-10 md:space-y-10 md:pb-16">
+      <div className="relative z-10 mx-0 space-y-8 pb-16 md:space-y-10 md:pb-16">
         <FeaturedEntry
           key={selectedEntry.id}
           entry={selectedEntry}
@@ -554,7 +555,7 @@ export default function BuildLogTimeline({
 
               <div
                 ref={scrollRef}
-                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-9rem)] pr-[calc(50%-9rem)] sm:pl-[calc(50%-9.5rem)] sm:pr-[calc(50%-9.5rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-6.75rem)] pr-[calc(50%-6.75rem)] sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 <div className="relative inline-flex items-end py-2">
                   {entries.map((entry) => {
@@ -570,7 +571,7 @@ export default function BuildLogTimeline({
                             slotRefs.current.delete(entry.id);
                           }
                         }}
-                        className="flex h-[20.5rem] w-[18rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[19rem] md:h-[21.5rem] md:w-[20rem]"
+                        className="flex h-[18.5rem] w-[13.5rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[16rem] md:h-[21.5rem] md:w-[20rem]"
                       >
                         <TimelineUpdateNode
                           entry={entry}

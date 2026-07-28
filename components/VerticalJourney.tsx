@@ -46,7 +46,17 @@ export default function ScatteredJourney() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
+    // Scroll events can fire far more often than the screen repaints
+    // (especially with trackpad/inertial scrolling), and each one here
+    // triggers a state update that re-renders the mask, path, and every
+    // milestone card. Without throttling to one update per frame, those
+    // re-renders queue up faster than React can flush them, so the drone
+    // visibly falls behind the scroll position — this keeps it locked to
+    // the actual scroll on every frame, same technique used elsewhere in
+    // the codebase for scroll-linked animation (see AwardHighlight).
+    let rafId = 0;
+
+    const sync = () => {
       const wrapper = wrapperRef.current;
       const path = pathRef.current;
       if (!wrapper || !path || pathLength === 0) return;
@@ -60,9 +70,21 @@ export default function ScatteredJourney() {
       const point = path.getPointAtLength(clamped * pathLength);
       setDronePoint({ x: point.x, y: point.y });
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(sync);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    sync();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, [pathLength]);
 
   return (

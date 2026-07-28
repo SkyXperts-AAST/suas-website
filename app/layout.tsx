@@ -53,7 +53,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-navy font-sans text-offwhite">
         <CursorDrone />
         <Nav />
-        <main className="flex-1 overflow-x-clip">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

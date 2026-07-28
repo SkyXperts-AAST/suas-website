@@ -82,7 +82,7 @@ export default function Home() {
       <AwardHighlight />
 
       {/* CHAPTER 04 — BUILD */}
-      <div id="build" className="scroll-mt-24">
+      <div id="build" className="scroll-mt-16">
         <DroneAssemblyScroll />
       </div>
 

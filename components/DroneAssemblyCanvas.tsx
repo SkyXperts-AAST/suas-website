@@ -28,7 +28,14 @@ export default function DroneAssemblyCanvas({
       gl={{ alpha: true, antialias: true }}
       dpr={[1, 1.75]}
     >
-      <SceneLighting preset="studio" />
+      {/* Suspended separately from the model: <Environment> loads an HDRI,
+          and without its own boundary that fetch suspends this whole
+          subtree — nothing in the canvas commits until the environment map
+          arrives (invisible once cached, but a blank canvas on a cold load).
+          Split, the two load in parallel. Same fix as VehicleCanvas. */}
+      <Suspense fallback={null}>
+        <SceneLighting preset="studio" />
+      </Suspense>
       <Suspense
         fallback={
           <mesh>

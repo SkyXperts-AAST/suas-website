@@ -372,3 +372,102 @@ html {
   border-color: rgba(10, 22, 40, 0.22);
   background: #ffffff;
 }
+
+.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/90,
+.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/88,
+.build-log-reading[data-reading-mode="light"] .build-log-prose-aside .text-offwhite\/88 {
+  color: rgba(10, 22, 40, 0.92);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-prose-figure figcaption,
+.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/60 {
+  color: rgba(10, 22, 40, 0.58);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-article-footer .text-offwhite\/45 {
+  color: rgba(10, 22, 40, 0.55);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite\/78 {
+  color: rgba(10, 22, 40, 0.78);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite\/55 {
+  color: rgba(10, 22, 40, 0.58);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-slot-label {
+  color: rgba(10, 22, 40, 0.55);
+}
+
+.build-log-reading[data-reading-mode="light"]
+  .build-log-timeline-section
+  button[aria-current="true"]
+  .build-log-timeline-slot-label {
+  color: rgba(10, 22, 40, 0.68);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-dot.border-white\/30,
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-dot.bg-\[\#0a1628\] {
+  border-color: rgba(10, 22, 40, 0.25);
+  background: #ffffff;
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-rail {
+  background: linear-gradient(
+    to right,
+    rgba(10, 22, 40, 0.04),
+    rgba(10, 22, 40, 0.2),
+    rgba(10, 22, 40, 0.04)
+  );
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-empty-state {
+  border-color: rgba(10, 22, 40, 0.12);
+  background: #ffffff;
+  color: rgba(10, 22, 40, 0.72);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a.border-accent\/30.bg-accent\/10 {
+  border-color: rgba(227, 28, 28, 0.22);
+  background: rgba(227, 28, 28, 0.08);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a .text-offwhite {
+  color: #0a1628;
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a .text-offwhite\/85 {
+  color: rgba(10, 22, 40, 0.82);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite,
+.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite\/70 {
+  color: #0a1628;
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite\/70 {
+  color: rgba(10, 22, 40, 0.72);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-timeline-section button.focus-visible\:ring-offset-\[\#0a1628\]:focus-visible {
+  --tw-ring-offset-color: #eef1f6;
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-reading-switch button.border-white\/20 {
+  border-color: rgba(10, 22, 40, 0.18);
+  background: rgba(10, 22, 40, 0.06);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-reading-switch button.border-accent\/50 {
+  border-color: rgba(227, 28, 28, 0.35);
+  background: rgba(227, 28, 28, 0.12);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-hero .border-accent\/30 {
+  border-color: rgba(227, 28, 28, 0.22);
+}
+
+.build-log-reading[data-reading-mode="light"] .build-log-hero .bg-\[\#0a1628\]\/70 {
+  background-color: rgba(255, 255, 255, 0.94);
+}

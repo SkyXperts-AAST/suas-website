@@ -296,7 +296,7 @@ function TimelineUpdateNode({
         </div>
 
         <p
-          className={`mt-2 text-center text-[0.5625rem] font-black uppercase tracking-[0.14em] md:text-[0.625rem] ${
+          className={`build-log-timeline-slot-label mt-2 text-center text-[0.5625rem] font-black uppercase tracking-[0.14em] md:text-[0.625rem] ${
             isSelected ? "text-offwhite/70" : "text-offwhite/40"
           }`}
         >
@@ -307,7 +307,7 @@ function TimelineUpdateNode({
       <div className="mt-3 flex flex-col items-center">
         <span
           aria-hidden="true"
-          className={`rounded-full border-2 transition-all duration-300 motion-reduce:transition-none ${
+          className={`build-log-timeline-dot rounded-full border-2 transition-all duration-300 motion-reduce:transition-none ${
             isSelected
               ? "h-3.5 w-3.5 border-accent bg-accent shadow-[0_0_16px_rgba(227,28,28,0.75)]"
               : "h-3 w-3 border-white/30 bg-[#0a1628] group-hover:border-white/50"
@@ -471,7 +471,7 @@ export default function BuildLogTimeline({
 
   if (entries.length === 0) {
     return (
-      <p className="border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-offwhite/70">
+      <p className="build-log-empty-state border border-white/10 bg-white/[0.03] px-6 py-10 text-center text-offwhite/70">
         No build log entries yet. Check back soon.
       </p>
     );
@@ -545,19 +545,19 @@ export default function BuildLogTimeline({
               <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/25 to-white/10" />
             </div>
 
-            <div className="relative">
+            <div className="build-log-timeline-scroll-outer relative overflow-visible py-3">
               <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#0a1628] to-transparent md:w-16" />
               <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#0a1628] to-transparent md:w-16" />
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-10 bottom-[1.55rem] z-0 h-px bg-gradient-to-r from-white/5 via-white/25 to-white/5 md:inset-x-16 md:bottom-[1.7rem]"
+                className="build-log-timeline-rail pointer-events-none absolute inset-x-10 bottom-[1.55rem] z-0 h-px bg-gradient-to-r from-white/5 via-white/25 to-white/5 md:inset-x-16 md:bottom-[1.7rem]"
               />
 
               <div
                 ref={scrollRef}
-                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-7.25rem)] pr-[calc(50%-7.25rem)] sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="build-log-timeline-scroll snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pt-4 pl-[calc(50%-7.25rem)] pr-[calc(50%-7.25rem)] sm:pt-5 sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pt-6 md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
-                <div className="relative inline-flex items-end py-2">
+                <div className="relative inline-flex items-end pb-2">
                   {entries.map((entry) => {
                     const isSelected = entry.id === selectedEntryId;
 
@@ -571,7 +571,7 @@ export default function BuildLogTimeline({
                             slotRefs.current.delete(entry.id);
                           }
                         }}
-                        className="flex h-[19rem] w-[14.5rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[16rem] md:h-[21.5rem] md:w-[20rem]"
+                        className="flex h-[20.5rem] w-[14.5rem] shrink-0 snap-center snap-always items-end justify-center overflow-visible sm:h-[23rem] sm:w-[16rem] md:h-[24rem] md:w-[20rem]"
                       >
                         <TimelineUpdateNode
                           entry={entry}

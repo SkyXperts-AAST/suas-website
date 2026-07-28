@@ -11,18 +11,12 @@ import {
 } from "@/lib/vehicle/assemblyOrder";
 import { subsystemLabel } from "@/lib/vehicle/subsystemLookup";
 
-// Loaded only once we know we're on a large viewport, so phones never pay for
-// three/drei, the Draco decoder or the GLB. `ssr: false` because there is no
-// canvas to prerender in a static export anyway.
 const DroneAssemblyCanvas = dynamic(
   () => import("@/components/DroneAssemblyCanvas"),
   { ssr: false }
 );
 
-const SCROLL_HEIGHT = "220vh";
-
-// Tailwind's `md`, which is the breakpoint the rest of the site switches
-// layout on. Below it the scroll assembly is replaced by a static render.
+const SCROLL_HEIGHT = "280dvh";
 const DESKTOP_QUERY = "(min-width: 768px)";
 
 function labelForKey(key: string): string {
@@ -47,16 +41,22 @@ function clamp01(value: number) {
   return Math.min(1, Math.max(0, value));
 }
 
-function getSectionProgress(section: HTMLElement): number {
+function getSectionProgress(section: HTMLElement, sticky: HTMLElement): number {
   const rect = section.getBoundingClientRect();
-  const viewport = window.innerHeight;
-  const scrollRange = section.offsetHeight - viewport;
+  // Measure the pinned pane itself instead of re-deriving its height from
+  // `window.innerHeight`/`NAV_OFFSET_PX`: the pane is sized with `dvh` in
+  // CSS, which doesn't always equal `vh`-derived math (browser chrome,
+  // OS-level scaling, etc.). Reading the live layout keeps this in sync no
+  // matter which unit ends up governing the actual render.
+  const stickyHeight = Math.max(sticky.offsetHeight, 1);
+  const scrollRange = section.offsetHeight - stickyHeight;
+
   if (scrollRange <= 0) return 1;
-  const raw = clamp01(-rect.top / scrollRange);
-  return clamp01(raw / 0.72);
+
+  // Map the full pinned scroll distance to 0→1 assembly progress.
+  return clamp01(-rect.top / scrollRange);
 }
 
-/** Shared heading block, so both paths keep identical spacing and type. */
 function ChapterHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="shrink-0 text-center">
@@ -68,9 +68,6 @@ function ChapterHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Mobile: the finished vehicle as a flat image. No canvas, no scroll
- * listener, no pinned section — the copy describes the build rather than
- * asking for a scroll gesture that no longer drives anything. */
 function StaticAssembly() {
   return (
     <section className="relative bg-navy" aria-label="Storm assembly diagram">
@@ -109,11 +106,10 @@ function StaticAssembly() {
 
 export default function DroneAssemblyScroll() {
   const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const scrollApi = useMemo<AssemblyScrollApi>(() => ({ progress: 0 }), []);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
-  // Starts false so the first paint (and the prerendered HTML) is the cheap
-  // path; upgrades to the canvas only once a large viewport is confirmed.
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -135,13 +131,17 @@ export default function DroneAssemblyScroll() {
   useEffect(() => {
     if (!isDesktop) return;
     const section = sectionRef.current;
-    if (!section) return;
+    const sticky = stickyRef.current;
+    if (!section || !sticky) return;
 
     let rafId = 0;
     let lastUiUpdate = 0;
+    let active = false;
 
     const syncProgress = () => {
-      const next = reducedMotion ? 1 : getSectionProgress(section);
+      if (!active) return;
+
+      const next = reducedMotion ? 1 : getSectionProgress(section, sticky);
       scrollApi.progress = next;
 
       const now = performance.now();
@@ -151,19 +151,29 @@ export default function DroneAssemblyScroll() {
       }
     };
 
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(syncProgress);
+    const tick = () => {
+      syncProgress();
+      rafId = requestAnimationFrame(tick);
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        active = entry.isIntersecting;
+        if (active) syncProgress();
+      },
+      { rootMargin: "20% 0px" },
+    );
+
+    observer.observe(section);
+    rafId = requestAnimationFrame(tick);
+    window.addEventListener("resize", syncProgress, { passive: true });
     syncProgress();
 
     return () => {
+      active = false;
       cancelAnimationFrame(rafId);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      observer.disconnect();
+      window.removeEventListener("resize", syncProgress);
     };
   }, [isDesktop, reducedMotion, scrollApi]);
 
@@ -171,7 +181,7 @@ export default function DroneAssemblyScroll() {
     () => activeAssemblyKey(scrollProgress),
     [scrollProgress]
   );
-  const isComplete = scrollProgress > 0.9;
+  const isComplete = scrollProgress > 0.96;
   const doneCount = useMemo(
     () =>
       ASSEMBLY_ORDER.filter(
@@ -189,45 +199,55 @@ export default function DroneAssemblyScroll() {
       className="relative bg-navy"
       aria-label="Storm assembly diagram"
     >
-      <div className="sticky top-16 h-[calc(100dvh-4rem)]">
+      <div
+        ref={stickyRef}
+        className="sticky top-16 h-[calc(100dvh-4rem)] overflow-hidden"
+      >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
 
-        <div className="relative z-10 flex h-full flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-8 lg:py-6">
+        <div className="relative z-10 flex h-full min-h-0 flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-4 lg:px-8 lg:py-5">
           <ChapterHeading>
             <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl lg:text-4xl">
               Scroll to assemble
             </h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-offwhite/65 sm:text-base">
-              Every subsystem starts separated. Keep scrolling — this view
-              stays pinned while Storm assembles piece by piece. The build
-              order is tracked live on the model itself.
-            </p>
-            <p
-              className={`mt-2 text-sm text-offwhite/70 transition-opacity duration-500 ${
-                isComplete ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              Storm is fully assembled.{" "}
-              <Link
-                href="/vehicles"
-                className="pointer-events-auto font-medium text-accent underline-offset-2 hover:underline"
+            {/* Both states share one slot (stacked, not sequential) so the
+                heading's height never grows when the completion message
+                appears — that growth would shrink the canvas below and force
+                the build-order list into its own scrollbar. */}
+            <div className="relative mx-auto mt-2 max-w-xl">
+              <p
+                className={`text-sm leading-relaxed text-offwhite/65 transition-opacity duration-500 sm:text-base ${
+                  isComplete ? "opacity-0" : "opacity-100"
+                }`}
               >
-                Explore every subsystem →
-              </Link>
-            </p>
+                Every subsystem starts separated. Keep scrolling — this view
+                stays pinned while Storm assembles piece by piece. The build
+                order is tracked live on the model itself.
+              </p>
+              <p
+                className={`absolute inset-x-0 top-0 text-sm text-offwhite/70 transition-opacity duration-500 sm:text-base ${
+                  isComplete ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                Storm is fully assembled.{" "}
+                <Link
+                  href="/vehicles"
+                  className="pointer-events-auto font-medium text-accent underline-offset-2 hover:underline"
+                >
+                  Explore every subsystem →
+                </Link>
+              </p>
+            </div>
           </ChapterHeading>
 
-          <div className="relative min-h-[220px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
+          <div className="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
             <DroneAssemblyCanvas
               scrollApi={scrollApi}
               reducedMotion={reducedMotion}
             />
 
-            {/* Build checklist — floats directly on the model instead of
-                living in a separate column, so the diagram and the progress
-                it represents read as one object. */}
-            <div className="nav-glass absolute right-2.5 top-2.5 z-20 max-h-[calc(100%-4.5rem)] w-[10.5rem] overflow-y-auto rounded-xl border border-white/10 p-2.5 shadow-lg shadow-black/30 sm:right-4 sm:top-4 sm:w-56 sm:p-3">
-              <div className="mb-2 flex items-center justify-between gap-2">
+            <div className="nav-glass absolute right-2.5 top-2.5 z-20 max-h-[calc(100%-3rem)] w-[10.5rem] overflow-y-auto overscroll-contain rounded-xl border border-white/10 p-2 shadow-lg shadow-black/30 [scrollbar-width:none] sm:right-4 sm:top-4 sm:w-56 sm:p-2.5 [&::-webkit-scrollbar]:hidden">
+              <div className="mb-1.5 flex items-center justify-between gap-2">
                 <p className="font-display text-[9px] font-bold uppercase tracking-[0.16em] text-white/50 sm:text-[10px]">
                   Build order
                 </p>
@@ -236,7 +256,7 @@ export default function DroneAssemblyScroll() {
                 </p>
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {ASSEMBLY_ORDER.map((key) => {
                   const progress = assemblyProgressForGroup(scrollProgress, key);
                   const isActive = key === activeKey && !isComplete;
@@ -245,7 +265,7 @@ export default function DroneAssemblyScroll() {
                   return (
                     <div
                       key={key}
-                      className={`flex items-center gap-2 rounded-md px-1.5 py-1 transition-all duration-300 ${
+                      className={`flex items-center gap-2 rounded-md px-1.5 py-0.5 transition-all duration-300 ${
                         isActive
                           ? "bg-accent/15"
                           : isDone
@@ -254,7 +274,7 @@ export default function DroneAssemblyScroll() {
                       }`}
                     >
                       <div
-                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[8px] font-bold ${
+                        className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full text-[8px] font-bold ${
                           isDone
                             ? "bg-accent text-white"
                             : isActive

@@ -10,19 +10,61 @@ export function PageShell({ children, className = "" }: PageShellProps) {
     <div
       className={`relative overflow-x-clip bg-navy text-offwhite ${className}`.trim()}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
-      />
+      <FlightPathAccent />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
-      />
       {children}
+    </div>
+  );
+}
+
+/**
+ * Background accent: a dotted waypoint route in the upper-right of the page,
+ * echoing a planned flight path, with a quadcopter at the route's origin.
+ * Decorative only.
+ *
+ * The route starts just ahead of the quadcopter so the dotted line reads as the
+ * path it is about to fly. Its rotation matches the first leg's tangent — the
+ * leg runs (32,98) to (130,84), so atan2(-14, 98) ≈ -8deg.
+ */
+function FlightPathAccent() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute right-0 top-2 hidden w-[30rem] text-accent md:block lg:w-[38rem]"
+    >
+      <svg viewBox="0 0 480 120" fill="none" className="h-auto w-full">
+        <path
+          d="M32 98 L130 84 L268 50 L396 22 L468 12"
+          stroke="currentColor"
+          strokeOpacity="0.55"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeDasharray="3 12"
+        />
+        <circle cx="130" cy="84" r="5" fill="currentColor" fillOpacity="0.8" />
+        <circle cx="396" cy="22" r="5" fill="currentColor" fillOpacity="0.8" />
+
+        <g
+          transform="translate(16 100) rotate(-8)"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.9"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M-6.5 -6.5 L6.5 6.5 M-6.5 6.5 L6.5 -6.5" />
+          <circle cx="-6.5" cy="-6.5" r="3.4" />
+          <circle cx="6.5" cy="-6.5" r="3.4" />
+          <circle cx="-6.5" cy="6.5" r="3.4" />
+          <circle cx="6.5" cy="6.5" r="3.4" />
+          <rect x="-2.6" y="-2.6" width="5.2" height="5.2" rx="1.4" />
+        </g>
+      </svg>
     </div>
   );
 }

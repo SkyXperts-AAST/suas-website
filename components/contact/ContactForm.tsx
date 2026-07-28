@@ -96,15 +96,11 @@ export default function ContactForm() {
       className="rounded-3xl border border-white/15 bg-[#07101f]/80 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-12"
     >
       <div className="text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-          Request form
-        </p>
-        <h2 className="mt-3 text-3xl leading-[1.02] text-offwhite md:text-4xl">
+        <h2 className="text-3xl leading-[1.02] text-offwhite md:text-4xl">
           Send us a message
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-base leading-8 text-offwhite/70">
-          Tell us why you&apos;re reaching out and we&apos;ll route your request to
-          the right person.
+          Tell us what&apos;s on your mind — we&apos;ll reply from there.
         </p>
       </div>
 

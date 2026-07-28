@@ -1,13 +1,3 @@
-import type { SubTeamSlug } from "@/lib/build-log/types";
-
-export type TeamHeadContact = {
-  slug: SubTeamSlug;
-  name: string;
-  role: string;
-  phone: string;
-  email: string;
-};
-
 export type ContactReason =
   | "general"
   | "sponsorship"
@@ -16,36 +6,25 @@ export type ContactReason =
   | "join-team"
   | "other";
 
-export const TEAM_EMAIL = "contact@skyxperts.org";
+/** Shared team inbox: listed directly and used by the contact form's mailto. */
+export const TEAM_EMAIL = "SkyXperts@aast.edu";
 
-export const TEAM_HEADS: TeamHeadContact[] = [
+export type TeamLead = {
+  name: string;
+  role: string;
+  email: string;
+};
+
+export const TEAM_LEADS: TeamLead[] = [
   {
-    slug: "computer-vision",
-    name: "Team Head Name",
-    role: "Computer Vision Lead",
-    phone: "+20 100 000 0001",
-    email: "cv@skyxperts.org",
+    name: "Eng. Mohamed Ragab",
+    role: "Co-Founder & President",
+    email: "momahrous@edu.aau.at",
   },
   {
-    slug: "control",
-    name: "Team Head Name",
-    role: "Control Lead",
-    phone: "+20 100 000 0002",
-    email: "control@skyxperts.org",
-  },
-  {
-    slug: "electrical",
-    name: "Team Head Name",
-    role: "Electrical Lead",
-    phone: "+20 100 000 0003",
-    email: "electrical@skyxperts.org",
-  },
-  {
-    slug: "mechanical",
-    name: "Team Head Name",
-    role: "Mechanical Lead",
-    phone: "+20 100 000 0004",
-    email: "mechanical@skyxperts.org",
+    name: "Eng. Omar Ossama",
+    role: "Team Leader",
+    email: "O.Sharaf0255@student.aast.edu",
   },
 ];
 

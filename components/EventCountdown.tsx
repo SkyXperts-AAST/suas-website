@@ -18,10 +18,11 @@ function getTimeLeft() {
 
 // Pre-reveal state, applied imperatively rather than rendered — see
 // VehicleSpecs for why (avoids shipping invisible copy if hydration never
-// happens). The countdown digits get their own, more dramatic reveal since
-// they're the section's focal point.
+// happens). The countdown digits get their own per-unit "flip open" reveal
+// since they're the section's focal point, staggered so they land one after
+// another instead of all at once.
 const HIDDEN_CLASSES = ["opacity-0", "translate-y-3"];
-const HIDDEN_UNIT_CLASSES = ["opacity-0", "translate-y-6", "scale-90"];
+const UNIT_FLIP_DELAY_MS = 130;
 
 export default function EventCountdown() {
   const [mounted, setMounted] = useState(false);
@@ -29,7 +30,7 @@ export default function EventCountdown() {
 
   const sectionRef = useRef<HTMLElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
-  const unitsRef = useRef<HTMLDivElement>(null);
+  const unitRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outroRef = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
 
@@ -43,9 +44,9 @@ export default function EventCountdown() {
   useEffect(() => {
     const node = sectionRef.current;
     const intro = introRef.current;
-    const units = unitsRef.current;
     const outro = outroRef.current;
-    if (!node || !intro || !units || !outro) return;
+    const units = unitRefs.current;
+    if (!node || !intro || !outro) return;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -55,8 +56,15 @@ export default function EventCountdown() {
     }
 
     intro.classList.add(...HIDDEN_CLASSES);
-    units.classList.add(...HIDDEN_UNIT_CLASSES);
     outro.classList.add(...HIDDEN_CLASSES);
+    // Rotated up on a hinge like a split-flap display and tipped back with
+    // perspective — set imperatively (not via the `style` prop's initial
+    // value) so it only ever hides content once JS is confirmed running.
+    for (const unit of units) {
+      if (!unit) continue;
+      unit.style.opacity = "0";
+      unit.style.transform = "rotateX(-80deg) translateY(14px)";
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -111,19 +119,27 @@ export default function EventCountdown() {
         </p>
       </div>
 
-      {/* The countdown: the section's main point, so it gets the largest
-          type on the page and its own dramatic, slightly-delayed reveal
-          (scale + slide) instead of the gentler fade used for copy. */}
+      {/* The countdown: the section's main point, so each digit block gets
+          its own hinged "flip open" reveal — like a split-flap display
+          snapping down into place, staggered left to right. */}
       <div
-        ref={unitsRef}
-        className={`relative mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 transition-[opacity,transform] delay-150 duration-700 ease-out sm:gap-5 ${
-          revealed ? "translate-y-0 scale-100 opacity-100" : ""
-        }`}
+        className="relative mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-3 sm:gap-5"
+        style={{ perspective: "1200px" }}
       >
-        {units.map((u) => (
+        {units.map((u, i) => (
           <div
             key={u.label}
-            className="flex min-w-[5.5rem] flex-1 flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 shadow-[0_0_40px_rgba(227,28,28,0.08)] sm:min-w-[7.5rem] sm:px-6 sm:py-8"
+            ref={(el) => {
+              unitRefs.current[i] = el;
+            }}
+            style={{
+              transitionDelay: `${i * UNIT_FLIP_DELAY_MS}ms`,
+              transformOrigin: "50% 100%",
+              ...(revealed
+                ? { opacity: 1, transform: "rotateX(0deg) translateY(0)" }
+                : {}),
+            }}
+            className="flex min-w-[5.5rem] flex-1 flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 shadow-[0_0_40px_rgba(227,28,28,0.08)] transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1.4,0.36,1)] sm:min-w-[7.5rem] sm:px-6 sm:py-8"
           >
             <span className="font-mono text-6xl font-bold leading-none tabular-nums text-[#F5F5F7] sm:text-7xl md:text-8xl">
               {mounted ? String(u.value).padStart(2, "0") : "00"}
@@ -137,7 +153,7 @@ export default function EventCountdown() {
 
       <div
         ref={outroRef}
-        className={`relative transition-[opacity,transform] delay-300 duration-700 ease-out ${
+        className={`relative transition-[opacity,transform] delay-500 duration-700 ease-out ${
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >

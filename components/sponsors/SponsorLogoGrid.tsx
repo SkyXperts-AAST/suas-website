@@ -12,8 +12,8 @@ export default function SponsorLogoGrid({
     <ul
       className={
         compact
-          ? "flex flex-wrap items-center justify-center gap-4"
-          : "grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5"
+          ? "flex flex-wrap items-center justify-center gap-x-10 gap-y-6"
+          : "grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6"
       }
     >
       {SPONSORS.map((sponsor) => (

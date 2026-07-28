@@ -5,6 +5,7 @@ import VerticalJourney from "@/components/VerticalJourney";
 import EventCountdown from "@/components/EventCountdown";
 import JourneyRail, { type JourneyChapter } from "@/components/home/JourneyRail";
 import AwardHighlight from "@/components/home/AwardHighlight";
+import SpecialThanks from "@/components/home/SpecialThanks";
 import {
   HomeSectionBridge,
   HomeStoryChapter,
@@ -16,6 +17,7 @@ const CHAPTERS: JourneyChapter[] = [
   { id: "award", label: "Recognition" },
   { id: "build", label: "Build" },
   { id: "countdown", label: "Mission" },
+  { id: "thanks", label: "Thanks" },
 ];
 
 export default function Home() {
@@ -89,6 +91,11 @@ export default function Home() {
       {/* CHAPTER 05 — MISSION */}
       <div id="countdown" className="scroll-mt-24">
         <EventCountdown />
+      </div>
+
+      {/* CHAPTER 06 — SPECIAL THANKS */}
+      <div id="thanks" className="scroll-mt-24">
+        <SpecialThanks />
       </div>
     </main>
   );

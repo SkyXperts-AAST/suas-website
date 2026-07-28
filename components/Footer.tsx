@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa6";
 import Logo from "@/components/Logo";
-import SponsorLogoGrid from "@/components/sponsors/SponsorLogoGrid";
 
 const NAV_LINKS = [
   { href: "/team", label: "Team" },
@@ -49,28 +48,6 @@ export default function Footer() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/25 to-transparent"
       />
-
-      {/* Sponsors */}
-      <div className="border-b border-white/[0.06] bg-white/[0.02]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-10 lg:py-9">
-          <div className="shrink-0 lg:max-w-[11rem]">
-            <FooterHeading>Partners</FooterHeading>
-            <p className="mt-2 text-sm leading-relaxed text-offwhite/55">
-              Supported by organizations that invest in student engineering.
-            </p>
-            <Link
-              href="/sponsorships"
-              className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-offwhite/75 transition hover:text-accent"
-            >
-              Sponsorship opportunities
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="min-w-0 flex-1 lg:flex lg:justify-end">
-            <SponsorLogoGrid compact />
-          </div>
-        </div>
-      </div>
 
       {/* Main columns */}
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 sm:px-8 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 lg:px-10 lg:py-14">

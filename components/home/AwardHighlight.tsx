@@ -38,7 +38,15 @@ function getSectionProgress(section: HTMLElement): number {
 
 function RadarBadge({ icon, active }: { icon: string; active: boolean }) {
   return (
-    <div className="relative mx-auto flex h-28 w-28 shrink-0 items-center justify-center sm:mx-0 sm:h-32 sm:w-32">
+    <div className="relative mx-auto flex h-36 w-36 shrink-0 items-center justify-center sm:mx-0 sm:h-48 sm:w-48">
+      {/* Big outward shockwave on activation — reads as an impact/burst rather
+          than a steady-state pulse, so it only plays while the badge is active. */}
+      <span
+        aria-hidden="true"
+        className={`absolute inset-0 rounded-full border-2 border-accent/40 motion-reduce:animate-none ${
+          active ? "animate-ping [animation-duration:1.8s]" : "opacity-0"
+        }`}
+      />
       <span
         aria-hidden="true"
         className={`absolute inset-0 rounded-full border border-dashed border-accent/30 motion-reduce:animate-none ${
@@ -47,13 +55,13 @@ function RadarBadge({ icon, active }: { icon: string; active: boolean }) {
       />
       <span
         aria-hidden="true"
-        className={`absolute inset-2 rounded-full border border-accent/40 motion-reduce:animate-none sm:inset-3 ${
+        className={`absolute inset-3 rounded-full border border-accent/40 motion-reduce:animate-none sm:inset-4 ${
           active ? "animate-ping [animation-duration:2.6s]" : ""
         }`}
       />
       <span
-        className={`relative flex h-20 w-20 items-center justify-center rounded-full bg-accent/15 text-4xl shadow-[0_0_36px_rgba(227,28,28,0.4)] transition-transform duration-700 ease-out sm:h-24 sm:w-24 sm:text-5xl ${
-          active ? "scale-100" : "scale-50"
+        className={`relative flex h-24 w-24 items-center justify-center rounded-full bg-accent/15 text-6xl shadow-[0_0_70px_rgba(227,28,28,0.6)] transition-transform duration-[900ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:h-32 sm:w-32 sm:text-7xl ${
+          active ? "scale-100 rotate-0" : "scale-0 -rotate-45"
         }`}
       >
         {icon}
@@ -75,18 +83,18 @@ function StaticAwardList() {
           ICMTC 2026
         </p>
 
-        <div className="mt-12 flex flex-col gap-12">
+        <div className="mt-12 flex flex-col gap-16">
           {AWARDS.map((award) => (
             <div
               key={award.title}
-              className="mx-auto flex max-w-xl flex-col items-center gap-6 sm:flex-row sm:text-left"
+              className="mx-auto flex max-w-2xl flex-col items-center gap-8 sm:flex-row sm:gap-12 sm:text-left"
             >
               <RadarBadge icon={award.icon} active />
               <div>
-                <h3 className="font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl">
+                <h3 className="font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl">
                   {award.title}
                 </h3>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-offwhite/70 sm:mx-0">
+                <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-offwhite/70 sm:mx-0 sm:text-lg">
                   {award.detail}
                 </p>
               </div>
@@ -166,7 +174,7 @@ export default function AwardHighlight() {
           </p>
         </div>
 
-        <div className="relative mx-auto min-h-[19rem] w-full max-w-xl sm:min-h-[16rem]">
+        <div className="relative mx-auto min-h-[28rem] w-full max-w-2xl sm:min-h-[20rem]">
           {AWARDS.map((award, index) => {
             const isActive = index === activeIndex;
             const isPast = index < activeIndex;
@@ -174,24 +182,24 @@ export default function AwardHighlight() {
               <div
                 key={award.title}
                 aria-hidden={!isActive}
-                className={`absolute inset-0 flex flex-col items-center gap-6 transition-all duration-700 ease-out sm:flex-row sm:gap-10 sm:text-left ${
+                className={`absolute inset-0 flex flex-col items-center gap-8 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:flex-row sm:gap-14 sm:text-left ${
                   isActive
-                    ? "translate-y-0 opacity-100"
+                    ? "translate-y-0 scale-100 opacity-100 blur-none"
                     : isPast
-                      ? "-translate-y-10 opacity-0"
-                      : "translate-y-10 opacity-0"
+                      ? "-translate-y-20 scale-90 opacity-0 blur-sm"
+                      : "translate-y-20 scale-90 opacity-0 blur-sm"
                 }`}
               >
                 <RadarBadge icon={award.icon} active={isActive} />
                 <div>
-                  <p className="font-mono text-xs font-bold tracking-[0.2em] text-accent">
+                  <p className="font-mono text-sm font-bold tracking-[0.25em] text-accent">
                     {String(index + 1).padStart(2, "0")} /{" "}
                     {String(AWARDS.length).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-2 font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl lg:text-5xl">
+                  <h3 className="mt-3 font-display text-5xl leading-[1.02] tracking-tight text-offwhite sm:text-6xl lg:text-7xl">
                     {award.title}
                   </h3>
-                  <p className="mx-auto mt-3 max-w-md text-pretty text-sm leading-relaxed text-offwhite/70 sm:mx-0 sm:text-base">
+                  <p className="mx-auto mt-4 max-w-md text-pretty text-base leading-relaxed text-offwhite/70 sm:mx-0 sm:text-lg">
                     {award.detail}
                   </p>
                 </div>
@@ -200,13 +208,13 @@ export default function AwardHighlight() {
           })}
         </div>
 
-        <div className="absolute bottom-8 flex items-center gap-2 sm:bottom-10">
+        <div className="absolute bottom-8 flex items-center gap-2.5 sm:bottom-10">
           {AWARDS.map((award, index) => (
             <span
               key={award.title}
               aria-hidden="true"
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                index === activeIndex ? "w-6 bg-accent" : "w-1.5 bg-white/20"
+              className={`h-2 rounded-full transition-all duration-500 ${
+                index === activeIndex ? "w-8 bg-accent" : "w-2 bg-white/20"
               }`}
             />
           ))}

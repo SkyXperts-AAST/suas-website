@@ -13,27 +13,35 @@ export default function SponsorLogo({
 }: SponsorLogoProps) {
   const isExternal = sponsor.href.startsWith("http");
 
+  // No card, no white fill — logos sit directly on the dark background, just
+  // bigger and given breathing room instead of being boxed in.
   const frameClass = compact
-    ? "flex h-14 w-36 items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 transition hover:border-gray-300"
-    : "flex h-28 w-full items-center justify-center rounded-2xl border border-white/10 bg-white px-6 py-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.28)]";
+    ? "group flex h-16 w-40 items-center justify-center transition sm:h-20 sm:w-48"
+    : "group flex h-32 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-6 transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.05] sm:h-40";
+
+  // Rendered as a soft white silhouette so every logo reads cleanly against
+  // navy regardless of its own colors (some, like dark wordmarks, would
+  // otherwise vanish) — full color reveals on hover/focus as a small reward.
+  const logoTreatment =
+    "opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:brightness-100 group-hover:invert-0 group-focus-visible:opacity-100 group-focus-visible:brightness-100 group-focus-visible:invert-0";
 
   const content = sponsor.logoSrc ? (
     <Image
       src={sponsor.logoSrc}
       alt={sponsor.name}
-      width={compact ? 120 : 160}
-      height={compact ? 48 : 64}
-      className={
+      width={compact ? 200 : 260}
+      height={compact ? 80 : 104}
+      className={`${
         compact
-          ? "h-8 w-auto max-w-full object-contain"
-          : "h-12 w-auto max-w-full object-contain sm:h-14"
-      }
+          ? "h-14 w-auto max-w-full object-contain sm:h-16"
+          : "h-20 w-auto max-w-full object-contain sm:h-24"
+      } ${logoTreatment}`}
     />
   ) : (
     // TODO: replace with real logo file
     <span
-      className={`font-semibold tracking-wide ${
-        compact ? "text-sm text-gray-700" : "text-base text-navy"
+      className={`font-semibold tracking-wide text-offwhite/70 transition group-hover:text-offwhite ${
+        compact ? "text-base" : "text-lg"
       }`}
     >
       {sponsor.name}

@@ -105,7 +105,7 @@ export default function Hero() {
           <Logo
             variant="hero"
             decorative
-            className="h-auto w-[min(72vw,22rem)] opacity-[0.34] brightness-0 invert sm:w-80 md:w-[28rem]"
+            className="h-auto w-[min(72vw,22rem)] opacity-[0.55] drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] sm:w-80 md:w-[28rem]"
             priority
           />
         </div>

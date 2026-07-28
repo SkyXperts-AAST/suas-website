@@ -5,7 +5,7 @@ type TeamIconProps = {
   className?: string;
 };
 
-export default function TeamIcon({ slug, className = "h-6 w-6" }: TeamIconProps) {
+export default function TeamIcon({ slug, className = "h-8 w-8" }: TeamIconProps) {
   switch (slug) {
     case "computer-vision":
       return (

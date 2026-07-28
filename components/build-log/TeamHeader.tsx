@@ -4,39 +4,27 @@ import type { SubTeam } from "@/lib/build-log/types";
 
 type TeamHeaderProps = {
   team: SubTeam;
-  entryCount: number;
 };
 
-export default function TeamHeader({ team, entryCount }: TeamHeaderProps) {
+export default function TeamHeader({ team }: TeamHeaderProps) {
   const theme = getTeamTheme(team.slug);
 
   return (
-    <header className="relative z-30">
-      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-        <div className="flex items-start gap-5 md:gap-6">
-          <TeamIcon slug={team.slug} className={`h-14 w-14 shrink-0 md:h-16 md:w-16 ${theme.iconText}`} />
+    <header className="build-log-team-header relative z-30">
+      <div className="flex items-start gap-5 md:gap-6">
+        <TeamIcon slug={team.slug} className={`h-16 w-16 shrink-0 md:h-20 md:w-20 ${theme.iconText}`} />
 
-          <div>
-            <p
-              className={`text-[0.625rem] font-black uppercase tracking-[0.18em] ${theme.iconText}`}
-            >
-              {theme.label}
-            </p>
-            <h2 className="mt-1.5 text-2xl font-bold leading-tight text-offwhite md:text-3xl">
-              {team.name}
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-offwhite/70 md:text-base md:leading-7">
-              {team.description}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex shrink-0 items-baseline gap-2 md:flex-col md:items-end md:gap-0 md:text-right">
-          <p className={`text-3xl font-black tabular-nums ${theme.date}`}>
-            {entryCount}
+        <div>
+          <p
+            className={`text-xs font-black uppercase tracking-[0.2em] md:text-sm ${theme.iconText}`}
+          >
+            {theme.label}
           </p>
-          <p className="text-[0.625rem] font-black uppercase tracking-[0.16em] text-offwhite/50">
-            Timeline entries
+          <h2 className="mt-2 text-3xl font-black leading-[1.05] tracking-tight text-offwhite md:mt-3 md:text-5xl lg:text-6xl">
+            {team.name}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-offwhite/70 md:mt-4 md:text-base md:leading-7">
+            {team.description}
           </p>
         </div>
       </div>

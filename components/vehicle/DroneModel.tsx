@@ -26,8 +26,7 @@ const MODEL_YAW = Math.PI;
 // the camera is already framed around.
 const LANDING_OFFSET_Y = 0.22;
 const LANDING_DURATION = 1.8;
-// Matches BuildLogHeroBackground's hover-spin rate, for a consistent idle
-// speed across the two drone hero scenes.
+// Matches the vehicles page idle propeller spin rate.
 const PROPELLER_IDLE_SPEED = 22;
 
 function easeOutCubic(t: number) {
@@ -163,7 +162,7 @@ export default function DroneModel({
   // Landing sequence lives on a wrapper group rather than `model` itself —
   // `model` comes from useMemo and mutating it directly in a hook callback
   // isn't safe under the React Compiler; a ref is the sanctioned escape
-  // hatch (same pattern as BuildLogHeroBackground's rigRef).
+  // hatch (same pattern as a ref-backed rig group).
   const landingGroupRef = useRef<THREE.Group>(null);
 
   // Descends from the airborne Y to the resting Y (0) over LANDING_DURATION,

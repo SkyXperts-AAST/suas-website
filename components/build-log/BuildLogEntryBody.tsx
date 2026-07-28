@@ -16,13 +16,13 @@ export default function BuildLogEntryBody({
       : [{ type: "paragraph" as const, text: summary }];
 
   return (
-    <div className="build-log-prose max-w-[65ch] space-y-5 font-sans">
+    <div className="build-log-prose space-y-8 font-sans md:space-y-9">
       {content.map((block, index) => {
         if (block.type === "paragraph") {
           return (
             <p
               key={`paragraph-${index}`}
-              className="text-base font-normal leading-[1.75] text-offwhite/92 md:text-[1.0625rem] md:leading-[1.8]"
+              className="text-[1.0625rem] font-normal leading-[1.85] text-offwhite/90 md:text-lg md:leading-[1.9]"
             >
               {block.text}
             </p>
@@ -31,43 +31,46 @@ export default function BuildLogEntryBody({
 
         if (block.type === "list") {
           return (
-            <div key={`list-${index}`} className="space-y-2.5">
+            <aside
+              key={`list-${index}`}
+              className="build-log-prose-aside border border-white/10 bg-white/[0.03] px-5 py-5 md:px-6 md:py-6"
+            >
               {block.heading ? (
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-offwhite/50">
+                <h3 className="font-display text-lg font-bold leading-snug text-offwhite md:text-xl">
                   {block.heading}
-                </p>
+                </h3>
               ) : null}
-              <ul className="space-y-2">
+              <ul className={`space-y-3 ${block.heading ? "mt-4" : ""}`}>
                 {block.items.map((item, itemIndex) => (
                   <li
                     key={`list-${index}-item-${itemIndex}`}
-                    className="flex gap-2.5 text-base font-normal leading-[1.7] text-offwhite/92 md:text-[1.0625rem]"
+                    className="flex gap-3 text-base leading-[1.75] text-offwhite/88 md:text-[1.0625rem] md:leading-[1.8]"
                   >
-                    <span className="mt-[0.65em] h-1 w-1 shrink-0 rounded-full bg-offwhite/50" />
+                    <span
+                      aria-hidden="true"
+                      className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                    />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-            </div>
+            </aside>
           );
         }
 
         return (
-          <figure
-            key={`image-${index}`}
-            className="my-3 max-w-[16rem] sm:max-w-[18rem]"
-          >
-            <div className="relative aspect-[4/3] max-h-32 w-full overflow-hidden rounded-sm border border-white/10 bg-white/[0.02] sm:max-h-36">
+          <figure key={`image-${index}`} className="build-log-prose-figure my-2">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] md:rounded-xl">
               <Image
                 src={block.src}
                 alt={block.alt}
                 fill
-                sizes="(max-width: 640px) 256px, 288px"
+                sizes="(max-width: 768px) 100vw, 672px"
                 className="object-cover"
               />
             </div>
             {block.caption ? (
-              <figcaption className="mt-2 text-xs leading-relaxed text-offwhite/65 md:text-[0.8125rem]">
+              <figcaption className="mt-3 text-sm leading-relaxed text-offwhite/60 md:text-[0.9375rem]">
                 {block.caption}
               </figcaption>
             ) : null}

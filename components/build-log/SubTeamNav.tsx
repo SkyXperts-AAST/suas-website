@@ -21,7 +21,7 @@ export default function SubTeamNav() {
   return (
     <nav
       aria-label="Sub-team build logs"
-      className="grid w-full grid-cols-2 border-b border-white/10 sm:grid-cols-4"
+      className="build-log-subteam-nav grid w-full grid-cols-2 border-b border-white/10 sm:grid-cols-4"
     >
       {SUB_TEAMS.map((team) => {
         const active = isTeamActive(pathname, team.slug);
@@ -39,7 +39,7 @@ export default function SubTeamNav() {
           >
             <TeamIcon
               slug={team.slug}
-              className={`h-7 w-7 shrink-0 transition-colors sm:h-8 sm:w-8 md:h-9 md:w-9 ${
+              className={`h-10 w-10 shrink-0 transition-colors sm:h-11 sm:w-11 md:h-12 md:w-12 ${
                 active ? theme.iconText : "text-offwhite/40 group-hover:text-offwhite/65"
               }`}
             />

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BuildLogTimeline from "@/components/build-log/BuildLogTimeline";
-import TeamHeader from "@/components/build-log/TeamHeader";
+import BuildLogTeamView from "@/components/build-log/BuildLogTeamView";
 import { getEntriesForTeam } from "@/lib/build-log/loadEntries";
 import { getSubTeam, isSubTeamSlug, SUB_TEAMS } from "@/lib/build-log/teams";
 
@@ -43,12 +42,5 @@ export default async function BuildLogTeamPage({ params }: BuildLogTeamPageProps
     notFound();
   }
 
-  return (
-    <div className="relative z-30 isolate space-y-10 md:space-y-12">
-      <TeamHeader team={team} entryCount={entries.length} />
-      <div className="relative z-10">
-        <BuildLogTimeline entries={entries} teamSlug={teamSlug} />
-      </div>
-    </div>
-  );
+  return <BuildLogTeamView team={team} entries={entries} teamSlug={teamSlug} />;
 }

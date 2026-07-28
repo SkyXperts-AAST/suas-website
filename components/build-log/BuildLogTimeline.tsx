@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BuildLogEntryBody from "@/components/build-log/BuildLogEntryBody";
+import TeamIcon from "@/components/build-log/TeamIcon";
 import { getTeamTheme } from "@/lib/build-log/themes";
 import type { BuildLogEntry, SubTeamSlug } from "@/lib/build-log/types";
 
@@ -15,27 +16,304 @@ function formatDate(date: string) {
   }).format(new Date(`${date}T12:00:00`));
 }
 
+function formatShortDate(date: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(`${date}T12:00:00`));
+}
+
 type BuildLogTimelineProps = {
   entries: BuildLogEntry[];
   teamSlug: SubTeamSlug;
 };
 
-function ChevronIcon({ expanded }: { expanded: boolean }) {
+function scrollElementToCenter(
+  container: HTMLElement,
+  element: HTMLElement,
+  behavior: ScrollBehavior = "smooth",
+) {
+  const containerRect = container.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+  const elementCenter =
+    container.scrollLeft + (elementRect.left - containerRect.left) + elementRect.width / 2;
+
+  container.scrollTo({
+    left: elementCenter - container.clientWidth / 2,
+    behavior,
+  });
+}
+
+function findClosestSlotId(
+  container: HTMLElement,
+  slotRefs: Map<string, HTMLElement>,
+) {
+  const containerRect = container.getBoundingClientRect();
+  const containerCenterX = containerRect.left + containerRect.width / 2;
+
+  let closestId = "";
+  let closestDistance = Infinity;
+
+  for (const [id, node] of slotRefs.entries()) {
+    const rect = node.getBoundingClientRect();
+    const distance = Math.abs(rect.left + rect.width / 2 - containerCenterX);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestId = id;
+    }
+  }
+
+  return closestId;
+}
+
+type FeaturedEntryProps = {
+  entry: BuildLogEntry;
+  isLatest: boolean;
+  theme: ReturnType<typeof getTeamTheme>;
+  canGoNewer: boolean;
+  canGoOlder: boolean;
+  onGoNewer: () => void;
+  onGoOlder: () => void;
+};
+
+function NavArrow({
+  direction,
+  disabled,
+  onClick,
+  label,
+}: {
+  direction: "left" | "right";
+  disabled: boolean;
+  onClick: () => void;
+  label: string;
+}) {
   return (
-    <svg
-      className={`h-4 w-4 shrink-0 text-offwhite/50 transition-transform duration-200 ${
-        expanded ? "rotate-180" : ""
-      }`}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="square"
-      strokeLinejoin="miter"
-      aria-hidden="true"
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/15 bg-[#0a1628]/90 text-offwhite transition-colors hover:border-white/30 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:border-white/5 disabled:text-offwhite/20 disabled:hover:bg-[#0a1628]/90 md:h-10 md:w-10"
     >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
+      <svg
+        className="h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="square"
+        aria-hidden="true"
+      >
+        {direction === "left" ? <path d="M15 6 9 12l6 6" /> : <path d="m9 6 6 6-6 6" />}
+      </svg>
+    </button>
+  );
+}
+
+function FeaturedEntry({
+  entry,
+  isLatest,
+  theme,
+  canGoNewer,
+  canGoOlder,
+  onGoNewer,
+  onGoOlder,
+}: FeaturedEntryProps) {
+  return (
+    <article className="build-log-featured build-log-article overflow-hidden border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
+      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-3 py-8 md:px-4 md:py-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span
+            className={`inline-block border px-2.5 py-1 text-[0.625rem] font-black uppercase tracking-[0.14em] ${theme.tag}`}
+          >
+            {isLatest ? "Latest update" : "Update"}
+          </span>
+          <time
+            dateTime={entry.date}
+            className={`text-xs font-semibold uppercase tracking-[0.12em] md:text-sm ${theme.date}`}
+          >
+            {formatDate(entry.date)}
+          </time>
+        </div>
+
+        <h1 className="mt-5 font-display text-3xl font-bold leading-[1.08] tracking-tight text-offwhite md:mt-6 md:text-4xl md:leading-[1.06] lg:text-[2.75rem]">
+          {entry.title}
+        </h1>
+
+        <p className="build-log-article-deck mt-5 max-w-[36rem] text-lg leading-8 text-offwhite/78 md:mt-6 md:text-xl md:leading-9">
+          {entry.summary}
+        </p>
+
+        <div className="mt-7 flex items-center gap-2 md:mt-8 md:gap-3">
+          <NavArrow
+            direction="left"
+            disabled={!canGoNewer}
+            onClick={onGoNewer}
+            label="Newer update"
+          />
+          <span className="min-w-[5.5rem] text-center text-xs font-black uppercase tracking-[0.12em] text-offwhite/40">
+            {isLatest
+              ? `Latest · ${formatShortDate(entry.date)}`
+              : formatShortDate(entry.date)}
+          </span>
+          <NavArrow
+            direction="right"
+            disabled={!canGoOlder}
+            onClick={onGoOlder}
+            label="Older update"
+          />
+        </div>
+      </header>
+
+      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-3 py-8 md:px-4 md:py-10">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+          <Image
+            src={entry.image}
+            alt={entry.imageAlt}
+            fill
+            sizes="(max-width: 768px) 100vw, 896px"
+            className="object-cover object-center"
+            priority
+          />
+        </div>
+        <figcaption className="mt-3 text-center text-sm leading-relaxed text-offwhite/55 md:text-[0.9375rem]">
+          {entry.imageAlt}
+        </figcaption>
+      </figure>
+
+      <div className="build-log-article-body mx-auto max-w-4xl px-3 pb-8 md:px-4 md:pb-10 lg:pb-12">
+        <BuildLogEntryBody blocks={entry.body} summary={entry.summary} />
+      </div>
+
+      {entry.tags && entry.tags.length > 0 ? (
+        <footer className="build-log-article-footer mx-auto max-w-4xl border-t border-white/10 px-3 py-6 md:px-4 md:py-7">
+          <p className="text-[0.625rem] font-black uppercase tracking-[0.16em] text-offwhite/45">
+            Topics
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {entry.tags.map((tag) => (
+              <li
+                key={tag}
+                className={`border px-2.5 py-1 text-[0.625rem] font-bold uppercase tracking-[0.08em] ${theme.tag}`}
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+        </footer>
+      ) : null}
+    </article>
+  );
+}
+
+type TimelineUpdateNodeProps = {
+  entry: BuildLogEntry;
+  teamSlug: SubTeamSlug;
+  theme: ReturnType<typeof getTeamTheme>;
+  isSelected: boolean;
+  isLatest: boolean;
+  onSelect: () => void;
+};
+
+function TimelineUpdateNode({
+  entry,
+  teamSlug,
+  theme,
+  isSelected,
+  isLatest,
+  onSelect,
+}: TimelineUpdateNodeProps) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-current={isSelected ? "true" : undefined}
+      className={`group relative flex w-full max-w-[15rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
+        isSelected ? "z-10" : "z-0"
+      }`}
+    >
+      <div
+        className={`w-full origin-bottom transition-all duration-300 ease-out motion-reduce:transition-none ${
+          isSelected
+            ? "scale-[1.05] opacity-100"
+            : "scale-[0.97] opacity-75 group-hover:scale-[0.99] group-hover:opacity-90"
+        }`}
+      >
+        <div
+          className={`build-log-timeline-card min-h-[14.75rem] border p-3 text-left transition-colors duration-300 motion-reduce:transition-none md:min-h-[15.5rem] md:p-4 ${
+            isSelected
+              ? `border-accent/70 bg-accent/10 shadow-[0_0_28px_rgba(227,28,28,0.22)] ring-2 ${theme.ring}`
+              : `border-white/10 bg-[#0a1628]/88 ${theme.cardHover}`
+          }`}
+        >
+          <div className="flex h-full flex-col space-y-2.5 md:space-y-3">
+            <div className="relative h-16 w-full shrink-0 overflow-hidden border border-white/10 md:h-[4.5rem]">
+              <Image
+                src={entry.image}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 240px, 288px"
+                className="object-cover object-center"
+              />
+            </div>
+
+            <div className="flex items-start gap-2.5 md:gap-3">
+              <TeamIcon
+                slug={teamSlug}
+                className={`h-8 w-8 shrink-0 md:h-9 md:w-9 ${theme.iconText} ${
+                  isSelected ? "opacity-100" : "opacity-85"
+                }`}
+              />
+              <div className="min-w-0 flex-1">
+                <p
+                  className={`text-[0.625rem] font-black uppercase tracking-[0.14em] md:text-xs ${
+                    isSelected ? theme.date : "text-offwhite/50"
+                  }`}
+                >
+                  {formatShortDate(entry.date)}
+                </p>
+                <p
+                  className={`mt-0.5 line-clamp-2 font-display text-sm font-bold leading-snug md:text-base ${
+                    isSelected ? "text-offwhite" : "text-offwhite/80"
+                  }`}
+                >
+                  {entry.title}
+                </p>
+              </div>
+            </div>
+
+            <p
+              className={`line-clamp-3 font-sans text-sm leading-6 md:text-[0.9375rem] md:leading-7 ${
+                isSelected ? "text-offwhite/75" : "text-offwhite/60"
+              }`}
+            >
+              {entry.summary}
+            </p>
+          </div>
+        </div>
+
+        <p
+          className={`mt-2 text-center text-[0.5625rem] font-black uppercase tracking-[0.14em] md:text-[0.625rem] ${
+            isSelected ? "text-offwhite/70" : "text-offwhite/40"
+          }`}
+        >
+          {isLatest ? `Latest · ${formatShortDate(entry.date)}` : formatShortDate(entry.date)}
+        </p>
+      </div>
+
+      <div className="mt-3 flex flex-col items-center">
+        <span
+          aria-hidden="true"
+          className={`rounded-full border-2 transition-all duration-300 motion-reduce:transition-none ${
+            isSelected
+              ? "h-3.5 w-3.5 border-accent bg-accent shadow-[0_0_16px_rgba(227,28,28,0.75)]"
+              : "h-3 w-3 border-white/30 bg-[#0a1628] group-hover:border-white/50"
+          }`}
+        />
+      </div>
+    </button>
   );
 }
 
@@ -45,106 +323,150 @@ export default function BuildLogTimeline({
 }: BuildLogTimelineProps) {
   const theme = getTeamTheme(teamSlug);
   const latestEntryId = entries[0]?.id ?? "";
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(
-    () => new Set(latestEntryId ? [latestEntryId] : []),
-  );
-  const [activeEntryId, setActiveEntryId] = useState(latestEntryId);
-  const entryRefs = useRef(new Map<string, HTMLElement>());
-  const ratiosRef = useRef(new Map<string, number>());
+  const [selectedEntryId, setSelectedEntryId] = useState(latestEntryId);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef(new Map<string, HTMLDivElement>());
+  const selectionSourceRef = useRef<"scroll" | "action">("action");
+  const isAutoScrollingRef = useRef(false);
+  const scrollRafRef = useRef<number | null>(null);
+  const scrollStopTimerRef = useRef<number | null>(null);
+  const selectedEntryIdRef = useRef(selectedEntryId);
 
-  useEffect(() => {
-    setExpandedIds(new Set(latestEntryId ? [latestEntryId] : []));
-    setActiveEntryId(latestEntryId);
-  }, [latestEntryId, teamSlug]);
+  selectedEntryIdRef.current = selectedEntryId;
 
-  const registerEntry = useCallback(
-    (id: string, node: HTMLElement | null) => {
-      if (node) {
-        entryRefs.current.set(id, node);
-      } else {
-        entryRefs.current.delete(id);
+  const selectEntry = useCallback((id: string, source: "scroll" | "action") => {
+    selectionSourceRef.current = source;
+    setSelectedEntryId(id);
+  }, []);
+
+  const snapClosestToCenter = useCallback(
+    (behavior: ScrollBehavior = "smooth") => {
+      const container = scrollRef.current;
+      if (!container || isAutoScrollingRef.current) {
+        return;
       }
+
+      const closestId = findClosestSlotId(container, slotRefs.current);
+      const closestSlot = closestId ? slotRefs.current.get(closestId) : null;
+
+      if (!closestId || !closestSlot) {
+        return;
+      }
+
+      isAutoScrollingRef.current = true;
+      scrollElementToCenter(container, closestSlot, behavior);
+
+      if (closestId !== selectedEntryIdRef.current) {
+        selectEntry(closestId, "scroll");
+      }
+
+      window.setTimeout(() => {
+        isAutoScrollingRef.current = false;
+      }, behavior === "smooth" ? 420 : 0);
     },
-    [],
+    [selectEntry],
   );
 
-  const toggleEntry = (id: string) => {
-    if (id === latestEntryId) {
+  const syncSelectionToScrollCenter = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container || isAutoScrollingRef.current) {
       return;
     }
 
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-    setActiveEntryId(id);
-  };
+    const closestId = findClosestSlotId(container, slotRefs.current);
 
-  const allExpanded =
-    entries.length > 0 && entries.every((entry) => expandedIds.has(entry.id));
-
-  const toggleAllEntries = () => {
-    if (allExpanded) {
-      setExpandedIds(new Set(latestEntryId ? [latestEntryId] : []));
-      setActiveEntryId(latestEntryId);
-      return;
+    if (closestId && closestId !== selectedEntryIdRef.current) {
+      selectEntry(closestId, "scroll");
     }
-
-    setExpandedIds(new Set(entries.map((entry) => entry.id)));
-  };
+  }, [selectEntry]);
 
   useEffect(() => {
-    if (entries.length === 0) {
+    selectEntry(latestEntryId, "action");
+  }, [latestEntryId, selectEntry, teamSlug]);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    const node = slotRefs.current.get(selectedEntryId);
+    if (!container || !node) {
       return;
     }
 
-    const pickActiveEntry = () => {
-      let bestId = latestEntryId;
-      let bestRatio = -1;
+    requestAnimationFrame(() => {
+      scrollElementToCenter(container, node, "auto");
+    });
+  }, [entries.length, teamSlug]);
 
-      for (const entry of entries) {
-        const ratio = ratiosRef.current.get(entry.id) ?? 0;
-        if (ratio > bestRatio) {
-          bestRatio = ratio;
-          bestId = entry.id;
-        }
+  useEffect(() => {
+    if (selectionSourceRef.current === "scroll") {
+      selectionSourceRef.current = "action";
+      return;
+    }
+
+    const node = slotRefs.current.get(selectedEntryId);
+    const container = scrollRef.current;
+
+    if (!node || !container) {
+      return;
+    }
+
+    isAutoScrollingRef.current = true;
+    scrollElementToCenter(container, node, "smooth");
+
+    const timer = window.setTimeout(() => {
+      isAutoScrollingRef.current = false;
+    }, 450);
+
+    return () => window.clearTimeout(timer);
+  }, [selectedEntryId]);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) {
+      return;
+    }
+
+    const handleScroll = () => {
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
       }
 
-      if (bestId) {
-        setActiveEntryId(bestId);
+      scrollRafRef.current = requestAnimationFrame(() => {
+        scrollRafRef.current = null;
+        syncSelectionToScrollCenter();
+      });
+
+      if (scrollStopTimerRef.current !== null) {
+        window.clearTimeout(scrollStopTimerRef.current);
       }
+
+      scrollStopTimerRef.current = window.setTimeout(() => {
+        scrollStopTimerRef.current = null;
+        snapClosestToCenter("smooth");
+      }, 140);
     };
 
-    const observer = new IntersectionObserver(
-      (observed) => {
-        for (const record of observed) {
-          const id = record.target.getAttribute("data-entry-id");
-          if (!id) {
-            continue;
-          }
+    const handleScrollEnd = () => {
+      if (scrollStopTimerRef.current !== null) {
+        window.clearTimeout(scrollStopTimerRef.current);
+        scrollStopTimerRef.current = null;
+      }
+      snapClosestToCenter("smooth");
+    };
 
-          ratiosRef.current.set(id, record.intersectionRatio);
-        }
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    container.addEventListener("scrollend", handleScrollEnd);
 
-        pickActiveEntry();
-      },
-      {
-        threshold: [0, 0.15, 0.35, 0.55, 0.75, 1],
-        rootMargin: "-12% 0px -12% 0px",
-      },
-    );
-
-    for (const node of entryRefs.current.values()) {
-      observer.observe(node);
-    }
-
-    return () => observer.disconnect();
-  }, [entries, latestEntryId]);
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("scrollend", handleScrollEnd);
+      if (scrollRafRef.current !== null) {
+        cancelAnimationFrame(scrollRafRef.current);
+      }
+      if (scrollStopTimerRef.current !== null) {
+        window.clearTimeout(scrollStopTimerRef.current);
+      }
+    };
+  }, [snapClosestToCenter, syncSelectionToScrollCenter]);
 
   if (entries.length === 0) {
     return (
@@ -154,187 +476,119 @@ export default function BuildLogTimeline({
     );
   }
 
+  const selectedEntry =
+    entries.find((entry) => entry.id === selectedEntryId) ?? entries[0];
+  const selectedIndex = entries.findIndex((entry) => entry.id === selectedEntry.id);
+  const isLatestSelected = selectedEntry.id === latestEntryId;
+  const canGoNewer = selectedIndex > 0;
+  const canGoOlder = selectedIndex < entries.length - 1;
+
+  const goNewer = () => {
+    if (canGoNewer) {
+      selectEntry(entries[selectedIndex - 1].id, "action");
+    }
+  };
+
+  const goOlder = () => {
+    if (canGoOlder) {
+      selectEntry(entries[selectedIndex + 1].id, "action");
+    }
+  };
+
   return (
-    <div className="relative isolate -mx-4 -mb-10 min-h-[calc(100dvh-12rem)] md:-mx-5 md:-mb-16">
-      <button
-        type="button"
-        onClick={toggleAllEntries}
-        aria-expanded={allExpanded}
-        className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 border bg-[#0a1628]/92 px-4 py-2.5 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-offwhite shadow-[0_8px_32px_rgba(0,0,0,0.45)] backdrop-blur-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:bottom-8 md:right-8 md:text-[0.8125rem] ${theme.tag}`}
-      >
-        <svg
-          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${
-            allExpanded ? "" : "rotate-180"
-          }`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="square"
-          aria-hidden="true"
-        >
-          <path d="m6 9 6 6 6-6" />
-        </svg>
-        {allExpanded ? "Collapse all" : "Expand all"}
-      </button>
+    <div className="build-log-timeline relative isolate -mx-3 -mb-10 min-h-[calc(100dvh-12rem)] md:-mx-4 md:-mb-16">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen min-h-full -translate-x-1/2 overflow-hidden"
+        className="build-log-timeline-bg pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen min-h-full -translate-x-1/2 overflow-hidden bg-navy"
       >
-        {entries.map((entry) => {
-          const isActive = activeEntryId === entry.id;
+        <div className="absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="absolute right-0 top-1/3 h-80 w-80 translate-x-1/4 rounded-full bg-white/5 blur-3xl" />
 
-          return (
-            <div
-              key={entry.id}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
-                isActive ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <Image
-                src={entry.image}
-                alt=""
-                fill
-                sizes="100vw"
-                className="scale-110 object-cover blur-3xl"
-                priority={entry.id === latestEntryId}
-              />
-              <div className="absolute inset-0 bg-navy/82" />
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${theme.gradient}`}
-              />
-            </div>
-          );
-        })}
+        <div className="absolute inset-x-0 top-[8%] mx-auto aspect-square w-[min(92vw,36rem)] opacity-[0.14] md:top-[10%] md:w-[min(72vw,42rem)] md:opacity-[0.18]">
+          <Image
+            src="/drone-nobackground.png"
+            alt=""
+            fill
+            sizes="(max-width: 768px) 92vw, 42rem"
+            className="object-contain"
+            priority
+          />
+        </div>
+
         <div className="absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-[#0a1628] via-[#0a1628]/80 to-transparent md:h-40" />
+        <div className="absolute inset-x-0 bottom-0 z-[1] h-24 bg-gradient-to-t from-[#0a1628] to-transparent md:h-32" />
       </div>
 
-      <ol className="relative z-10 mx-4 ml-8 space-y-8 pb-10 md:mx-5 md:ml-10 md:space-y-10 md:pb-16">
-        <span
-          aria-hidden="true"
-          className={`absolute bottom-4 left-0 top-4 w-px bg-gradient-to-b ${theme.timelineLine}`}
+      <div className="relative z-10 mx-0 space-y-8 pb-10 md:space-y-10 md:pb-16">
+        <FeaturedEntry
+          key={selectedEntry.id}
+          entry={selectedEntry}
+          isLatest={isLatestSelected}
+          theme={theme}
+          canGoNewer={canGoNewer}
+          canGoOlder={canGoOlder}
+          onGoNewer={goNewer}
+          onGoOlder={goOlder}
         />
 
-        {entries.map((entry, index) => {
-          const isLatest = entry.id === latestEntryId;
-          const isExpanded = expandedIds.has(entry.id);
-          const isActive = activeEntryId === entry.id;
-          const entryNumber = String(entries.length - index).padStart(2, "0");
+        {entries.length > 1 ? (
+          <section
+            aria-label="Update timeline"
+            className="build-log-timeline-section mt-10 space-y-5 md:mt-14 md:space-y-6"
+          >
+            <div className="build-log-timeline-divider flex items-center gap-4">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/25 to-white/10" />
+              <h4 className="shrink-0 text-[0.625rem] font-black uppercase tracking-[0.18em] text-offwhite/45 md:text-xs">
+                Timeline
+              </h4>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/25 to-white/10" />
+            </div>
 
-          return (
-            <li
-              key={entry.id}
-              ref={(node) => registerEntry(entry.id, node)}
-              data-entry-id={entry.id}
-              className="relative pl-8 md:pl-10"
-            >
-              <span
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#0a1628] to-transparent md:w-16" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#0a1628] to-transparent md:w-16" />
+              <div
                 aria-hidden="true"
-                className={`build-log-dot absolute -left-[0.4rem] top-8 h-4 w-4 border-2 md:-left-[0.45rem] md:top-9 md:h-[1.125rem] md:w-[1.125rem] ${theme.timelineDot} ${
-                  isExpanded || isLatest ? theme.timelineDotGlow : ""
-                }`}
+                className="pointer-events-none absolute inset-x-10 bottom-[1.55rem] z-0 h-px bg-gradient-to-r from-white/5 via-white/25 to-white/5 md:inset-x-16 md:bottom-[1.7rem]"
               />
 
-              <article
-                className={`overflow-hidden border bg-[#0a1628]/90 transition-all duration-300 motion-reduce:transition-none ${
-                  isActive
-                    ? `border-white/20 ${theme.glow}`
-                    : "border-white/10 opacity-95"
-                }`}
+              <div
+                ref={scrollRef}
+                className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pl-[calc(50%-9rem)] pr-[calc(50%-9rem)] sm:pl-[calc(50%-9.5rem)] sm:pr-[calc(50%-9.5rem)] md:pl-[calc(50%-10rem)] md:pr-[calc(50%-10rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
-                <div className="border-b border-white/10 px-5 py-5 md:px-8 md:py-6">
-                  <time
-                    dateTime={entry.date}
-                    className={`text-sm font-semibold uppercase tracking-[0.08em] md:text-base ${theme.date}`}
-                  >
-                    {formatDate(entry.date)}
-                  </time>
+                <div className="relative inline-flex items-end py-2">
+                  {entries.map((entry) => {
+                    const isSelected = entry.id === selectedEntryId;
 
-                  {isLatest ? (
-                    <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-                      <h3 className="font-display text-xl font-bold leading-snug text-offwhite md:text-2xl md:leading-tight">
-                        {entry.title}
-                      </h3>
-                      <span className="text-xs font-black uppercase tracking-[0.16em] text-offwhite/40">
-                        Latest · #{entryNumber}
-                      </span>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => toggleEntry(entry.id)}
-                      aria-expanded={isExpanded}
-                      className="mt-4 flex w-full items-start justify-between gap-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-display text-lg font-bold leading-snug text-offwhite md:text-xl md:leading-tight">
-                          {entry.title}
-                        </h3>
-                        {!isExpanded && (
-                          <p className="mt-2 line-clamp-2 font-sans text-[0.9375rem] font-normal leading-7 text-offwhite/72 md:text-base md:leading-8">
-                            {entry.summary}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex shrink-0 items-center gap-3 pt-1">
-                        <span className="text-xs font-black uppercase tracking-[0.16em] text-offwhite/40">
-                          #{entryNumber}
-                        </span>
-                        <ChevronIcon expanded={isExpanded} />
-                      </div>
-                    </button>
-                  )}
-                </div>
-
-                <div
-                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${
-                    isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <div className="relative h-52 w-full md:h-64 lg:h-72">
-                      <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,black_0%,black_52%,rgba(0,0,0,0.6)_72%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_52%,rgba(0,0,0,0.6)_72%,transparent_100%)]">
-                        <Image
-                          src={entry.image}
-                          alt={entry.imageAlt}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 1280px"
-                          className="object-cover object-center"
+                    return (
+                      <div
+                        key={entry.id}
+                        ref={(node) => {
+                          if (node) {
+                            slotRefs.current.set(entry.id, node);
+                          } else {
+                            slotRefs.current.delete(entry.id);
+                          }
+                        }}
+                        className="flex h-[20.5rem] w-[18rem] shrink-0 snap-center snap-always items-end justify-center sm:h-[21rem] sm:w-[19rem] md:h-[21.5rem] md:w-[20rem]"
+                      >
+                        <TimelineUpdateNode
+                          entry={entry}
+                          teamSlug={teamSlug}
+                          theme={theme}
+                          isSelected={isSelected}
+                          isLatest={entry.id === latestEntryId}
+                          onSelect={() => selectEntry(entry.id, "action")}
                         />
                       </div>
-                    </div>
-
-                    <div className="space-y-5 px-5 pb-6 pt-2 md:space-y-6 md:px-8 md:pb-8 md:pt-3">
-                      <span
-                        className={`inline-block border px-2 py-0.5 text-[0.625rem] font-black uppercase tracking-[0.14em] ${theme.tag}`}
-                      >
-                        {isLatest ? "Latest update" : "Update"}
-                      </span>
-
-                      {!isLatest && <h3 className="sr-only">{entry.title}</h3>}
-
-                      <BuildLogEntryBody blocks={entry.body} summary={entry.summary} />
-
-                      {entry.tags && entry.tags.length > 0 && (
-                        <ul className="flex flex-wrap gap-1.5 pt-1">
-                          {entry.tags.map((tag) => (
-                            <li
-                              key={tag}
-                              className={`border px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.08em] ${theme.tag}`}
-                            >
-                              {tag}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
-              </article>
-            </li>
-          );
-        })}
-      </ol>
+              </div>
+            </div>
+          </section>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -73,7 +73,6 @@ export default function SponsorshipsPage() {
             <DownloadIcon />
             Download a copy
           </a>
-          <p className="text-sm text-offwhite/50 sm:ml-1">PDF · 15 MB</p>
         </div>
       </PageSection>
     </PageShell>

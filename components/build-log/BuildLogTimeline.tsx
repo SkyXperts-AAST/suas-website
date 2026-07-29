@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import BuildLogEntryBody from "@/components/build-log/BuildLogEntryBody";
 import TeamIcon from "@/components/build-log/TeamIcon";
+import { buildLogImagePositionStyle } from "@/lib/build-log/imagePosition";
 import { getTeamTheme } from "@/lib/build-log/themes";
 import type { BuildLogEntry, SubTeamSlug } from "@/lib/build-log/types";
 
@@ -68,6 +69,19 @@ function findClosestSlotId(
   return closestId;
 }
 
+function isSlotCentered(
+  container: HTMLElement,
+  slot: HTMLElement,
+  threshold = 12,
+) {
+  const containerRect = container.getBoundingClientRect();
+  const slotRect = slot.getBoundingClientRect();
+  const containerCenterX = containerRect.left + containerRect.width / 2;
+  const slotCenterX = slotRect.left + slotRect.width / 2;
+
+  return Math.abs(slotCenterX - containerCenterX) <= threshold;
+}
+
 type FeaturedEntryProps = {
   entry: BuildLogEntry;
   isLatest: boolean;
@@ -123,7 +137,10 @@ function FeaturedEntry({
 }: FeaturedEntryProps) {
   return (
     <article className="build-log-featured build-log-article overflow-hidden rounded-xl border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] sm:rounded-none">
-      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-4 py-8 md:px-4 md:py-10">
+      <header
+        id="build-log-topic-top"
+        className="build-log-article-header mx-auto max-w-4xl scroll-mt-[calc(3.5rem+env(safe-area-inset-top))] border-b border-white/10 px-4 py-8 md:scroll-mt-20 md:px-4 md:py-10"
+      >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <span
             className={`inline-block border px-2.5 py-1 text-[0.625rem] font-black uppercase tracking-[0.12em] sm:text-[0.625rem] sm:tracking-[0.14em] ${theme.tag}`}
@@ -175,7 +192,8 @@ function FeaturedEntry({
             alt={entry.imageAlt}
             fill
             sizes="(max-width: 768px) 100vw, 896px"
-            className="object-cover object-center"
+            className="object-cover"
+            style={buildLogImagePositionStyle(entry.imagePosition)}
             priority
           />
         </div>
@@ -216,6 +234,7 @@ type TimelineUpdateNodeProps = {
   isSelected: boolean;
   isLatest: boolean;
   onSelect: () => void;
+  shouldIgnoreClick: () => boolean;
 };
 
 function TimelineUpdateNode({
@@ -225,17 +244,34 @@ function TimelineUpdateNode({
   isSelected,
   isLatest,
   onSelect,
+  shouldIgnoreClick,
 }: TimelineUpdateNodeProps) {
+  const handleClick = () => {
+    if (shouldIgnoreClick()) {
+      return;
+    }
+
+    onSelect();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onSelect();
+    }
+  };
+
   return (
-    <button
-      type="button"
-      tabIndex={-1}
-      onClick={onSelect}
-      onPointerDown={(event) => {
-        event.preventDefault();
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={(event) => {
+        event.stopPropagation();
+        handleClick();
       }}
+      onKeyDown={handleKeyDown}
       aria-current={isSelected ? "true" : undefined}
-      className={`group relative flex w-full max-w-[13.25rem] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
+      className={`group relative flex w-full max-w-[13.25rem] cursor-pointer flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a1628] sm:max-w-[16rem] md:max-w-[18rem] ${
         isSelected ? "z-10" : "z-0"
       }`}
     >
@@ -260,7 +296,8 @@ function TimelineUpdateNode({
                 alt=""
                 fill
                 sizes="(max-width: 768px) 240px, 288px"
-                className="object-cover object-center"
+                className="object-cover"
+                style={buildLogImagePositionStyle(entry.imagePosition)}
               />
             </div>
 
@@ -318,7 +355,7 @@ function TimelineUpdateNode({
           }`}
         />
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -332,33 +369,108 @@ export default function BuildLogTimeline({
   const scrollRef = useRef<HTMLDivElement>(null);
   const timelineSectionRef = useRef<HTMLElement>(null);
   const slotRefs = useRef(new Map<string, HTMLDivElement>());
-  const selectionSourceRef = useRef<"scroll" | "action">("action");
-  const isAutoScrollingRef = useRef(false);
-  const scrollRafRef = useRef<number | null>(null);
-  const scrollStopTimerRef = useRef<number | null>(null);
   const selectedEntryIdRef = useRef(selectedEntryId);
   const scrollAnchorRef = useRef<
     { mode: "timeline"; top: number } | { mode: "page"; top: number } | null
   >(null);
+  const timelineDragRef = useRef({
+    pointerId: -1,
+    startX: 0,
+    startScrollLeft: 0,
+    dragged: false,
+  });
+  const scrollIdleTimerRef = useRef<number | null>(null);
+  const suppressSelectionSyncRef = useRef(false);
+  const isAutoScrollingRef = useRef(false);
 
   selectedEntryIdRef.current = selectedEntryId;
 
-  const selectEntry = useCallback(
-    (id: string, source: "scroll" | "action", anchor: "timeline" | "page" = "page") => {
-      if (source === "action") {
-        if (anchor === "timeline") {
-          const section = timelineSectionRef.current;
-          scrollAnchorRef.current = section
-            ? { mode: "timeline", top: section.getBoundingClientRect().top }
-            : { mode: "page", top: window.scrollY };
-        } else {
-          scrollAnchorRef.current = { mode: "page", top: window.scrollY };
-        }
+  const shouldIgnoreTimelineClick = useCallback(() => {
+    return timelineDragRef.current.dragged;
+  }, []);
+
+  const scrollToEntry = useCallback(
+    (id: string, behavior: ScrollBehavior = "smooth") => {
+      const container = scrollRef.current;
+      const node = slotRefs.current.get(id);
+      if (!container || !node) {
+        return;
       }
-      selectionSourceRef.current = source;
-      setSelectedEntryId(id);
+
+      scrollElementToCenter(container, node, behavior);
     },
     [],
+  );
+
+  const selectFromTimeline = useCallback((id: string) => {
+    const section = timelineSectionRef.current;
+    scrollAnchorRef.current = section
+      ? { mode: "timeline", top: section.getBoundingClientRect().top }
+      : { mode: "page", top: window.scrollY };
+    setSelectedEntryId(id);
+  }, []);
+
+  const selectFromNav = useCallback((id: string) => {
+    scrollAnchorRef.current = { mode: "page", top: window.scrollY };
+    setSelectedEntryId(id);
+  }, []);
+
+  const selectFromScroll = useCallback((id: string) => {
+    if (id === selectedEntryIdRef.current) {
+      return;
+    }
+
+    setSelectedEntryId(id);
+  }, []);
+
+  const beginProgrammaticScroll = useCallback((durationMs: number) => {
+    suppressSelectionSyncRef.current = true;
+    isAutoScrollingRef.current = true;
+
+    window.setTimeout(() => {
+      suppressSelectionSyncRef.current = false;
+      isAutoScrollingRef.current = false;
+    }, durationMs);
+  }, []);
+
+  const snapClosestToCenter = useCallback(
+    (behavior: ScrollBehavior = "smooth") => {
+      if (
+        suppressSelectionSyncRef.current ||
+        isAutoScrollingRef.current ||
+        timelineDragRef.current.dragged
+      ) {
+        return;
+      }
+
+      const container = scrollRef.current;
+      if (!container) {
+        return;
+      }
+
+      const closestId = findClosestSlotId(container, slotRefs.current);
+      const closestSlot = closestId ? slotRefs.current.get(closestId) : null;
+
+      if (!closestId || !closestSlot) {
+        return;
+      }
+
+      if (closestId !== selectedEntryIdRef.current) {
+        selectFromScroll(closestId);
+      }
+
+      if (isSlotCentered(container, closestSlot)) {
+        return;
+      }
+
+      isAutoScrollingRef.current = true;
+      scrollElementToCenter(container, closestSlot, behavior);
+
+      window.setTimeout(() => {
+        isAutoScrollingRef.current = false;
+      }, behavior === "smooth" ? 420 : 0);
+    },
+    [selectFromScroll],
   );
 
   useLayoutEffect(() => {
@@ -392,85 +504,13 @@ export default function BuildLogTimeline({
     requestAnimationFrame(compensateScroll);
   }, [selectedEntryId]);
 
-  const snapClosestToCenter = useCallback(
-    (behavior: ScrollBehavior = "smooth") => {
-      const container = scrollRef.current;
-      if (!container || isAutoScrollingRef.current) {
-        return;
-      }
-
-      const closestId = findClosestSlotId(container, slotRefs.current);
-      const closestSlot = closestId ? slotRefs.current.get(closestId) : null;
-
-      if (!closestId || !closestSlot) {
-        return;
-      }
-
-      isAutoScrollingRef.current = true;
-      scrollElementToCenter(container, closestSlot, behavior);
-
-      if (closestId !== selectedEntryIdRef.current) {
-        selectEntry(closestId, "scroll");
-      }
-
-      window.setTimeout(() => {
-        isAutoScrollingRef.current = false;
-      }, behavior === "smooth" ? 420 : 0);
-    },
-    [selectEntry],
-  );
-
-  const syncSelectionToScrollCenter = useCallback(() => {
-    const container = scrollRef.current;
-    if (!container || isAutoScrollingRef.current) {
-      return;
-    }
-
-    const closestId = findClosestSlotId(container, slotRefs.current);
-
-    if (closestId && closestId !== selectedEntryIdRef.current) {
-      selectEntry(closestId, "scroll");
-    }
-  }, [selectEntry]);
-
   useEffect(() => {
-    selectEntry(latestEntryId, "action");
-  }, [latestEntryId, selectEntry, teamSlug]);
-
-  useEffect(() => {
-    const container = scrollRef.current;
-    const node = slotRefs.current.get(selectedEntryId);
-    if (!container || !node) {
-      return;
-    }
-
+    setSelectedEntryId(latestEntryId);
     requestAnimationFrame(() => {
-      scrollElementToCenter(container, node, "auto");
+      beginProgrammaticScroll(50);
+      scrollToEntry(latestEntryId, "auto");
     });
-  }, [entries.length, teamSlug]);
-
-  useEffect(() => {
-    if (selectionSourceRef.current === "scroll") {
-      selectionSourceRef.current = "action";
-      return;
-    }
-
-    const node = slotRefs.current.get(selectedEntryId);
-    const container = scrollRef.current;
-
-    if (!node || !container) {
-      return;
-    }
-
-    isAutoScrollingRef.current = true;
-    scrollElementToCenter(container, node, "smooth");
-
-    const timer = window.setTimeout(() => {
-      isAutoScrollingRef.current = false;
-    }, 450);
-
-    return () => window.clearTimeout(timer);
-  }, [selectedEntryId]);
+  }, [beginProgrammaticScroll, latestEntryId, scrollToEntry, teamSlug]);
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -478,48 +518,163 @@ export default function BuildLogTimeline({
       return;
     }
 
-    const handleScroll = () => {
-      if (scrollRafRef.current !== null) {
-        cancelAnimationFrame(scrollRafRef.current);
+    const syncSelectionAfterScroll = () => {
+      if (
+        suppressSelectionSyncRef.current ||
+        isAutoScrollingRef.current ||
+        timelineDragRef.current.dragged
+      ) {
+        return;
       }
 
-      scrollRafRef.current = requestAnimationFrame(() => {
-        scrollRafRef.current = null;
-        syncSelectionToScrollCenter();
-      });
+      const closestId = findClosestSlotId(container, slotRefs.current);
+      if (closestId) {
+        selectFromScroll(closestId);
+      }
+    };
 
-      if (scrollStopTimerRef.current !== null) {
-        window.clearTimeout(scrollStopTimerRef.current);
+    const scheduleSnapToCenter = () => {
+      if (scrollIdleTimerRef.current !== null) {
+        window.clearTimeout(scrollIdleTimerRef.current);
       }
 
-      scrollStopTimerRef.current = window.setTimeout(() => {
-        scrollStopTimerRef.current = null;
+      scrollIdleTimerRef.current = window.setTimeout(() => {
+        scrollIdleTimerRef.current = null;
         snapClosestToCenter("smooth");
       }, 140);
     };
 
     const handleScrollEnd = () => {
-      if (scrollStopTimerRef.current !== null) {
-        window.clearTimeout(scrollStopTimerRef.current);
-        scrollStopTimerRef.current = null;
+      if (scrollIdleTimerRef.current !== null) {
+        window.clearTimeout(scrollIdleTimerRef.current);
+        scrollIdleTimerRef.current = null;
       }
+
       snapClosestToCenter("smooth");
     };
 
+    const handleWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) {
+        return;
+      }
+
+      const delta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+
+      if (delta === 0) {
+        return;
+      }
+
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      const nextScrollLeft = Math.max(
+        0,
+        Math.min(container.scrollLeft + delta, maxScrollLeft),
+      );
+
+      if (nextScrollLeft === container.scrollLeft) {
+        return;
+      }
+
+      container.scrollLeft = nextScrollLeft;
+      event.preventDefault();
+      syncSelectionAfterScroll();
+      scheduleSnapToCenter();
+    };
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      if (event.button !== 0) {
+        return;
+      }
+
+      timelineDragRef.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startScrollLeft: container.scrollLeft,
+        dragged: false,
+      };
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const drag = timelineDragRef.current;
+      if (event.pointerId !== drag.pointerId) {
+        return;
+      }
+
+      const deltaX = event.clientX - drag.startX;
+      if (Math.abs(deltaX) <= 4) {
+        return;
+      }
+
+      if (!drag.dragged) {
+        drag.dragged = true;
+        container.setPointerCapture(event.pointerId);
+      }
+
+      container.scrollLeft = drag.startScrollLeft - deltaX;
+      event.preventDefault();
+    };
+
+    const finishPointerInteraction = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
+      const drag = timelineDragRef.current;
+      const wasDragged = drag.dragged && event.pointerId === drag.pointerId;
+
+      if (container.hasPointerCapture(event.pointerId)) {
+        container.releasePointerCapture(event.pointerId);
+      }
+
+      timelineDragRef.current = {
+        pointerId: -1,
+        startX: 0,
+        startScrollLeft: 0,
+        dragged: false,
+      };
+
+      if (wasDragged) {
+        syncSelectionAfterScroll();
+        scheduleSnapToCenter();
+      }
+    };
+
+    const handleScroll = () => {
+      syncSelectionAfterScroll();
+      scheduleSnapToCenter();
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    container.addEventListener("pointerdown", handlePointerDown);
+    container.addEventListener("pointermove", handlePointerMove);
+    container.addEventListener("pointerup", finishPointerInteraction);
+    container.addEventListener("pointercancel", finishPointerInteraction);
     container.addEventListener("scroll", handleScroll, { passive: true });
     container.addEventListener("scrollend", handleScrollEnd);
 
     return () => {
+      container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener("pointerdown", handlePointerDown);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("pointerup", finishPointerInteraction);
+      container.removeEventListener("pointercancel", finishPointerInteraction);
       container.removeEventListener("scroll", handleScroll);
       container.removeEventListener("scrollend", handleScrollEnd);
-      if (scrollRafRef.current !== null) {
-        cancelAnimationFrame(scrollRafRef.current);
-      }
-      if (scrollStopTimerRef.current !== null) {
-        window.clearTimeout(scrollStopTimerRef.current);
+      if (scrollIdleTimerRef.current !== null) {
+        window.clearTimeout(scrollIdleTimerRef.current);
       }
     };
-  }, [snapClosestToCenter, syncSelectionToScrollCenter]);
+  }, [selectFromScroll, snapClosestToCenter]);
 
   if (entries.length === 0) {
     return (
@@ -538,14 +693,30 @@ export default function BuildLogTimeline({
 
   const goNewer = () => {
     if (canGoNewer) {
-      selectEntry(entries[selectedIndex - 1].id, "action");
+      const id = entries[selectedIndex - 1].id;
+      beginProgrammaticScroll(450);
+      selectFromNav(id);
+      scrollToEntry(id, "smooth");
     }
   };
 
   const goOlder = () => {
     if (canGoOlder) {
-      selectEntry(entries[selectedIndex + 1].id, "action");
+      const id = entries[selectedIndex + 1].id;
+      beginProgrammaticScroll(450);
+      selectFromNav(id);
+      scrollToEntry(id, "smooth");
     }
+  };
+
+  const handleTimelineSelect = (id: string) => {
+    beginProgrammaticScroll(450);
+
+    if (id !== selectedEntryIdRef.current) {
+      selectFromTimeline(id);
+    }
+
+    scrollToEntry(id, "smooth");
   };
 
   return (
@@ -603,7 +774,7 @@ export default function BuildLogTimeline({
 
               <div
                 ref={scrollRef}
-                className="build-log-timeline-scroll touch-pan-x snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-y-none scroll-smooth pb-4 pt-1 pl-[calc(50%-6.625rem)] pr-[calc(50%-6.625rem)] sm:pt-4 sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pb-5 md:pt-7 md:pl-[calc(50%-10.5rem)] md:pr-[calc(50%-10.5rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="build-log-timeline-scroll w-full max-w-full cursor-grab touch-pan-x overflow-x-auto overflow-y-hidden overscroll-x-contain overscroll-y-none pb-4 pt-1 pl-[calc(50%-6.625rem)] pr-[calc(50%-6.625rem)] select-none active:cursor-grabbing sm:pt-4 sm:pl-[calc(50%-8rem)] sm:pr-[calc(50%-8rem)] md:pb-5 md:pt-7 md:pl-[calc(50%-10.5rem)] md:pr-[calc(50%-10.5rem)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 <div className="relative inline-flex items-end gap-6 pb-2 sm:gap-4 md:gap-4">
                   <div
@@ -625,7 +796,7 @@ export default function BuildLogTimeline({
                             slotRefs.current.delete(entry.id);
                           }
                         }}
-                        className="flex w-[13.25rem] shrink-0 snap-center snap-always items-end justify-center overflow-visible sm:w-[16rem] md:w-[21rem]"
+                        className="flex w-[13.25rem] shrink-0 items-end justify-center overflow-visible sm:w-[16rem] md:w-[21rem]"
                       >
                         <TimelineUpdateNode
                           entry={entry}
@@ -633,7 +804,8 @@ export default function BuildLogTimeline({
                           theme={theme}
                           isSelected={isSelected}
                           isLatest={entry.id === latestEntryId}
-                          onSelect={() => selectEntry(entry.id, "action", "timeline")}
+                          shouldIgnoreClick={shouldIgnoreTimelineClick}
+                          onSelect={() => handleTimelineSelect(entry.id)}
                         />
                       </div>
                     );

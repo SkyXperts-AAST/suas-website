@@ -22,7 +22,7 @@ const DESKTOP_LINKS = [
   { href: "/gallery", label: "Gallery" },
   { href: "/build-log", label: "Build Log" },
   { href: "/sponsorships", label: "Sponsorships" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Contact Us" },
 ] as const;
 
 const MOBILE_PRIMARY = [
@@ -35,7 +35,7 @@ const MOBILE_PRIMARY = [
 const MOBILE_MORE = [
   { href: "/gallery", label: "Gallery", icon: HiPhoto },
   { href: "/sponsorships", label: "Sponsorships", icon: HiBuildingOffice2 },
-  { href: "/contact", label: "Contact", icon: HiEnvelope },
+  { href: "/contact", label: "Contact Us", icon: HiEnvelope },
 ] as const;
 
 function isActive(pathname: string, href: string, exact = false) {

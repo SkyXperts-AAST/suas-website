@@ -63,8 +63,8 @@ export default function Footer() {
             />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-offwhite/60">
-            AAST&apos;s Student Unmanned Aerial Systems team — designing,
-            building, and flying Storm for disaster response missions.
+            A student team at AAST designing, building, and flying autonomous
+            aircraft from the ground up.
           </p>
           <p className="mt-3 font-display text-xs font-semibold tracking-wide text-offwhite/40">
             AAST · SUAS 2026

@@ -46,43 +46,56 @@ export default function SponsorshipsPage() {
             Sponsorship Proposal
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg">
-            Browse the full proposal below, or download a copy to share with your
-            team.
+            Open the full proposal in a new tab, or download a copy to share
+            with your team.
           </p>
         </div>
 
-        {/* TODO: add public/sponsorship-proposal.pdf */}
-        <object
-          data={SPONSORSHIP_PROPOSAL_PDF}
-          type="application/pdf"
-          className="h-[480px] w-full rounded-lg border border-white/10 bg-white/[0.03] md:h-[800px]"
-          aria-label="SkyXperts sponsorship proposal PDF"
-        >
-          <p className="p-6 text-base text-offwhite/70">
-            Your browser doesn&apos;t support embedded PDFs.{" "}
-            <a
-              href={SPONSORSHIP_PROPOSAL_PDF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-accent underline-offset-2 hover:underline"
-            >
-              Click here to view the Sponsorship Proposal.
-            </a>
-          </p>
-        </object>
-
-        <div className="mt-6 flex justify-center md:justify-start">
+        {/* Opens in the browser's own PDF viewer rather than embedding one.
+            An <object> embed shipped the whole 15MB file to every visitor and
+            doesn't render inline on iOS Safari at all. */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href={SPONSORSHIP_PROPOSAL_PDF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+          >
+            <ExternalLinkIcon />
+            View Proposal
+          </a>
           <a
             href={SPONSORSHIP_PROPOSAL_PDF}
             download
-            className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <DownloadIcon />
             Download PDF
           </a>
+          <p className="text-sm text-offwhite/50 sm:ml-1">PDF · 10 pages</p>
         </div>
       </PageSection>
     </PageShell>
+  );
+}
+
+function ExternalLinkIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M15 3h6v6" />
+      <path d="M10 14 21 3" />
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    </svg>
   );
 }
 

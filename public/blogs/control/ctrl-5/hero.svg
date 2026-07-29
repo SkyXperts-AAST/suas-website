@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Storm during rate-controller gain tuning and vibration testing">
+  <rect width="1600" height="1000" fill="#0a1628"/>
+  <rect x="48" y="48" width="1504" height="904" fill="#111f35" stroke="#ffffff26" stroke-width="2" stroke-dasharray="14 10" rx="12"/>
+  <text x="800" y="180" fill="#f5f5f7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Photo placeholder</text>
+  <text x="800" y="240" fill="#e31c1c" font-family="ui-monospace, monospace" font-size="22" text-anchor="middle">hero.svg</text>
+  <text x="800" y="320" fill="#ffffff99" font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle">ctrl-5 — hero</text>
+  <text x="800" y="532" fill="#ffffffcc" font-family="ui-sans-serif, system-ui, sans-serif" font-size="22" text-anchor="middle"><tspan x="800" dy="0">Storm during rate-controller gain tuning and vibration testing</tspan></text>
+  <text x="800" y="920" fill="#ffffff66" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" text-anchor="middle">Replace with a .jpg or .webp and update entries.json if the extension changes</text>
+</svg>

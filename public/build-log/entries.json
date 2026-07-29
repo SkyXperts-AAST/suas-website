@@ -160,6 +160,119 @@
   ],
   "control": [
     {
+      "id": "ctrl-11",
+      "date": "2026-07-21",
+      "title": "Control update: ICMTC 2026, 3rd place and best mission performance",
+      "summary": "3rd overall and best mission performance at ICMTC 2026. Mission 1 flew 1.72 km across 9 waypoints with a mid-mission payload drop at 0.12 m altitude RMSE.",
+      "image": "/blogs/control/ctrl-11/hero.svg",
+      "imageAlt": "Storm flying its competition mission at ICMTC 2026",
+      "tags": [
+        "field-test",
+        "SUAS 2026",
+        "payload"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "We placed 3rd overall at ICMTC 2026 and took best mission performance. Mission 1 is the flight worth writing about."
+        },
+        {
+          "type": "paragraph",
+          "text": "It was a single-lap, 9-waypoint autonomous route with a mid-mission payload drop, flown on the same rate-controller gains from earlier in the season and the script stack described above."
+        },
+        {
+          "type": "list",
+          "heading": "Mission 1",
+          "items": [
+            "Duration: 538.2 s",
+            "Distance flown: 1.72 km",
+            "Max altitude: 46.99 m",
+            "Altitude tracking: 0.12 m RMSE, the tightest we saw all season",
+            "Waypoint accuracy: ~7.5 m average error, well inside the competition’s 30 m tolerance",
+            "Landed safely"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Because if there’s one thing this flight proved, it’s that the controller isn’t the bottleneck anymore. 0.12 m of altitude tracking under real competition conditions is about as tight as it gets."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-10",
+      "date": "2026-07-21",
+      "title": "Control update: rules we now write every script around",
+      "summary": "Retry loops on every critical call, clear_mission() before every upload, servo lock only after arm(). The list of rules we’d already paid for in debugging time.",
+      "image": "/blogs/control/ctrl-10/hero.svg",
+      "imageAlt": "Control team reviewing mission script behaviour before a test run",
+      "tags": [
+        "software",
+        "process",
+        "PX4"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Past a certain point this season we stopped treating each new mission script as fresh code and started treating it as an application of rules we’d already paid for in debugging time. The list:"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every critical MAVSDK call (arming, takeoff, mission upload, servo actuation) goes through a retry loop now, 3 to 5 attempts a couple of seconds apart. Nothing critical is allowed to fail silently on the first try, because on real hardware the first try sometimes just doesn’t land."
+        },
+        {
+          "type": "paragraph",
+          "text": "clear_mission() runs before every single upload. Skip it and the drone hangs in Hold mode after takeoff. That one cost us more debugging time than it should have before we traced it back to a stale mission still sitting on the flight controller."
+        },
+        {
+          "type": "paragraph",
+          "text": "The payload-release servo gets locked into its safe position immediately after arm() returns, never before. PX4 resets actuator outputs to a disarmed position the instant it arms, so an earlier lock just gets overwritten."
+        },
+        {
+          "type": "paragraph",
+          "text": "We call RTL manually instead of letting PX4 handle return-to-launch on its own after the mission. That gives us control over how the return flight lines up with payload sequencing rather than leaving the timing to the autopilot."
+        },
+        {
+          "type": "paragraph",
+          "text": "On the hardware side, ModemManager was quietly interfering with USB serial communication to the flight controller, so it’s permanently disabled on the companion Pi. And mavsdk_server gets restarted fresh before every test run, since stale connection state carrying over between runs was a recurring source of flaky behaviour that took a while to diagnose each time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Nothing on this list is clever. It’s the reason the mission script held up on competition day without any of these old failure modes showing up again."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-9",
+      "date": "2026-07-13",
+      "title": "Control update: the bug that changed how we trigger payload release",
+      "summary": "Mission-progress logs showed waypoints being skipped entirely. For a payload release gated on one waypoint event, that’s a release that might never fire.",
+      "image": "/blogs/control/ctrl-9/hero.svg",
+      "imageAlt": "Payload release mechanism mounted under Storm",
+      "tags": [
+        "payload",
+        "software",
+        "incident"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "One specific bug, with an outsized effect on how our mission scripts are structured."
+        },
+        {
+          "type": "paragraph",
+          "text": "Early versions of the payload-release logic hung off a waypoint-reached event. The script waited for the mission to report it had reached a particular waypoint, then triggered the release. Reasonable enough. Then we went through the mission-progress logs and found waypoints being skipped: the mission would report jumping from waypoint 2 straight to waypoint 4, with no waypoint 3 event logged at all."
+        },
+        {
+          "type": "paragraph",
+          "text": "For most of a mission that’s harmless. For a payload release gated on one specific waypoint event, it’s a release that might never fire."
+        },
+        {
+          "type": "paragraph",
+          "text": "The trigger now fires unconditionally once the mission-progress loop finishes, with no dependence on any single waypoint event along the way. Small change in the code. We only found it because we read the logs closely after a flight that looked fine from the ground."
+        }
+      ]
+    },
+    {
       "id": "ctrl-1",
       "date": "2026-07-10",
       "title": "Full mission dry run + failsafe trials",
@@ -203,6 +316,80 @@
       ]
     },
     {
+      "id": "ctrl-8",
+      "date": "2026-07-06",
+      "title": "Control update: why we stopped trusting the \"obvious\" API calls",
+      "summary": "Three MAVSDK calls that look right in the documentation and fail on real hardware — and what we replaced each of them with.",
+      "image": "/blogs/control/ctrl-8/hero.svg",
+      "imageAlt": "Companion computer running autonomous mission scripts on the bench",
+      "tags": [
+        "software",
+        "integration",
+        "process"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Writing autonomous mission scripts for our companion computer taught us the same lesson several times over this season. The MAVSDK call that looks correct in the documentation is not always the one that works on real hardware. Three we tried, watched fail in flight, and dropped:"
+        },
+        {
+          "type": "paragraph",
+          "text": "set_takeoff_altitude() went first. It’s the documented way to set a takeoff height and it’s known to be unreliable on real hardware. We set MIS_TAKEOFF_ALT directly through the parameter system instead, and that’s been solid ever since."
+        },
+        {
+          "type": "paragraph",
+          "text": "set_current_mission_item() went second. On paper it lets a script jump to a specific mission item on demand. On our hardware it timed out reliably, so we cut it rather than wrap retry logic around something that doesn’t work."
+        },
+        {
+          "type": "paragraph",
+          "text": "The third was a pattern rather than a function: waiting on altitude with a fixed asyncio.sleep(). A flat sleep can’t account for real variance in climb rate. Sometimes the aircraft is there early, sometimes late, and the fixed wait either burns time or moves on before the aircraft has arrived. Every altitude wait now polls against a tolerance band and only proceeds once the aircraft is actually where it needs to be."
+        },
+        {
+          "type": "paragraph",
+          "text": "These aren’t exotic bugs. They surface after you’ve flown the same script enough times on real hardware to see the pattern, which is also why they’re easy to relearn the hard way next season if nobody writes them down."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-7",
+      "date": "2026-06-15",
+      "title": "Control update: FRR, first flight at altitude",
+      "summary": "A full dry run of the ICMTC mission plan, then FRR at meaningfully higher altitude than anything we’d tested at. Altitude tracking came in at 0.13 m RMSE.",
+      "image": "/blogs/control/ctrl-7/hero.svg",
+      "imageAlt": "Storm during the Flight Readiness Review flight at altitude",
+      "tags": [
+        "field-test",
+        "validation",
+        "SUAS 2026"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Before FRR we ran a full dry run of the ICMTC competition mission plan, the same 9-waypoint route with the mid-mission payload drop we’d be flying later in the season. It ran clean, so we went into FRR fairly confident the mission logic wasn’t the risk. The unknown was altitude: meaningfully higher than anything we’d tested at."
+        },
+        {
+          "type": "paragraph",
+          "text": "Altitude doesn’t change the margin for error equally on every axis, so we didn’t scale everything up together. Takeoff altitude and horizontal cruise speed went up, because altitude and open air buy you room to react to a horizontal deviation. Vertical ascent and descent rates came down, because misjudging altitude up there is far less recoverable than drifting sideways. We also redid barometer and gyro calibration and tightened the actuator PWM range before the flight."
+        },
+        {
+          "type": "list",
+          "heading": "Before → After",
+          "items": [
+            "Takeoff altitude: 10 m → 17.98 m",
+            "Landing-approach altitude: 10 m → 20 m",
+            "Final landing-phase altitude: 5 m → 7 m",
+            "Cruise speed: 3 m/s → 5 m/s",
+            "Auto ascent rate: 3 m/s → 1.6 m/s",
+            "Auto descent rate: 1.5 m/s → 1.0 m/s"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The flight reached 45.41 m, held a steady ~16 m cruise for most of the mission, and landed safely. Altitude tracking came in at 0.13 m RMSE, about as tight as anything we’d flown lower down. That was the answer we wanted: the gains generalized past the conditions we tuned them in."
+        }
+      ]
+    },
+    {
       "id": "ctrl-2",
       "date": "2026-05-22",
       "title": "SITL first, then HITL, before anything flies",
@@ -240,6 +427,65 @@
         {
           "type": "paragraph",
           "text": "Next: this code goes to physical flight trials now that both simulation stages are clean."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-6",
+      "date": "2026-05-11",
+      "title": "Control update: first clean mission",
+      "summary": "A deliberately small test — 3 waypoints and an automatic return-to-launch — to prove the new gains held up in the air rather than just on the bench.",
+      "image": "/blogs/control/ctrl-6/hero.svg",
+      "imageAlt": "Storm flying an autonomous three-waypoint test mission",
+      "tags": [
+        "field-test",
+        "validation"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "With the new gains locked in, we needed to know whether the fix held up in the air and not just on the bench. The test was deliberately small: a 3-waypoint autonomous mission with an automatic return-to-launch."
+        },
+        {
+          "type": "paragraph",
+          "text": "It flew clean. Three waypoints, RTL, landing, no drama. Not much of a mission, but it was the first time we could call the oscillation fix flight-proven rather than a good-looking number on a vibration plot, and we tested a lot more aggressively after it."
+        }
+      ]
+    },
+    {
+      "id": "ctrl-5",
+      "date": "2026-05-04",
+      "title": "Control update: taming \"crazy flight\"",
+      "summary": "An oscillation across roll, pitch and yaw left Storm unsafe to fly. We reworked the rate-controller gains by hand against the flight logs instead of re-running AutoTune.",
+      "image": "/blogs/control/ctrl-5/hero.svg",
+      "imageAlt": "Storm during rate-controller gain tuning and vibration testing",
+      "tags": [
+        "PX4",
+        "analysis",
+        "testing"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Most of this update was one problem: an oscillation we’d nicknamed \"Crazy Flight.\" The aircraft shook across roll, pitch and yaw badly enough that it wasn’t safely flyable. We could have re-run PX4’s AutoTune and hoped for a better result. Instead we went through the rate-controller gains by hand and checked them against what the flight logs were actually showing."
+        },
+        {
+          "type": "list",
+          "heading": "Where we ended up",
+          "items": [
+            "Roll rate: P 0.137, I 0.175, D 0.0015",
+            "Pitch rate: P 0.136, I 0.175, D 0.0015",
+            "Yaw rate: P 0.205, I 0.20, D 0.0034",
+            "Angle gains: roll/pitch P at 6.5, yaw P at 4.67"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Oscillation on all three axes dropped by roughly half compared to where we started."
+        },
+        {
+          "type": "paragraph",
+          "text": "What took the longest was working out why AutoTune’s first pass made things worse in places. Its D-term can amplify structural resonance in the airframe rather than damp it out. So we kept the P and I terms, which do reflect real airframe response, and re-checked the D terms by hand against vibration data instead of trusting them blind. We treat AutoTune as a starting point now, not an answer."
         }
       ]
     },

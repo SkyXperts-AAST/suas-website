@@ -14,15 +14,14 @@ export default function TeamPage() {
   return (
     <PageShell>
       {/* Hero — full team photo (uncropped), text at the bottom edge */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-navy">
+      <section className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/10 bg-navy md:max-h-[720px]">
         <Image
           src="/team/groupPhoto.jpg"
           alt=""
-          width={1280}
-          height={720}
+          fill
           priority
-          className="mx-auto block h-auto w-full max-w-[1280px]"
-          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="object-cover"
+          sizes="100vw"
           aria-hidden="true"
         />
         <div

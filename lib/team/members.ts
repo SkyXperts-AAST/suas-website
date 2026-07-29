@@ -63,7 +63,7 @@ export const softwareGroups = {
       "Computer Vision is how Storm sees, and how it makes sense of what it's looking at. The team stitches scattered aerial footage into clean, high-resolution maps, and it trains detection models that can find a single target in a messy landscape while the drone is still moving.",
     groupPhoto: "/team/vision.JPG",
     members: membersFromNames([
-      "Abdulla Mahar",
+      "Abdullah Mahar",
       "Hossam Koshok",
       "Gomana Hossam",
       "Salma Khaled",

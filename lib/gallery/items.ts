@@ -16,7 +16,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Mock mission day",
     description:
       "Full competition-style runs through search patterns, target acquisition, and recovery.",
-    image: "/gallery/field-day.png",
+    image: "/gallery/field-day.jpg",
     imageAlt: "Drone flying over an open field during a mock mission",
     category: "Field test",
   },
@@ -34,7 +34,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Leadership",
     description:
       "SkyXperts student leaders guiding the SUAS program.",
-    image: "/gallery/leaders.JPG",
+    image: "/gallery/leaders.jpg",
     imageAlt: "SkyXperts leadership team group photo",
     category: "Team",
   },
@@ -43,7 +43,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Field operations",
     description:
       "Live capture from a recent field session — checking systems behavior between mission runs.",
-    image: "/gallery/vlcsnap-2026-06-28-17h30m02s086.png",
+    image: "/gallery/field-ops.jpg",
     imageAlt: "Field operations capture from a recent SkyXperts test session",
     category: "Operations",
   },

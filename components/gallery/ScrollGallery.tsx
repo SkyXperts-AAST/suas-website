@@ -8,6 +8,9 @@ import type { GalleryItem } from "@/lib/gallery/types";
 /** Matches sticky nav height (`h-16` in Nav.tsx). */
 const NAV_OFFSET_PX = 64;
 
+/** Keep only nearby slides mounted so phones don't decode every image at once. */
+const LOAD_WINDOW = 1;
+
 type ScrollGalleryProps = {
   items: GalleryItem[];
 };
@@ -24,6 +27,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -53,13 +57,24 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
   }, [items.length]);
 
   useEffect(() => {
+    const onScrollOrResize = () => {
+      if (rafRef.current != null) return;
+      rafRef.current = window.requestAnimationFrame(() => {
+        rafRef.current = null;
+        updateActiveIndex();
+      });
+    };
+
     updateActiveIndex();
-    window.addEventListener("scroll", updateActiveIndex, { passive: true });
-    window.addEventListener("resize", updateActiveIndex);
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
 
     return () => {
-      window.removeEventListener("scroll", updateActiveIndex);
-      window.removeEventListener("resize", updateActiveIndex);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+      if (rafRef.current != null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
     };
   }, [updateActiveIndex]);
 
@@ -86,38 +101,33 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
       />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-48 h-72 w-72 translate-x-1/3 rounded-full bg-violet-500/10 blur-3xl"
-      />
 
-      <div className="sticky top-16 z-10 h-[calc(100dvh-4rem)] overflow-hidden">
+      <div className="sticky top-16 z-10 h-[calc(100dvh-4rem)] overflow-hidden bg-[#05071e]">
         {items.map((item, index) => {
           const isActive = index === activeIndex;
+          const shouldLoad = Math.abs(index - activeIndex) <= LOAD_WINDOW;
 
           return (
             <div
               key={item.id}
               aria-hidden={!isActive}
               className={`absolute inset-0 ${
-                reducedMotion ? "" : "transition-opacity duration-700 ease-in-out"
+                reducedMotion ? "" : "transition-opacity duration-500 ease-out"
               } ${isActive ? "opacity-100" : "opacity-0"}`}
             >
-              <Image
-                src={item.image}
-                alt={item.imageAlt}
-                fill
-                priority={index === 0}
-                sizes="100vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-[#0a1628]/35" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#05071e]/95 via-[#0a1628]/35 to-[#0a1628]/20" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#05071e]/55 via-transparent to-[#05071e]/55" />
+              {shouldLoad ? (
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt}
+                  fill
+                  priority={index === 0}
+                  sizes="(max-width: 768px) 100vw, 100vw"
+                  className="object-contain object-center md:object-cover"
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-[#0a1628]/25 md:bg-[#0a1628]/35" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#05071e]/95 via-[#0a1628]/25 to-[#0a1628]/15 md:via-[#0a1628]/35 md:to-[#0a1628]/20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#05071e]/40 via-transparent to-[#05071e]/40 md:from-[#05071e]/55 md:to-[#05071e]/55" />
             </div>
           );
         })}

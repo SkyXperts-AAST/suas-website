@@ -76,77 +76,29 @@ Recommended aspect ratio: **16:10** (matches the build log layout). Minimum widt
 
 ## electrical
 
-### elec-1 — Two kinds of failure, one checklist
+### elec-1 — Electrical Update: Power System Sizing (September 2025 – January 2026)
 
 - **Folder:** `public/blogs/electrical/elec-1/`
-- **Hero (`hero.svg`):** GCS or laptop showing logged voltage/current telemetry from a flight — proof that power data is being recorded.
-- **Body 1 (`body-1.svg`):** Same: telemetry plot, log review session, or printed pre-power-on checklist on the bench.
+- **Hero (`hero.svg`):** Early electrical team working through power system sizing — whiteboard with thrust-to-weight math, mass estimate, or the avionics power budget spreadsheet.
+- **Body 1 (`body-1.svg`):** Battery pack (MAD 6S 28 Ah) on the bench with sizing notes, or the payload release mechanism bench test with the ESC in the loop.
 
-### elec-2 — Shorted a pack during re-integration
+### elec-2 — Electrical Update: Telemetry Calibration and Endurance Testing (February – May 2026)
 
 - **Folder:** `public/blogs/electrical/elec-2/`
-- **Hero (`hero.svg`):** Power module bay during integration — harness work, PM08/PDB area, or team working on wiring with terminals visible.
-- **Body 1 (`body-1.svg`):** Close-up of insulated terminals, heat-shrink on bus bars, or the integration workspace after the new handling rules.
+- **Hero (`hero.svg`):** Bench setup comparing PM07 reported current/voltage against a handheld multimeter or power analyzer.
+- **Body 1 (`body-1.svg`):** Motor on thrust test stand at full throttle — clamp meter or power analyzer visible, or a thrust-current plot showing ~61.5 A per motor at the takeoff operating point.
 
-### elec-3 — Power architecture locked: one battery, two regulated rails
+### elec-3 — Electrical Update: Power Module Failure and Redesign (June 2026)
 
 - **Folder:** `public/blogs/electrical/elec-3/`
-- **Hero (`hero.svg`):** Full power distribution layout — PM08-CAN, 300 A PDB, battery leads, and rail routing in the avionics bay.
-- **Body 1 (`body-1.svg`):** Harness routing from PM08-CAN and PDB — labeled photo showing which rail goes where.
+- **Hero (`hero.svg`):** Storm in flight during the full mission profile test — the flight itself was fine; use an in-air shot from that day, or the PM07 area post-flight (do not show active fire — a photo of the regulator/board area is enough).
+- **Body 1 (`body-1.svg`):** New PM08-CAN and 300 A side-entry PDB installed in Storm's avionics bay — part numbers readable if possible.
 
-### elec-4 — New distribution hardware: 300 A PDB and a digital power module
+### elec-4 — Electrical Update: Wiring Incident and Process Changes (July 2026)
 
 - **Folder:** `public/blogs/electrical/elec-4/`
-- **Hero (`hero.svg`):** New PM08-CAN and 300 A side-entry PDB installed in Storm's avionics bay.
-- **Body 1 (`body-1.svg`):** Close-up of the PM08-CAN and PDB mounting — part numbers readable if possible.
-
-### elec-5 — Smoke off the buck regulator after our first full mission
-
-- **Folder:** `public/blogs/electrical/elec-5/`
-- **Hero (`hero.svg`):** Storm in flight during the full mission profile test — the flight itself was fine; use an in-air shot from that day.
-- **Body 1 (`body-1.svg`):** Post-flight on the ground: aircraft after landing, or the PM07 area (do not show active fire — a photo of the regulator/board area is enough).
-
-### elec-6 — Bench test: pushing the motors to full throttle to size the ESCs
-
-- **Folder:** `public/blogs/electrical/elec-6/`
-- **Hero (`hero.svg`):** Motor on thrust test stand at full throttle — clamp meter or power analyzer visible, or thrust-current plot screenshot.
-- **Body 1 (`body-1.svg`):** Thrust vs current chart at the takeoff operating point, or bench photo with readout showing ~61.5 A per motor.
-
-### elec-7 — Endurance math: 29.93 minutes, on paper
-
-- **Folder:** `public/blogs/electrical/elec-7/`
-- **Hero (`hero.svg`):** Thrust-current spline fit at cruise operating point (~1962 gf, ~10.12 A) — chart export or annotated plot.
-- **Body 1 (`body-1.svg`):** Cruise operating point chart from the endurance model.
-- **Body 2 (`body-2.svg`):** Landing operating point chart (~1308 gf, ~5.87 A per motor).
-
-### elec-8 — The PM07's readings didn't match the meter
-
-- **Folder:** `public/blogs/electrical/elec-8/`
-- **Hero (`hero.svg`):** Bench setup comparing PM07 reported current/voltage against a handheld multimeter or power analyzer.
-- **Body 1 (`body-1.svg`):** Side-by-side: meter reading vs GCS/autopilot telemetry display showing the mismatch.
-
-### elec-9 — Sizing the pack, then checking the part that actually bites
-
-- **Folder:** `public/blogs/electrical/elec-9/`
-- **Hero (`hero.svg`):** Battery pack (MAD 6S 28 Ah) on the bench with sizing notes, or cruise-point current chart used in sizing.
-- **Body 1 (`body-1.svg`):** Cruise thrust-current curve used for average-draw calculations in the sizing spreadsheet.
-
-### elec-10 — Chasing down payload release failures that weren't real
-
-- **Folder:** `public/blogs/electrical/elec-10/`
-- **Hero (`hero.svg`):** Payload release mechanism on the bench — servo, trap door, or bracket latch with ESC in the loop.
-
-### elec-11 — Budgeting the small rail: what the avionics actually pull
-
-- **Folder:** `public/blogs/electrical/elec-11/`
-- **Hero (`hero.svg`):** Cross-sub-team meeting: electrical + software reviewing the avionics power budget spreadsheet.
-- **Body 1 (`body-1.svg`):** Whiteboard or spreadsheet screenshot listing Pixhawk, GPS, radio, camera, Jetson current draws.
-
-### elec-12 — The power system starts with a number we didn't pick
-
-- **Folder:** `public/blogs/electrical/elec-12/`
-- **Hero (`hero.svg`):** Early electrical team working through power system sizing — whiteboard with thrust-to-weight math or mass estimate.
-- **Body 1 (`body-1.svg`):** Sizing session: AUW estimate, 2:1 T/W calculation, or motor thrust curve printouts on the table.
+- **Hero (`hero.svg`):** Power module bay during re-integration — harness work, PM08/PDB area, or team working on wiring with terminals visible.
+- **Body 1 (`body-1.svg`):** Close-up of insulated terminals, heat-shrink on bus bars, or the integration workspace after the new handling rules.
 
 ## mechanical
 

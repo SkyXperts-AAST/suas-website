@@ -101,7 +101,27 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
           className="relative z-10 flex h-[calc(100dvh-4rem)] shrink-0 flex-col justify-end overflow-hidden px-5 pb-16 pt-10 sm:px-6 sm:pb-20 md:justify-center md:px-10 md:pb-24"
           style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
         >
-          <div className="max-w-3xl">
+          {/* Opening frame: the first gallery photo sits behind the title so
+              the page opens on an image rather than flat navy. Marked
+              decorative — the same photo follows immediately as slide 1 with
+              its real alt text, so announcing it twice would just be noise.
+              Darkened harder than the photo slides' own overlays, since full
+              headline copy sits on top of this one. */}
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <Image
+              src={items[0].image}
+              alt=""
+              aria-hidden="true"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-[#05071e]/70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05071e] via-[#0a1628]/75 to-[#0a1628]/55" />
+          </div>
+
+          <div className="relative z-10 max-w-3xl">
             <PageBadge label="Gallery" />
             <h1 className="mt-4 text-3xl leading-[1.05] sm:mt-5 sm:text-4xl md:text-6xl">
               Moments from the

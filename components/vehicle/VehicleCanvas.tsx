@@ -360,6 +360,15 @@ export default function VehicleCanvas({
       groupBoundsRef.current = groupBounds;
       const controls = controlsRef.current;
       if (controls) frameHeroView(controls, overallBounds, false);
+      // On touch devices, a single-finger drag on the canvas defaults to
+      // orbiting the camera — which also means it swallows the vertical
+      // swipe a mobile visitor expects to scroll the page. Selecting a
+      // component is already a tap (DroneModel's onClick, independent of
+      // this), so free-orbiting isn't needed for the touch interaction
+      // model; only pinch-zoom (touches.two) is kept.
+      if (controls && window.matchMedia("(pointer: coarse)").matches) {
+        controls.touches.one = 0; // CameraControls.ACTION.NONE
+      }
 
       // Ground plane for the soft contact shadow: sit it just under the lowest
       // point of the drone (the legs) and size it to the footprint.
@@ -489,7 +498,7 @@ export default function VehicleCanvas({
   return (
     <div
       ref={containerRef}
-      className="relative h-[calc(100vh-72px)] w-full overflow-hidden"
+      className="relative h-[calc(100vh-72px)] w-full overflow-hidden touch-pan-y"
       style={{ background: PRESET_BACKGROUNDS[preset] }}
     >
       <Canvas

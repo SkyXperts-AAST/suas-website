@@ -32,7 +32,7 @@ export default function SponsorshipsPage() {
           </h2>
         </div>
 
-        <div className="mx-auto max-w-2xl">
+        <div className="mx-auto max-w-4xl">
           <SponsorLogoGrid />
         </div>
       </PageSection>

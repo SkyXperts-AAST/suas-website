@@ -13,7 +13,7 @@ export default function SponsorLogoGrid({
       className={
         compact
           ? "flex flex-wrap items-center justify-center gap-x-10 gap-y-6"
-          : "grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6"
+          : "grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
       }
     >
       {SPONSORS.map((sponsor) => (

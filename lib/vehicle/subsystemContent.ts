@@ -161,17 +161,21 @@ const CONTENT: Record<string, SubsystemContent> = {
     tagline:
       "Stabilized feed for mapping and target confirmation, same hardware.",
   },
-  // Not specced yet — deliberately left on placeholders.
   payload: {
     summary: "Carries and releases the competition delivery load.",
     specs: [
-      { label: "Type", value: TBD },
-      { label: "Capacity", value: TBD },
-      { label: "Release", value: TBD },
-      { label: "Actuator", value: TBD },
-      { label: "Mass", value: TBD },
+      {
+        label: "Release Mechanism (Flare)",
+        value: "Servo-actuated trap door, single bay",
+      },
+      {
+        label: "Release Mechanism (Water Bottle)",
+        value: "Bracket-secured, double pin attachment, servo-driven latch",
+      },
+      { label: "Bays", value: "2 (one per payload type)" },
     ],
-    tagline: PLACEHOLDER_TAGLINE,
+    tagline:
+      "Two release mechanisms handle two payload types: a servo-actuated trap door for the flare, and a bracket-secured, servo-latched release for the water bottle. Both were chosen over a winch-based system, which was heavier and slower to deploy — keeping drops fast and the subsystem light matters against the mission's tight 45-minute window.",
   },
 };
 

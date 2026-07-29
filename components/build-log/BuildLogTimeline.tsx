@@ -137,7 +137,10 @@ function FeaturedEntry({
 }: FeaturedEntryProps) {
   return (
     <article className="build-log-featured build-log-article overflow-hidden rounded-xl border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] sm:rounded-none">
-      <header className="build-log-article-header mx-auto max-w-4xl border-b border-white/10 px-4 py-8 md:px-4 md:py-10">
+      <header
+        id="build-log-topic-top"
+        className="build-log-article-header mx-auto max-w-4xl scroll-mt-[calc(3.5rem+env(safe-area-inset-top))] border-b border-white/10 px-4 py-8 md:scroll-mt-20 md:px-4 md:py-10"
+      >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <span
             className={`inline-block border px-2.5 py-1 text-[0.625rem] font-black uppercase tracking-[0.12em] sm:text-[0.625rem] sm:tracking-[0.14em] ${theme.tag}`}

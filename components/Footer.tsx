@@ -67,7 +67,7 @@ export default function Footer() {
             aircraft from the ground up.
           </p>
           <p className="mt-3 font-display text-xs font-semibold tracking-wide text-offwhite/40">
-            AAST · SUAS 2026
+            AAST · 2026
           </p>
         </div>
 

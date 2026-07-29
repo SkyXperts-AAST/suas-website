@@ -18,7 +18,7 @@ export default function CursorDrone() {
 
   return (
     <div
-      className="pointer-events-none fixed z-50 hidden sm:block"
+      className="pointer-events-none fixed z-[60] hidden sm:block"
       style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
     >
       <TbDrone className="h-7 w-7 text-[#E31C1C] drop-shadow-[0_0_6px_rgba(255,255,255,0.6)]" />

@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   title: "SkyXperts",
   description: "SkyXperts SUAS team website",
   icons: {
-    icon: "/small logo.png",
-    apple: "/small logo.png",
+    icon: "/skyxperts-x.png",
+    apple: "/skyxperts-x.png",
   },
 };
 

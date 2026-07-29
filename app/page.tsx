@@ -35,7 +35,7 @@ export default function Home() {
             chapter="01"
             label="Origin"
             title="We build. We don't just study."
-            description="SkyXperts started at AAST with a handful of students who wanted to build real autonomous aircraft instead of just reading about them. That hasn't changed. We're a full team now — avionics, structures, vision, software — designing and flying vehicles from scratch. Competitions like SUAS and ICMTC aren't the reason we exist. They're where we prove the work."
+            description="SkyXperts started at AAST with a handful of students who wanted to build real autonomous aircraft instead of just reading about them. That hasn't changed. We're a full team now — avionics, structures, vision, control — designing and flying vehicles from scratch. Competitions like SUAS and ICMTC aren't the reason we exist. They're where we prove the work."
             className="flex-1"
           />
           <div className="flex-1">

@@ -354,37 +354,51 @@ export default function VehicleCanvas({
     selectedGroupRef.current = selectedGroup;
   }, [selectedGroup]);
 
+  // Applies the scroll-friendly touch/wheel overrides the moment
+  // CameraControls itself mounts, rather than waiting on the model's onReady
+  // (which only fires once the GLTF has loaded and its bounds are computed).
+  // camera-controls hard-sets touch-action: none on the canvas as soon as it
+  // connects — before the model finishes loading on a slow mobile
+  // connection, that "none" was the only value ever in effect, so a swipe
+  // during that whole loading window never reached the page's native scroll.
+  // Gating this on model-ready reproduced exactly that: dead scroll from
+  // first paint until the model settled.
+  const setControls = useCallback((instance: CameraControls | null) => {
+    controlsRef.current = instance;
+    if (!instance) return;
+
+    // On touch devices, a single-finger drag on the canvas defaults to
+    // orbiting the camera — which also means it swallows the vertical
+    // swipe a mobile visitor expects to scroll the page. Selecting a
+    // component is already a tap (DroneModel's onClick, independent of
+    // this), so free-orbiting isn't needed for the touch interaction
+    // model; only pinch-zoom (touches.two) is kept.
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      instance.touches.one = 0; // CameraControls.ACTION.NONE
+    }
+
+    // camera-controls dollies the camera on wheel by default, calling
+    // preventDefault — which swallows the page scroll for anyone whose
+    // cursor happens to be over the canvas. Zoom isn't essential here
+    // (the tour already frames each component), so give the scroll
+    // gesture back to the page.
+    instance.mouseButtons.wheel = 0; // CameraControls.ACTION.NONE
+
+    // camera-controls also hard-sets touch-action: none on its element to
+    // own every touch gesture, which blocks a single-finger swipe from ever
+    // reaching the page's native scroll. pan-y lets vertical swipes fall
+    // through to page scroll while still leaving mouse drag-to-rotate
+    // (desktop) and pinch-to-zoom (touch) to the library.
+    const canvasEl = containerRef.current?.querySelector("canvas");
+    if (canvasEl) canvasEl.style.touchAction = "pan-y";
+  }, []);
+
   const handleReady = useCallback(
     (overallBounds: THREE.Box3, groupBounds: Map<string, THREE.Box3>) => {
       overallBoundsRef.current = overallBounds;
       groupBoundsRef.current = groupBounds;
       const controls = controlsRef.current;
       if (controls) frameHeroView(controls, overallBounds, false);
-      // On touch devices, a single-finger drag on the canvas defaults to
-      // orbiting the camera — which also means it swallows the vertical
-      // swipe a mobile visitor expects to scroll the page. Selecting a
-      // component is already a tap (DroneModel's onClick, independent of
-      // this), so free-orbiting isn't needed for the touch interaction
-      // model; only pinch-zoom (touches.two) is kept.
-      if (controls && window.matchMedia("(pointer: coarse)").matches) {
-        controls.touches.one = 0; // CameraControls.ACTION.NONE
-      }
-      if (controls) {
-        // camera-controls dollies the camera on wheel by default, calling
-        // preventDefault — which swallows the page scroll for anyone whose
-        // cursor happens to be over the canvas. Zoom isn't essential here
-        // (the tour already frames each component), so give the scroll
-        // gesture back to the page.
-        controls.mouseButtons.wheel = 0; // CameraControls.ACTION.NONE
-
-        // camera-controls also hard-sets touch-action: none on its element
-        // to own every touch gesture, which blocks a single-finger swipe
-        // from ever reaching the page's native scroll. pan-y lets vertical
-        // swipes fall through to page scroll while still leaving mouse
-        // drag-to-rotate (desktop) and pinch-to-zoom (touch) to the library.
-        const canvasEl = containerRef.current?.querySelector("canvas");
-        if (canvasEl) canvasEl.style.touchAction = "pan-y";
-      }
 
       // Ground plane for the soft contact shadow: sit it just under the lowest
       // point of the drone (the legs) and size it to the footprint.
@@ -585,7 +599,7 @@ export default function VehicleCanvas({
             frames={hasLanded ? 1 : Infinity}
           />
         )}
-        <CameraControls ref={controlsRef} makeDefault />
+        <CameraControls ref={setControls} makeDefault />
       </Canvas>
       <HeroOverlay
         dimmed={selectedGroup !== null}

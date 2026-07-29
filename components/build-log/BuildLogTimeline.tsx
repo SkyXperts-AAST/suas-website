@@ -185,22 +185,26 @@ function FeaturedEntry({
         </div>
       </header>
 
-      <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-4 py-8 md:px-4 md:py-10">
-        <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
-          <Image
-            src={entry.image}
-            alt={entry.imageAlt}
-            fill
-            sizes="(max-width: 768px) 100vw, 896px"
-            className="object-cover"
-            style={buildLogImagePositionStyle(entry.imagePosition)}
-            priority
-          />
-        </div>
-        <figcaption className="mt-3 text-center text-sm leading-relaxed text-offwhite/55 md:text-[0.9375rem]">
-          {entry.imageAlt}
-        </figcaption>
-      </figure>
+      {entry.image ? (
+        <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-4 py-8 md:px-4 md:py-10">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+            <Image
+              src={entry.image}
+              alt={entry.imageAlt ?? ""}
+              fill
+              sizes="(max-width: 768px) 100vw, 896px"
+              className="object-cover"
+              style={buildLogImagePositionStyle(entry.imagePosition)}
+              priority
+            />
+          </div>
+          {entry.imageAlt ? (
+            <figcaption className="mt-3 text-center text-sm leading-relaxed text-offwhite/55 md:text-[0.9375rem]">
+              {entry.imageAlt}
+            </figcaption>
+          ) : null}
+        </figure>
+      ) : null}
 
       <div className="build-log-article-body mx-auto max-w-4xl px-4 pb-10 md:px-4 md:pb-10 lg:pb-12">
         <BuildLogEntryBody blocks={entry.body} summary={entry.summary} />
@@ -290,16 +294,18 @@ function TimelineUpdateNode({
           }`}
         >
           <div className="flex h-full flex-col space-y-2.5 md:space-y-3">
-            <div className="relative h-14 w-full shrink-0 overflow-hidden border border-white/10 sm:h-16 md:h-[4.5rem]">
-              <Image
-                src={entry.image}
-                alt=""
-                fill
-                sizes="(max-width: 768px) 240px, 288px"
-                className="object-cover"
-                style={buildLogImagePositionStyle(entry.imagePosition)}
-              />
-            </div>
+            {entry.image ? (
+              <div className="relative h-14 w-full shrink-0 overflow-hidden border border-white/10 sm:h-16 md:h-[4.5rem]">
+                <Image
+                  src={entry.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 240px, 288px"
+                  className="object-cover"
+                  style={buildLogImagePositionStyle(entry.imagePosition)}
+                />
+              </div>
+            ) : null}
 
             <div className="flex items-start gap-2.5 md:gap-3">
               <TeamIcon

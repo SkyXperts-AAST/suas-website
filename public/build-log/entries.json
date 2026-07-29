@@ -2,158 +2,141 @@
   "computer-vision": [
     {
       "id": "cv-1",
-      "date": "2026-07-15",
-      "title": "Field day: lawnmower search + live geolocation",
-      "summary": "Ran the full search-to-geolocation loop outdoors for the first time — lawnmower coverage at 50 m AGL feeding real-time target coordinates to the flight controller.",
-      "image": "/blogs/computer-vision/cv-1/hero.svg",
-      "imageAlt": "Field testing of the onboard vision and search pipeline",
+      "date": "2026-07-24",
+      "title": "Teaching the confirmation stage to handle occlusion",
+      "summary": "We’re retraining the confirmation stage on realistic, partially covered target crops so it can handle the difficult cases the detector sees at flight altitude.",
       "tags": [
-        "field-test",
-        "geolocation"
+        "dataset",
+        "occlusion"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Took Storm out to run the search pipeline start to finish instead of bench-testing the pieces separately. Flew the lawnmower pattern inside the search boundary at 50 m (164 ft) AGL — the altitude where the A8 Mini's 81° horizontal FOV gives roughly an 85.4 m swath per pass, wide enough to set line spacing with real overlap between legs instead of leaving gaps at the pattern edges."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/computer-vision/cv-1/body-1.svg",
-          "alt": "Field session validating search coverage and detection handoff",
-          "caption": "Lawnmower pass over the search grid — first outdoor run of the full detection-to-reposition loop."
+          "text": "With a lighter confirmation model in the works, we turned our attention to a common real-world headache: partially covered targets. A mannequin tucked under brush or a tent partly collapsed can still get flagged correctly by the detector, but the confirmation stage needs more practice recognizing these trickier cases."
         },
         {
           "type": "paragraph",
-          "text": "Every confirmed detection got run through the geolocation conversion live: pixel position to ground sample distance (about 2.01 cm/pixel at this altitude), then to a real-world offset using GPS position and fused heading, then to a geodetic target coordinate. The flight controller received that as a reposition command ahead of payload release."
-        },
-        {
-          "type": "list",
-          "heading": "Notes from the field",
-          "items": [
-            "Two passes needed a re-fly — direct sun glare over the tarp targets washed out contrast on the gimbal feed.",
-            "Reposition commands landed within expected tolerance on every run that didn't get re-flown.",
-            "Line spacing held overlap fine at 50 m; haven't pushed the pattern into gustier conditions yet."
-          ]
+          "text": "We’re retraining the confirmation stage on crops that better reflect what the detector actually sees at flight altitude, with a stronger emphasis on partial-occlusion examples. Synthetic generation is proving especially useful here, since we can place targets under partial cover directly instead of waiting to find real-world examples of it."
         },
         {
           "type": "paragraph",
-          "text": "Next up: repeat the same run in more wind than we saw today, and start actually logging detection-to-command latency instead of eyeballing it off the video feed."
+          "text": "Early signs are encouraging, and we’re feeling good about where the pipeline stands heading into our next round of outdoor testing."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: fold these improvements into the full detector retrain and start planning our first full outdoor test of the complete search-to-confirmation loop."
         }
       ]
     },
     {
       "id": "cv-2",
-      "date": "2026-06-02",
-      "title": "Training run: YOLO detector on synthetic + real data",
-      "summary": "Fine-tuned the YOLO detector for the two competition target classes; occlusion and orientation augmentation got cranked up after the last round undercounted partially-covered targets.",
-      "image": "/blogs/computer-vision/cv-2/hero.svg",
-      "imageAlt": "Vision model evaluation during field data collection",
+      "date": "2026-07-02",
+      "title": "Zeroing in on the real bottleneck",
+      "summary": "End-to-end timing showed that detection is performing well; the heavier confirmation stage is where most of our processing time is going.",
       "tags": [
-        "training",
-        "detection"
+        "optimization",
+        "pipeline"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Spent this cycle on the detector instead of the airframe. Sticking with a YOLO single-stage model for the mannequin and tent classes — looked at DETR early on, but the gains transformer detectors report show up on datasets much larger than our synthetic-plus-real mix, so it wasn't worth the extra training complexity for us."
+          "text": "With the Jetson pipeline running smoothly, we finally timed the whole system end to end — and detection turned out not to be the slow part. The confirmation stage, which double-checks whether a detected region is really the mannequin, the tent, or just background clutter, is where most of our processing time is going."
         },
         {
           "type": "paragraph",
-          "text": "Training set is still mostly synthetic — target instances composited onto aerial backgrounds with randomized orientation, scale, lighting, and occlusion — topped up with real field imagery so the model sees actual camera noise and lighting the synthetic pipeline can't fake."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/computer-vision/cv-2/body-1.svg",
-          "alt": "Real aerial imagery used to supplement synthetic training data",
-          "caption": "Real field captures added this round to cover debris clutter the synthetic set was missing."
-        },
-        {
-          "type": "list",
-          "heading": "What changed this round",
-          "items": [
-            "Cranked up occlusion augmentation after last month's model missed mannequins partially buried in debris — competition rules explicitly allow that, so it has to be covered.",
-            "Added full 0–360° orientation sampling instead of the narrower range we started with.",
-            "Real-image share of the training set is still small; want more field captures before the next retrain."
-          ]
+          "text": "Right now that stage relies on a heavier, general-purpose model, which is accurate but on the slower side for real-time use. We’re scoping out a lighter, purpose-built classifier to take its place, with an eye toward running it on the Jetson’s GPU alongside detection."
         },
         {
           "type": "paragraph",
-          "text": "Next: pull more field photos from upcoming flight days and re-check validation on the occlusion-heavy cases specifically, not just aggregate mAP."
+          "text": "Good problem to have — it means the detector itself is performing well."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: benchmark lighter classifier options and start looking at how it handles trickier real-world cases like partial occlusion."
         }
       ]
     },
     {
       "id": "cv-3",
-      "date": "2026-04-18",
-      "title": "Camera decision: A8 Mini for mapping + detection",
-      "summary": "Settled on the SIYI A8 Mini as our one camera for both risk mapping and target detection, running inference onboard instead of over the video link.",
-      "image": "/blogs/computer-vision/cv-3/hero.svg",
-      "imageAlt": "SkyXperts computer vision sub-team with the A8 Mini camera setup",
+      "date": "2026-06-04",
+      "title": "Finding and fixing the rough edges",
+      "summary": "Fixing small image-scaling and model-output mismatches brought Jetson detections in line with our bench results.",
       "tags": [
-        "hardware",
-        "camera"
+        "debugging",
+        "jetson"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Decided early that one gimbal camera has to cover both jobs — feeding the risk-map stitching pipeline and running target detection — with all inference happening onboard the Jetson. We looked at running detection on the ground station instead, but that ties the whole detection loop to the RF video link, which gets unreliable fast in a field with a dozen other teams' radios running."
+          "text": "Spent this stretch chasing down some inconsistencies between our Jetson results and our bench results. Turned out to be a couple of small mismatches in how the pipeline was handling image scaling and how it was reading the model’s output — nothing structural, just details that needed lining up."
         },
         {
           "type": "paragraph",
-          "text": "Between the A8 Mini and a cheaper fixed action camera, the gimbal won out mainly for the global shutter and built-in stabilization. Keeping the optical axis close to nadir through turns and gust corrections matters a lot for how cleanly stitched mapping frames overlap — a shaky feed makes that job much harder downstream."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/computer-vision/cv-3/body-1.svg",
-          "alt": "Computer vision team working on the perception pipeline",
-          "caption": "Bench-mounting the A8 Mini feed to the Jetson Orin Nano before the first onboard inference test."
-        },
-        {
-          "type": "list",
-          "heading": "Open items",
-          "items": [
-            "Need to confirm gimbal stabilization holds up in the wind speeds we expect on competition day, not just on calm bench tests.",
-            "Global shutter rules out most of the rolling-shutter smear we saw on the old action-cam footage during turns."
-          ]
+          "text": "Once those were sorted, detections on the Jetson started matching what we’d seen during development, and confidence levels across both classes look solid."
         },
         {
           "type": "paragraph",
-          "text": "Next: get the A8 Mini feed running through the full onboard detection pipeline end to end, not just verified as a standalone feed."
+          "text": "We’re treating this as a good sign that the core pipeline is close to flight-ready, and we’re shifting focus to making sure the whole system runs quickly enough in real time."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: get the full pipeline running on our test rig and start timing each stage, not just detection on its own."
         }
       ]
     },
     {
       "id": "cv-4",
-      "date": "2025-11-08",
-      "title": "Shaking out the vision scripts on the small test rig first",
-      "summary": "Ran flight modes, detection scripts, and payload triggers on the smaller test platform before touching the real airframe — cheaper to crash.",
-      "image": "/blogs/computer-vision/cv-4/hero.svg",
-      "imageAlt": "Prototype multirotor used for early vision development",
+      "date": "2026-04-18",
+      "title": "Getting the model onto the Jetson",
+      "summary": "We exported the YOLO model through TensorRT conversion so onboard inference can take advantage of the Jetson’s GPU.",
       "tags": [
-        "prototype",
-        "validation"
+        "hardware",
+        "jetson"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Before anything touches Storm, we run it on the small test platform first. This round covered flight mode switching, the early detection scripts, and the payload deployment trigger logic — all on hardware that's a lot cheaper to total than the competition airframe."
-        },
-        {
-          "type": "list",
-          "heading": "Results",
-          "items": [
-            "Flight mode transitions behaved as expected across the full test sequence.",
-            "Detection script ran without crashing for the whole test — accuracy wasn't the focus here, just making sure it doesn't fall over mid-flight.",
-            "Payload trigger fired correctly on command every time it was tested."
-          ]
+          "text": "This week was all about getting our YOLO model ready to run onboard. We exported the model and worked it through TensorRT conversion so it can take advantage of the Jetson’s GPU instead of relying on slower CPU inference."
         },
         {
           "type": "paragraph",
-          "text": "Nothing gets promoted to the full-scale build until it's held up on the test platform first — the point is to catch the dumb software bugs on the unit we don't mind breaking."
+          "text": "There were a few hiccups along the way getting the converted model to behave the same way it did on our development machines, but nothing that pointed to a problem with the model itself — just the usual friction of getting a pipeline to run the same way on new hardware."
         },
         {
           "type": "paragraph",
-          "text": "Next: start porting the validated scripts over to the Storm-specific hardware configuration and re-test against the real sensor stack."
+          "text": "We’re optimistic about where this is headed and are looking forward to timing the full pipeline once everything is stable on-device."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: finish smoothing out on-device performance and start timing the complete detection pipeline end to end."
+        }
+      ]
+    },
+    {
+      "id": "cv-5",
+      "date": "2026-03-16",
+      "title": "Locking in our detection approach",
+      "summary": "We settled on one YOLO model for both target classes and a synthetic-data pipeline that produces correctly scaled, automatically labelled training images.",
+      "tags": [
+        "detection",
+        "dataset"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "This week we settled on our core detection strategy: a single YOLO model trained to recognize both the mannequin and the tent, rather than running two separate models. With everything else competing for compute onboard, one model handling both classes made the most sense for keeping things fast and simple."
+        },
+        {
+          "type": "paragraph",
+          "text": "To get there, we’re leaning heavily on synthetic data generation. Using SDXL inpainting, we’re placing targets into realistic pasture backgrounds matched to the Search Boundary terrain out at Skyway Range, Tulsa, with mask sizing tied to our camera’s ground sample distance so targets show up at the right scale for a given altitude. Because we control the placement, labels come out accurate automatically, which saves us a ton of manual annotation work down the line."
+        },
+        {
+          "type": "paragraph",
+          "text": "Early test renders are looking good, and we’re excited to start scaling this up into a full training set."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next up: build out a larger batch of synthetic images and start looking at what it takes to get this running fast on the Jetson."
         }
       ]
     }

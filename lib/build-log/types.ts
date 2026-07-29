@@ -24,10 +24,11 @@ export type BuildLogEntry = {
   title: string;
   /** Short preview shown on collapsed cards and when `body` is omitted. */
   summary: string;
-  image: string;
+  /** Optional until a real photo is added. */
+  image?: string;
   /** CSS object-position for the hero / timeline thumbnail. */
   imagePosition?: BuildLogImagePosition;
-  imageAlt: string;
+  imageAlt?: string;
   tags?: string[];
   /** Full entry content. Use `image` blocks to place photos between paragraphs. */
   body?: BuildLogContentBlock[];

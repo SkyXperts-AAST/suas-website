@@ -388,9 +388,18 @@ export default function VehicleCanvas({
   // aspect-aware, so a new width needs a fresh distance. Deferred to the next
   // frame so react-three-fiber has updated the camera aspect first. Skipped
   // while a component is selected.
+  //
+  // Gated on width actually changing: mobile browsers fire `resize` when
+  // their chrome (address bar) collapses/expands during a scroll gesture,
+  // even though the container's svh-based height doesn't move as a result.
+  // Reframing on that phantom resize would yank the camera mid-scroll.
   useEffect(() => {
     let raf = 0;
+    let lastWidth = window.innerWidth;
     const onResize = () => {
+      const width = window.innerWidth;
+      if (width === lastWidth) return;
+      lastWidth = width;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const controls = controlsRef.current;
@@ -498,7 +507,14 @@ export default function VehicleCanvas({
   return (
     <div
       ref={containerRef}
-      className="relative h-[calc(100vh-72px)] w-full overflow-hidden touch-pan-y"
+      // svh (not vh/dvh) so the mobile browser chrome collapsing/expanding
+      // mid-scroll doesn't resize this container out from under the user —
+      // it's pinned to the smallest-chrome-visible viewport instead of
+      // tracking chrome state. Nav height differs per breakpoint (56px
+      // mobile + its own safe-area inset, 64px desktop; see Nav.tsx), so
+      // that's matched here rather than the single fixed 72px both used
+      // to share.
+      className="relative h-[calc(100svh-56px-env(safe-area-inset-top))] w-full overflow-hidden touch-pan-y md:h-[calc(100svh-64px)]"
       style={{ background: PRESET_BACKGROUNDS[preset] }}
     >
       <Canvas

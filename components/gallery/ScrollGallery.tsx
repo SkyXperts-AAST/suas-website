@@ -79,7 +79,10 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     );
   }
 
-  const slideCount = items.length + 1;
+  // The first photo is the opening frame's backdrop, so it isn't repeated as a
+  // captioned slide of its own — the numbering below counts the rest.
+  const [introItem, ...photoItems] = items;
+  const slideCount = photoItems.length + 1;
 
   return (
     <div className="relative bg-navy text-offwhite">
@@ -109,7 +112,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               headline copy sits on top of this one. */}
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
-              src={items[0].image}
+              src={introItem.image}
               alt=""
               aria-hidden="true"
               fill
@@ -137,7 +140,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
           </div>
         </section>
 
-        {items.map((item, index) => {
+        {photoItems.map((item, index) => {
           const slideIndex = index + 1;
           const isActive = activeIndex === slideIndex;
 
@@ -148,7 +151,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
                 slideRefs.current[slideIndex] = node;
               }}
               data-index={slideIndex}
-              aria-label={`${item.title} (${formatIndex(index, items.length)})`}
+              aria-label={`${item.title} (${formatIndex(index, photoItems.length)})`}
               className="relative z-10 flex h-[calc(100dvh-4rem)] shrink-0 flex-col overflow-hidden md:block"
               style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
             >
@@ -171,7 +174,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               {/* Mobile caption under image */}
               <div className="shrink-0 border-t border-white/5 bg-[#05071e] px-5 py-4 sm:px-6 sm:py-5 md:hidden">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-                  {formatIndex(index, items.length)}
+                  {formatIndex(index, photoItems.length)}
                 </p>
                 {item.category ? (
                   <p className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
@@ -194,7 +197,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               >
                 <div className="max-w-2xl">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-                    {formatIndex(index, items.length)}
+                    {formatIndex(index, photoItems.length)}
                   </p>
                   {item.category ? (
                     <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">

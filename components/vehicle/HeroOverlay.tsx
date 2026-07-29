@@ -75,10 +75,15 @@ export default function HeroOverlay({
         </div>
       </div>
 
-      {/* Bottom-center scroll hint */}
+      {/* Bottom-center scroll hint. Unconstrained, this span's flex-column
+          parent lets it wrap to 3-4 ragged lines on a narrow phone, which
+          was eating into the hero copy's clearance above it — the shorter
+          mobile-only copy keeps it to one line; sm+ has the room for the
+          full hint. */}
       <div className="absolute bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-6">
-        <span className="text-[0.7rem] uppercase tracking-[0.25em] text-[#F5F5F7]/50">
-          Scroll down or click on components to explore
+        <span className="text-center text-[0.7rem] uppercase tracking-[0.25em] text-[#F5F5F7]/50">
+          Scroll down
+          <span className="hidden sm:inline"> or click on components to explore</span>
         </span>
         <svg
           viewBox="0 0 24 24"

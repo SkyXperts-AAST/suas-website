@@ -90,7 +90,7 @@ export const softwareGroups = {
 export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
   Mechanical: {
     blurb:
-      "Mechanical builds the body Storm lives in. They shape the airframe and structure, which has to stay light enough to fly and tough enough to survive landing after landing. It folds down to travel too, and they care about how it looks while it does all of that.",
+      "Mechanical builds the body everything else bolts onto. They shape the airframe and structure, which has to stay light enough to fly and tough enough to survive landing after landing. It folds down to travel too, and they care about how it looks while it does all of that.",
     groupPhoto: "/team/mechanical.JPG",
     members: membersFromNames([
       "Yahia Alaa",

@@ -110,8 +110,7 @@ export default function VehicleSpecs() {
         <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-[#F5F5F7]/75">
           Storm is a carbon-fiber quadcopter engineered for stability and
           endurance under real-world flight conditions, built in-house from the
-          ground up — subsystem by subsystem, tested and validated at every
-          stage.
+          ground up, tested and validated at every stage.
         </p>
 
         {/* Stat strip. No cells or boxes — the numbers carry it, separated by

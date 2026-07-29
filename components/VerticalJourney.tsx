@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const milestones = [
   { year: "2023", text: "SkyXperts founded", x: 170, y: 60 },
-  { year: "2024–25", text: "Built our first drone and competed at ICMTC", x: 510, y: 190 },
+  { year: "2024–25", text: "Built our first drone and won 2nd place at ICMTC", x: 510, y: 190 },
   { year: "2025–26", text: "Built a small prototype multirotor to begin testing the mission", x: 170, y: 320 },
   { year: "2026", text: "Returned to ICMTC flying Storm — Best Mission Award, 3rd place overall", x: 510, y: 450 },
   { year: "2026", text: "Preparing Storm for SUAS 2026: Storm Response", x: 170, y: 580 },

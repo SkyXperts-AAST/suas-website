@@ -34,9 +34,13 @@ export default function HeroOverlay({
         dimmed ? "opacity-30" : "opacity-100"
       }`}
     >
-      {/* Bottom-left hero content */}
+      {/* Bottom-left hero content. Raised well clear of the scroll hint on
+          mobile, where the subtitle wraps to more lines and eats into the
+          14 (56px) gap that's fine once the CTA row fits on one line at
+          sm+. safe-area-inset-bottom keeps the clearance on notched
+          phones with a home-indicator bar. */}
       <div
-        className={`absolute bottom-14 left-6 max-w-md transition-opacity duration-500 sm:left-12 ${
+        className={`absolute bottom-[calc(6.5rem+env(safe-area-inset-bottom))] left-6 max-w-md transition-opacity duration-500 sm:bottom-14 sm:left-12 ${
           hasLanded ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -72,7 +76,7 @@ export default function HeroOverlay({
       </div>
 
       {/* Bottom-center scroll hint */}
-      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+      <div className="absolute bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-6">
         <span className="text-[0.7rem] uppercase tracking-[0.25em] text-[#F5F5F7]/50">
           Scroll down or click on components to explore
         </span>

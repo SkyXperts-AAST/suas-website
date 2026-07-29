@@ -66,7 +66,7 @@ export default function Hero() {
   return (
     <section className="relative flex h-[calc(100dvh-4rem)] flex-col items-center justify-center overflow-hidden bg-[#0a1628] px-6 text-center">
       <Image
-        src="/drone.png"
+        src="/drone-hero.webp"
         alt="SkyXperts drone in flight"
         fill
         className="z-0 object-cover object-[center_58%] opacity-50 saturate-[0.55]"

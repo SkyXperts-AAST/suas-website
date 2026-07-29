@@ -57,10 +57,10 @@ export const leadership: TeamMember[] = [
 
 export const softwareGroups = {
   blurb:
-    "The Software team builds the intelligence that lets Storm fly, see, and decide on its own — turning raw sensor data into real-time flight and mission decisions.",
+    "The Software team gives Storm its mind. They start from raw pixels and sensor noise and build the perception and decision-making that let the machine work out what matters and act on it in real time. When it's working, the flying looks deliberate instead of lucky.",
   computerVision: {
     blurb:
-      "Computer Vision builds the detection and mapping pipeline for Storm's Risk Mapping and Search, Detect, and Deliver tasks — stitching aerial imagery into high-resolution maps and running object detection models to locate the mannequin and tent targets within the Search Boundary in real time.",
+      "Computer Vision is how Storm sees, and how it makes sense of what it's looking at. The team stitches scattered aerial footage into clean, high-resolution maps, and it trains detection models that can find a single target in a messy landscape while the drone is still moving.",
     groupPhoto: "/team/vision.JPG",
     members: membersFromNames([
       "Abdulla Mahar",
@@ -73,7 +73,7 @@ export const softwareGroups = {
   } satisfies SubTeamGroup,
   controlAndNavigation: {
     blurb:
-      "Control & Navigation develops the flight control and autopilot logic that keeps Storm within 100ft of every waypoint at up to 150ft turn radius, manages autonomous takeoff/landing, and handles failsafes like return-to-home and flight termination on comms loss.",
+      "Control & Navigation handles the reflexes. They keep Storm steady, hold it on course, and make the split-second calls during takeoff, landing, and whatever goes wrong in between. That last part is the difference between a drone that flies and one you can actually trust.",
     groupPhoto: "/team/control.JPG",
     members: membersFromNames([
       "Sameh Walid",
@@ -90,7 +90,7 @@ export const softwareGroups = {
 export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
   Mechanical: {
     blurb:
-      "The Mechanical team designs Storm's airframe, delivery mechanism, and structural layout — engineering a sub-35lb airframe that survives repeated autonomous landings, packs down to a transportable size, and reliably releases the strobing beacon and water bottle payloads mid-flight.",
+      "Mechanical builds the body Storm lives in. They shape the airframe and structure, which has to stay light enough to fly and tough enough to survive landing after landing. It folds down to travel too, and they care about how it looks while it does all of that.",
     groupPhoto: "/team/mechanical.JPG",
     members: membersFromNames([
       "Yahia Alaa",
@@ -101,7 +101,7 @@ export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
   },
   Electrical: {
     blurb:
-      "Electrical designs Storm's power distribution and avionics wiring — sizing battery packs under the 100Wh-per-cell limit, integrating the flight controller, ESCs, and Remote ID module, and ensuring clean, reliable power delivery from takeoff through a full mission cycle.",
+      "Electrical keeps Storm powered. They design the architecture behind every subsystem: batteries sized correctly, wiring kept clean, and current arriving where it's needed the moment it's needed, from the first spin of the props to the last.",
     groupPhoto: "/team/electrical.JPG",
     members: membersFromNames([
       "Aleyeldin",

@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import { PageBadge } from "@/components/layout/PageShell";
 import type { GalleryItem } from "@/lib/gallery/types";
-
-/** Matches sticky nav height (`h-16` in Nav.tsx). */
-const NAV_OFFSET_PX = 64;
-
-/** Keep only nearby slides mounted so phones don't decode every image at once. */
-const LOAD_WINDOW = 1;
 
 type ScrollGalleryProps = {
   items: GalleryItem[];
@@ -19,64 +19,55 @@ function formatIndex(index: number, total: number) {
   return `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
 }
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
-
 export default function ScrollGallery({ items }: ScrollGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLElement | null)[]>([]);
 
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+  const scrollToIndex = useCallback((index: number) => {
+    const root = scrollerRef.current;
+    const slide = slideRefs.current[index];
+    if (!root || !slide) return;
+    root.scrollTo({ top: slide.offsetTop, behavior: "smooth" });
   }, []);
 
-  const updateActiveIndex = useCallback(() => {
-    const container = containerRef.current;
-    if (!container || items.length === 0) {
-      return;
-    }
+  useEffect(() => {
+    const root = scrollerRef.current;
+    if (!root || items.length === 0) return;
 
-    const rect = container.getBoundingClientRect();
-    const viewport = window.innerHeight - NAV_OFFSET_PX;
-    const scrollStep = Math.max(viewport * 0.92, 1);
-    const scrolled = Math.max(0, -rect.top);
-    const nextIndex = clamp(
-      Math.floor(scrolled / scrollStep),
-      0,
-      items.length - 1,
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        const index = Number(
+          (visible.target as HTMLElement).dataset.index ?? "0",
+        );
+        setActiveIndex((prev) => (prev === index ? prev : index));
+      },
+      {
+        root,
+        threshold: [0.35, 0.55, 0.75],
+      },
     );
 
-    setActiveIndex((prev) => (prev === nextIndex ? prev : nextIndex));
+    slideRefs.current.forEach((slide) => {
+      if (slide) observer.observe(slide);
+    });
+
+    return () => observer.disconnect();
   }, [items.length]);
 
-  useEffect(() => {
-    const onScrollOrResize = () => {
-      if (rafRef.current != null) return;
-      rafRef.current = window.requestAnimationFrame(() => {
-        rafRef.current = null;
-        updateActiveIndex();
-      });
-    };
-
-    updateActiveIndex();
-    window.addEventListener("scroll", onScrollOrResize, { passive: true });
-    window.addEventListener("resize", onScrollOrResize);
-
-    return () => {
-      window.removeEventListener("scroll", onScrollOrResize);
-      window.removeEventListener("resize", onScrollOrResize);
-      if (rafRef.current != null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [updateActiveIndex]);
+  const onDotKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      scrollToIndex(index);
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -88,120 +79,158 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     );
   }
 
-  const activeItem = items[activeIndex] ?? items[0];
-  const scrollHeight = `${items.length * 100}dvh`;
+  const slideCount = items.length + 1;
 
   return (
-    <div
-      ref={containerRef}
-      className="relative overflow-x-clip bg-navy text-offwhite"
-      style={{ height: scrollHeight }}
-    >
+    <div className="relative bg-navy text-offwhite">
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
-      />
+        ref={scrollerRef}
+        className="relative h-[calc(100dvh-4rem)] overflow-y-auto overscroll-y-contain scroll-smooth"
+        style={{ scrollSnapType: "y mandatory" }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
+        />
 
-      <div className="sticky top-16 z-10 h-[calc(100dvh-4rem)] overflow-hidden bg-[#05071e]">
+        <section
+          ref={(node) => {
+            slideRefs.current[0] = node;
+          }}
+          data-index={0}
+          className="relative z-10 flex min-h-full flex-col justify-end px-5 pb-16 pt-10 sm:px-6 sm:pb-20 md:justify-center md:px-10 md:pb-24"
+          style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
+        >
+          <div className="max-w-3xl">
+            <PageBadge label="Gallery" />
+            <h1 className="mt-4 text-3xl leading-[1.05] sm:mt-5 sm:text-4xl md:text-6xl">
+              Moments from the
+              <span className="block text-offwhite/85">build and the field.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-offwhite/65 sm:mt-5 sm:text-base sm:leading-7">
+              Scroll through flight tests, team moments, and field operations —
+              one frame at a time.
+            </p>
+            <p className="mt-8 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-offwhite/40 animate-chevron">
+              Scroll
+            </p>
+          </div>
+        </section>
+
         {items.map((item, index) => {
-          const isActive = index === activeIndex;
-          const shouldLoad = Math.abs(index - activeIndex) <= LOAD_WINDOW;
+          const slideIndex = index + 1;
+          const isActive = activeIndex === slideIndex;
 
           return (
-            <div
+            <section
               key={item.id}
-              aria-hidden={!isActive}
-              className={`absolute inset-0 ${
-                reducedMotion ? "" : "transition-opacity duration-500 ease-out"
-              } ${isActive ? "opacity-100" : "opacity-0"}`}
+              ref={(node) => {
+                slideRefs.current[slideIndex] = node;
+              }}
+              data-index={slideIndex}
+              aria-label={`${item.title} (${formatIndex(index, items.length)})`}
+              className="relative z-10 flex min-h-full flex-col md:block"
+              style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
             >
-              {shouldLoad ? (
+              <div className="relative min-h-[52dvh] flex-1 bg-[#05071e] md:absolute md:inset-0 md:min-h-0 md:flex-none">
                 <Image
                   src={item.image}
                   alt={item.imageAlt}
                   fill
-                  priority={index === 0}
-                  sizes="(max-width: 768px) 100vw, 100vw"
-                  className="object-contain object-center md:object-cover"
-                />
-              ) : null}
-              <div className="absolute inset-0 bg-[#0a1628]/25 md:bg-[#0a1628]/35" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#05071e]/95 via-[#0a1628]/25 to-[#0a1628]/15 md:via-[#0a1628]/35 md:to-[#0a1628]/20" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#05071e]/40 via-transparent to-[#05071e]/40 md:from-[#05071e]/55 md:to-[#05071e]/55" />
-            </div>
-          );
-        })}
-
-        <div className="relative z-10 flex h-full min-w-0 flex-col justify-between px-5 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10">
-          <div>
-            <PageBadge label="Gallery" />
-            <h1 className="mt-4 max-w-3xl text-2xl leading-[1.05] drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] sm:mt-5 sm:text-3xl md:text-5xl">
-              Moments from the
-              <span className="block text-offwhite/85">build and the field.</span>
-            </h1>
-          </div>
-
-          <div className="flex min-w-0 items-end justify-between gap-4 sm:gap-6">
-            <div
-              key={activeItem.id}
-              className={`min-w-0 max-w-2xl ${reducedMotion ? "" : "gallery-caption-in"}`}
-            >
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
-                {formatIndex(activeIndex, items.length)}
-              </p>
-              {activeItem.category ? (
-                <p className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55 sm:mt-3">
-                  {activeItem.category}
-                </p>
-              ) : null}
-              <h2 className="mt-2 text-xl leading-[1.05] text-offwhite sm:text-2xl md:text-3xl">
-                {activeItem.title}
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-offwhite/80 sm:mt-3 sm:leading-7 md:text-base">
-                {activeItem.description}
-              </p>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="hidden shrink-0 flex-col items-center gap-3 md:flex"
-            >
-              {items.map((item, index) => (
-                <span
-                  key={item.id}
-                  className={`block h-2 w-2 rounded-full transition-all duration-300 ${
-                    index === activeIndex
-                      ? "scale-125 bg-accent"
-                      : "bg-offwhite/25"
+                  priority={index < 2}
+                  sizes="100vw"
+                  className={`object-contain object-center transition-transform duration-700 ease-out md:object-cover md:duration-[900ms] ${
+                    isActive ? "scale-100" : "scale-[1.03] md:scale-105"
                   }`}
                 />
-              ))}
-            </div>
-          </div>
+                <div className="pointer-events-none absolute inset-0 hidden bg-[#0a1628]/35 md:block" />
+                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-[#05071e]/95 via-[#0a1628]/30 to-[#0a1628]/20 md:block" />
+                <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#05071e]/55 via-transparent to-[#05071e]/40 md:block" />
+              </div>
 
-          {/* Mobile progress dots */}
-          <div
-            aria-hidden="true"
-            className="mt-4 flex justify-center gap-2 md:hidden"
-          >
-            {items.map((item, index) => (
-              <span
-                key={item.id}
-                className={`block h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeIndex
-                    ? "w-5 bg-accent"
-                    : "w-1.5 bg-offwhite/30"
+              {/* Mobile caption under image */}
+              <div className="shrink-0 border-t border-white/5 bg-[#05071e] px-5 py-5 sm:px-6 sm:py-6 md:hidden">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+                  {formatIndex(index, items.length)}
+                </p>
+                {item.category ? (
+                  <p className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                    {item.category}
+                  </p>
+                ) : null}
+                <h2 className="mt-2 text-xl leading-[1.1] text-offwhite">
+                  {item.title}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-offwhite/75">
+                  {item.description}
+                </p>
+              </div>
+
+              {/* Desktop overlay caption */}
+              <div
+                className={`absolute inset-0 hidden flex-col justify-end px-10 py-12 transition-opacity duration-500 md:flex ${
+                  isActive ? "opacity-100" : "opacity-70"
                 }`}
-              />
-            ))}
-          </div>
+              >
+                <div className="max-w-2xl">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+                    {formatIndex(index, items.length)}
+                  </p>
+                  {item.category ? (
+                    <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                      {item.category}
+                    </p>
+                  ) : null}
+                  <h2 className="mt-2 text-4xl leading-[1.05] text-offwhite lg:text-5xl">
+                    {item.title}
+                  </h2>
+                  <p className="mt-3 max-w-xl text-base leading-7 text-offwhite/80">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
 
-          {activeIndex < items.length - 1 ? (
-            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-offwhite/45 sm:bottom-6 sm:text-xs animate-chevron">
-              Scroll
-            </p>
-          ) : null}
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden items-center pr-5 md:flex lg:pr-8">
+        <div
+          className="pointer-events-auto flex flex-col items-center gap-3"
+          role="tablist"
+          aria-label="Gallery slides"
+        >
+          {Array.from({ length: slideCount }, (_, index) => (
+            <button
+              key={index}
+              type="button"
+              role="tab"
+              aria-selected={activeIndex === index}
+              aria-label={
+                index === 0 ? "Gallery intro" : `Go to photo ${index}`
+              }
+              onClick={() => scrollToIndex(index)}
+              onKeyDown={(event) => onDotKeyDown(event, index)}
+              className={`block rounded-full transition-all duration-300 ${
+                activeIndex === index
+                  ? "h-6 w-1.5 bg-accent"
+                  : "h-1.5 w-1.5 bg-offwhite/30 hover:bg-offwhite/55"
+              }`}
+            />
+          ))}
         </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 h-0.5 bg-white/10 md:hidden"
+      >
+        <div
+          className="h-full bg-accent transition-[width] duration-300 ease-out"
+          style={{
+            width: `${((activeIndex + 1) / slideCount) * 100}%`,
+          }}
+        />
       </div>
     </div>
   );

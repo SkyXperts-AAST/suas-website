@@ -136,6 +136,16 @@ html {
   body * {
     cursor: none !important;
   }
+
+  /* Embedded documents (the sponsorship proposal PDF) render in their own
+     viewer, which swallows mousemove — the drone can't follow the pointer in
+     there, so hand the real cursor back rather than leaving that area with no
+     cursor at all. CursorDrone hides itself over these for the same reason. */
+  object,
+  iframe,
+  embed {
+    cursor: auto !important;
+  }
 }
 
 /* Build log — light reading mode */

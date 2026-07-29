@@ -14,6 +14,8 @@ type FormState = {
   message: string;
 };
 
+type SubmitStatus = "idle" | "loading" | "success" | "error";
+
 const INITIAL_STATE: FormState = {
   name: "",
   email: "",
@@ -21,29 +23,43 @@ const INITIAL_STATE: FormState = {
   message: "",
 };
 
-function reasonLabel(value: ContactReason) {
-  return CONTACT_REASONS.find((reason) => reason.value === value)?.label ?? value;
-}
+const CONTACT_ENDPOINT = "https://contact-api.skyxperts.com/";
 
 export default function ContactForm() {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setStatus("loading");
+    setErrorMessage(null);
 
-    const subject = encodeURIComponent(
-      `[SkyXperts] ${reasonLabel(form.reason)} — ${form.name}`,
-    );
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nReason: ${reasonLabel(form.reason)}\n\n${form.message}`,
-    );
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    window.location.href = `mailto:${TEAM_EMAIL}?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+      const data = (await response.json().catch(() => null)) as
+        | { success?: boolean; error?: string }
+        | null;
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.error ?? "Something went wrong. Please try again.");
+      }
+
+      setStatus("success");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Something went wrong. Please try again.",
+      );
+      setStatus("error");
+    }
   }
 
-  if (submitted) {
+  if (status === "success") {
     return (
       <div className="rounded-3xl border border-white/15 bg-[#07101f]/80 p-10 text-center shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-14">
         <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
@@ -63,11 +79,11 @@ export default function ContactForm() {
           </svg>
         </span>
         <h2 className="mt-4 text-3xl leading-[1.02] text-offwhite md:text-4xl">
-          Ready to send
+          Message sent
         </h2>
         <p className="mt-3 text-base leading-8 text-offwhite/70">
-          Your email app should open with your request pre-filled. If it
-          didn&apos;t, you can reach us directly at{" "}
+          Thanks for reaching out — we&apos;ll get back to you soon. If it&apos;s
+          urgent, you can also reach us directly at{" "}
           <a
             href={`mailto:${TEAM_EMAIL}`}
             className="font-semibold text-accent hover:underline"
@@ -79,7 +95,7 @@ export default function ContactForm() {
         <button
           type="button"
           onClick={() => {
-            setSubmitted(false);
+            setStatus("idle");
             setForm(INITIAL_STATE);
           }}
           className="mt-6 rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-offwhite transition hover:border-white/35 hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -180,12 +196,44 @@ export default function ContactForm() {
         </Field>
       </div>
 
+      {status === "error" && (
+        <p
+          role="alert"
+          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm font-medium text-red-400"
+        >
+          {errorMessage}
+        </p>
+      )}
+
       <div className="mt-8 flex justify-center">
         <button
           type="submit"
-          className="w-full rounded-full bg-accent px-10 py-4 text-base font-semibold text-white shadow-lg shadow-accent/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101f] md:w-auto"
+          disabled={status === "loading"}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-10 py-4 text-base font-semibold text-white shadow-lg shadow-accent/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101f] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
         >
-          Submit request
+          {status === "loading" && (
+            <svg
+              className="h-4 w-4 animate-spin"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 0 1 8-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+          )}
+          {status === "loading" ? "Sending..." : "Submit request"}
         </button>
       </div>
     </form>

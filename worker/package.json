@@ -1,0 +1,15 @@
+{
+  "name": "skyxperts-contact-form-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260702.1",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.86.0"
+  }
+}

@@ -1,0 +1,8 @@
+name = "skyxperts-contact-form"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+workers_dev = false
+
+routes = [
+  { pattern = "contact-api.skyxperts.com/*", zone_name = "skyxperts.com" }
+]

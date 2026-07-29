@@ -74,8 +74,8 @@ export default function TeamPage() {
             Sub-teams
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-            Explore Software, Mechanical, and Electrical — the crews building
-            Storm for SUAS.
+            Explore Software, Mechanical, and Electrical — the crews turning
+            ideas into a flying, thinking machine.
           </p>
         </div>
 

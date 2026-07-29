@@ -44,7 +44,7 @@ export default function HeroOverlay({
           hasLanded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+        <p className="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
           SUAS · USA
         </p>
         <h1 className="mt-3 text-6xl leading-[0.92] tracking-tight text-[#F5F5F7] sm:text-7xl">

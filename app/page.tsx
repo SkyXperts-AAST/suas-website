@@ -61,8 +61,8 @@ export default function Home() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(227,28,28,0.14),transparent_65%)]"
           />
           <div className="relative">
-            <p className="text-center font-display text-xs font-bold uppercase tracking-[0.24em] text-accent">
-              Chapter 02 · Timeline
+            <p className="text-center font-display text-[13px] font-bold uppercase tracking-[0.24em] text-accent">
+              Timeline
             </p>
             <h2 className="mx-auto mt-4 max-w-3xl text-balance text-center font-display text-5xl leading-[1.02] tracking-tight text-offwhite sm:text-6xl lg:text-7xl">
               From first flight to Storm

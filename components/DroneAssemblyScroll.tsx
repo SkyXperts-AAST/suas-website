@@ -60,8 +60,8 @@ function getSectionProgress(section: HTMLElement, sticky: HTMLElement): number {
 function ChapterHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="shrink-0 text-center">
-      <p className="font-display text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-        Chapter 04 · Build
+      <p className="font-display text-[13px] font-bold uppercase tracking-[0.2em] text-accent">
+        Build
       </p>
       {children}
     </div>

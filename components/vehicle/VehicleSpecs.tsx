@@ -101,7 +101,7 @@ export default function VehicleSpecs() {
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >
-        <p className="font-display text-xs font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+        <p className="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
           The Airframe
         </p>
         <h2 className="mt-3 text-4xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-5xl">

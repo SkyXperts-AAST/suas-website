@@ -147,8 +147,6 @@
       "date": "2026-07-21",
       "title": "Control update: ICMTC 2026, 3rd place and best mission performance",
       "summary": "3rd overall and best mission performance at ICMTC 2026. Mission 1 flew 1.72 km across 9 waypoints with a mid-mission payload drop at 0.12 m altitude RMSE.",
-      "image": "/blogs/control/ctrl-11/hero.svg",
-      "imageAlt": "Storm flying its competition mission at ICMTC 2026",
       "tags": [
         "field-test",
         "SUAS 2026",
@@ -186,8 +184,6 @@
       "date": "2026-07-21",
       "title": "Control update: rules we now write every script around",
       "summary": "Retry loops on every critical call, clear_mission() before every upload, servo lock only after arm(). The list of rules we’d already paid for in debugging time.",
-      "image": "/blogs/control/ctrl-10/hero.svg",
-      "imageAlt": "Control team reviewing mission script behaviour before a test run",
       "tags": [
         "software",
         "process",
@@ -229,8 +225,6 @@
       "date": "2026-07-13",
       "title": "Control update: the bug that changed how we trigger payload release",
       "summary": "Mission-progress logs showed waypoints being skipped entirely. For a payload release gated on one waypoint event, that’s a release that might never fire.",
-      "image": "/blogs/control/ctrl-9/hero.svg",
-      "imageAlt": "Payload release mechanism mounted under Storm",
       "tags": [
         "payload",
         "software",
@@ -260,8 +254,6 @@
       "date": "2026-07-06",
       "title": "Control update: why we stopped trusting the \"obvious\" API calls",
       "summary": "Three MAVSDK calls that look right in the documentation and fail on real hardware — and what we replaced each of them with.",
-      "image": "/blogs/control/ctrl-8/hero.svg",
-      "imageAlt": "Companion computer running autonomous mission scripts on the bench",
       "tags": [
         "software",
         "integration",
@@ -295,8 +287,6 @@
       "date": "2026-06-15",
       "title": "Control update: FRR, first flight at altitude",
       "summary": "A full dry run of the ICMTC mission plan, then FRR at meaningfully higher altitude than anything we’d tested at. Altitude tracking came in at 0.13 m RMSE.",
-      "image": "/blogs/control/ctrl-7/hero.svg",
-      "imageAlt": "Storm during the Flight Readiness Review flight at altitude",
       "tags": [
         "field-test",
         "validation",
@@ -334,8 +324,6 @@
       "date": "2026-05-11",
       "title": "Control update: first clean mission",
       "summary": "A deliberately small test — 3 waypoints and an automatic return-to-launch — to prove the new gains held up in the air rather than just on the bench.",
-      "image": "/blogs/control/ctrl-6/hero.svg",
-      "imageAlt": "Storm flying an autonomous three-waypoint test mission",
       "tags": [
         "field-test",
         "validation"
@@ -356,8 +344,6 @@
       "date": "2026-05-04",
       "title": "Control update: taming \"crazy flight\"",
       "summary": "An oscillation across roll, pitch and yaw left Storm unsafe to fly. We reworked the rate-controller gains by hand against the flight logs instead of re-running AutoTune.",
-      "image": "/blogs/control/ctrl-5/hero.svg",
-      "imageAlt": "Storm during rate-controller gain tuning and vibration testing",
       "tags": [
         "PX4",
         "analysis",
@@ -392,566 +378,162 @@
   "electrical": [
     {
       "id": "elec-1",
-      "date": "2026-07-24",
-      "title": "Two kinds of failure, one checklist",
-      "summary": "Wrote the power system lessons into an actual pre-power-on checklist — and started logging current on every flight, so the next thermal failure comes with data attached.",
-      "image": "/blogs/electrical/elec-1/toolbar_indicator_expanded.C4qoHX6s.png",
-      "imagePosition": "50% 0%",
-      "imageAlt": "Ground station monitoring power telemetry during a mission rehearsal",
+      "date": "2026-01-31",
+      "title": "Electrical Update: Power System Sizing",
+      "summary": "This period, the electrical team focused on sizing the power system based on mechanical's estimated all-up weight of just under 7 kg with payload.",
       "tags": [
-        "process",
-        "safety"
+        "propulsion",
+        "sizing",
+        "power-budget",
+        "battery"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Looking back at the power system over the past year, we managed to hit two completely different categories of failure, and it took us longer than it should have to notice they were different problems."
+          "text": "September 2025 – January 2026"
         },
         {
           "type": "paragraph",
-          "text": "The first was a sizing problem. Motors, pack, PDB, power module — they all answer to the same rule, which is that you design against worst-case sustained load with real margin instead of typical load with none. We were disciplined about that with the battery and then quietly failed to apply it to the module measuring the battery."
+          "text": "This period, the electrical team focused on sizing the power system based on mechanical's estimated all-up weight of just under 7 kg with payload. We used a 2:1 thrust-to-weight ratio as our design floor, giving the aircraft enough margin to correct for gusts and hold altitude rather than just hover. At that weight, this comes out to roughly 14 kgf of total thrust, about 3.5 kgf per motor."
         },
         {
           "type": "paragraph",
-          "text": "The second was a handling problem, and no amount of component selection would have touched it. Going digital fixed an accuracy problem. Going to higher continuous ratings fixed a thermal problem. Neither one stops a terminal from touching another terminal during a wiring session."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-1/body-1.svg",
-          "position": "top",
-          "alt": "Ground control station during a mission rehearsal",
-          "caption": "Voltage and current now get logged on every flight instead of just watched on the ground station."
-        },
-        {
-          "type": "list",
-          "heading": "What's written down now, instead of assumed",
-          "items": [
-            "Every current-carrying component gets sized against the measured worst-case sustained draw, and the number it was compared against gets recorded in the same document as the part number.",
-            "Continuous ratings drive the decision. Burst ratings are a footnote.",
-            "Voltage and current telemetry gets logged on every flight. We couldn't explain the June regulator failure because we had no data from the moment it happened, and we're not doing that twice.",
-            "Terminals insulated, polarity metered, one polarity at a time, disconnect procedure rehearsed — before an integration session starts, not partway through it.",
-            "Bench-test the real power path, ESC and servo included, before anything flies. That one we learned back in December on the payload servo, and it keeps being true."
-          ]
+          "text": "We also put together a power budget for the avionics stack — Pixhawk 6C, Holybro M9N GPS, RFD900A telemetry, RadioMaster ER8 receiver, SIYI A8 Mini, and Jetson Orin Nano — coming to about 35 W total. This rail is kept separate from the propulsion rail, since a voltage dip on the avionics side can reset the flight controller mid-flight."
         },
         {
           "type": "paragraph",
-          "text": "None of this is a clever engineering insight. It's mostly the stuff everyone already nods along to, which is exactly why it had to become procedure instead of good intentions."
+          "text": "During payload release testing, we ran 50 bench trials and got 47 clean releases. The 3 failures turned out to be a test setup issue: the servo was being bench-tested without an ESC in the loop, and it draws its power through the ESC's BEC rather than an independent rail. Once we added the ESC back into the test setup, all 3 released cleanly."
         },
         {
           "type": "paragraph",
-          "text": "Next: fly the timed endurance test we've been putting off since March, now that the telemetry it depends on is worth reading."
+          "text": "For the battery, we sized capacity based on average current draw over mission duration with a 20% margin added for wind, aggressive maneuvering, and cold-weather capacity loss. We also checked the pack's C-rating against peak current during a full-throttle climb, since a pack that's fine for average draw can still sag badly under peak load. We landed on a MAD 6S 28 Ah solid-state pack, rated for 140 A continuous and 280 A max."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next steps: hand off thrust requirements to the propulsion trade study and begin motor thrust/current testing on the bench."
         }
       ]
     },
     {
       "id": "elec-2",
-      "date": "2026-07-08",
-      "title": "Shorted a pack during re-integration",
-      "summary": "A positive and a negative terminal touched while the new power module was going back in. The pack measured about 0.7 mV afterward — it was finished.",
-      "image": "/blogs/electrical/elec-2/hero.svg",
-      "imageAlt": "Electrical team working on power module integration",
+      "date": "2026-05-31",
+      "title": "Electrical Update: Telemetry Calibration and Endurance Testing",
+      "summary": "This period, we ran into an issue with our power module. The PM07 was reporting pack voltage and current that disagreed with a handheld meter.",
       "tags": [
-        "incident",
-        "safety"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "This one wasn't a design problem. It was a wiring-work problem. While we were re-integrating the new power module, a positive terminal and a negative terminal made contact and shorted."
-        },
-        {
-          "type": "paragraph",
-          "text": "A dead short across a pack is limited by almost nothing except the pack's own internal resistance, and on a 28 Ah lithium pack there isn't much of that. The battery stopped working on the spot. We measured it afterward at roughly 0.7 mV, which on something with a 22.2 V nominal is just zero with extra decimal places."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-2/body-1.svg",
-          "alt": "Electrical sub-team during power module integration",
-          "caption": "Integration work on the power module bay — insulated terminals are a written rule here now, not a habit."
-        },
-        {
-          "type": "paragraph",
-          "text": "Whether the short drove the cells into a damaging over-discharge or tripped an internal protection circuit into a latched near-zero state, we genuinely can't say. Telling those two apart means opening the pack up, and we don't have that data. Either way it was out of service."
-        },
-        {
-          "type": "paragraph",
-          "text": "The part that bothers us is that this happened during routine re-integration, on hardware we'd already handled carefully once. Nobody was rushing or doing anything unusual. That's generally how this category of failure goes — it isn't the task that feels dangerous that gets you."
-        },
-        {
-          "type": "list",
-          "heading": "Changed the same day",
-          "items": [
-            "Exposed pads and bus bars get heat-shrink or tape before integration work starts, not after something has already touched.",
-            "One polarity connected at a time wherever the harness allows it.",
-            "Polarity checked with a multimeter on any new or modified harness before its first connection.",
-            "A connected battery means live rails, no exceptions — nobody reaches past a powered board with a metal tool because it looks fine.",
-            "Disconnect procedure written down and rehearsed, so a fault gets an immediate response instead of three people working out whose job it is."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: replace the pack, finish re-integration under the new handling rules, and get back to flight testing."
-        }
-      ]
-    },
-    {
-      "id": "elec-3",
-      "date": "2026-06-28",
-      "title": "Power architecture locked: one battery, two regulated rails",
-      "summary": "Finalized how power gets from the single 6S battery out to everything else — PM08-CAN for avionics, PDB for propulsion and the Jetson buck.",
-      "image": "/blogs/electrical/elec-3/hero.svg",
-      "imageAlt": "Electrical team wiring Storm power distribution",
-      "tags": [
-        "power",
-        "architecture"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Locked the full power distribution architecture this week, now that the replacement hardware has been through bench testing. Everything runs off a single MAD 6S 28 Ah solid-state lithium-ion pack (140 A continuous / 280 A max), routed through a PM08-CAN 14S 200 A power module and a 300 A side-entry PDB."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-3/body-1.svg",
-          "alt": "Electrical sub-team working on avionics integration",
-          "caption": "Harness routing from the PM08-CAN and PDB during power architecture bring-up."
-        },
-        {
-          "type": "list",
-          "heading": "Rail assignments",
-          "items": [
-            "PM08-CAN → 5.1 V rail → Pixhawk 6C, which in turn powers the RFD900A telemetry radio, RC receiver, Holybro M9N GPS, and the MG995 servo.",
-            "PDB → 22.2 V rail → all four ESCs and the SIYI A8 Mini gimbal.",
-            "PDB → 300 W buck converter → 18 V → Jetson Orin Nano."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Kept avionics and propulsion on physically separate rails on purpose, so a propulsion-side current spike doesn't have a path to brown out the flight controller or companion computer."
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: re-integrate the whole thing into the airframe now that each rail has been verified under simultaneous load on the bench."
-        }
-      ]
-    },
-    {
-      "id": "elec-4",
-      "date": "2026-06-15",
-      "title": "New distribution hardware: 300 A PDB and a digital power module",
-      "summary": "Replaced the PM07 with a PM08-CAN and a 300 A side-entry PDB — more than double the continuous headroom, plus telemetry that doesn't depend on us calibrating it correctly.",
-      "image": "/blogs/electrical/elec-4/hero.svg",
-      "imageAlt": "Storm avionics bay during power module replacement",
-      "tags": [
-        "power",
-        "PM08-CAN"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Reselected the whole distribution and sensing layer, this time against the 246 A worst case we measured in May rather than against what hover looks like. A 300 A side-entry power distribution board takes the propulsion side. A PM08-CAN, rated 200 A continuous, handles sensing and the regulated rail."
-        },
-        {
-          "type": "paragraph",
-          "text": "Continuous rating is the number that decided this. Burst ratings are real and they're useful, but a burst rating tells you about a spike during an aggressive maneuver — it says nothing about whether a board survives forty minutes of mission. Going from 90 A continuous to 200 A on the sensing path more than doubles the thermal headroom, and the PDB's heavy copper keeps resistive losses, and the heat they turn into, down on the distribution side."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-4/body-1.svg",
-          "alt": "Storm airframe with the new power distribution hardware installed",
-          "caption": "New PDB and PM08-CAN going into the avionics bay."
-        },
-        {
-          "type": "paragraph",
-          "text": "The other half of the fix is that the PM08-CAN reports over DroneCAN instead of an analog line. It sends pre-scaled digital telemetry, calibrated at the factory, with the current sensor galvanically isolated from the motor rail. That deletes the scaling constants we got wrong in February — not by us getting better at calibrating them, but by leaving nothing to calibrate."
-        },
-        {
-          "type": "paragraph",
-          "text": "It isn't a free upgrade. It costs more, and it puts a CAN bus in the critical path for battery telemetry, which is a dependency we didn't have before. We think that's a good trade for numbers we're willing to fly failsafes off, but it is a trade rather than a straight improvement."
-        },
-        {
-          "type": "list",
-          "heading": "Checked after the swap",
-          "items": [
-            "Reported pack voltage and current against a handheld meter — they agree out of the box, no constants touched.",
-            "Battery percentage tracked sensibly across a full discharge instead of wandering.",
-            "Re-counted every load hanging off the regulated rail, transient ones like the release servo included, so the buck converter isn't quietly carrying something we forgot about.",
-            "Ran the rail under simultaneous load on the bench before any of it went back into the airframe.",
-            "The module is 14S-rated and we're running 6S, so a chunk of that spec is headroom we'll never use."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: re-integrate into the airframe and write the rail assignments down properly, so this configuration is documented instead of remembered."
-        }
-      ]
-    },
-    {
-      "id": "elec-5",
-      "date": "2026-06-06",
-      "title": "Smoke off the buck regulator after our first full mission",
-      "summary": "Flew the complete mission, landed clean, then watched smoke come off the PM07's regulator on the ground. Battery came off immediately and nothing else was damaged.",
-      "image": "/blogs/electrical/elec-5/hero.svg",
-      "imageAlt": "Storm during the full mission flight test",
-      "tags": [
-        "failure",
-        "thermal"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "The aircraft was assembled, so we flew the whole mission profile. The flight was uneventful. A little after landing, pack still connected, we saw smoke coming off the buck regulator on the PM07."
-        },
-        {
-          "type": "paragraph",
-          "text": "Battery came off straight away. We got lucky: the regulator was the only thing that died, and nothing else on that rail — flight controller, GPS, radios, Jetson — showed any damage when we went over it afterward."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-5/body-1.svg",
-          "alt": "Quadcopter in flight during the full mission profile test",
-          "caption": "The flight itself was fine. The failure showed up on the ground, minutes after landing."
-        },
-        {
-          "type": "paragraph",
-          "text": "The honest version of the root cause is that we have a strong hypothesis and no confirmation. A buck converter dumps heat into its switching element and inductor, the PM07's board is rated for 90 A continuous, and there's no forced airflow over it. Hover sits somewhere in the low 40s including avionics, comfortably inside that rating, which explains why bench runs and short hops never showed a problem. A full mission with real climbs and gust corrections is a different duty cycle entirely."
-        },
-        {
-          "type": "paragraph",
-          "text": "What we can't tell you is what the current actually was when it let go, because we weren't logging it. That's on us, and it irritates more than the dead part does — a cheap regulator failed and we have no number to explain it with."
-        },
-        {
-          "type": "list",
-          "heading": "What we already knew and didn't put together",
-          "items": [
-            "We measured 61.5 A per motor at full throttle on May 5, a month before this flight. 246 A across four motors was written down and agreed on.",
-            "The PM07's 90 A continuous rating was also written down — in a different document, on a different day.",
-            "Nobody put those two numbers next to each other until there was smoke in the air."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "That's the mistake worth naming properly. We sized the battery against worst-case sustained load with margin, then picked the power module against roughly what we expected on a normal flight. Same aircraft, two different standards, and only one of them was any good."
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: reselect the distribution and sensing hardware against the 246 A figure with proper margin, and fix February's telemetry problem in the same pass."
-        }
-      ]
-    },
-    {
-      "id": "elec-6",
-      "date": "2026-05-05",
-      "title": "Bench test: pushing the motors to full throttle to size the ESCs",
-      "summary": "Ran each motor to full throttle on the bench to confirm the 80 A ESCs actually have margin — measured 61.5 A max draw per motor.",
-      "image": "/blogs/electrical/elec-6/hero.svg",
-      "imageAlt": "Thrust versus current curve at takeoff operating point",
-      "tags": [
+        "telemetry",
+        "PM07",
+        "endurance",
         "ESC",
         "bench-test"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Put each Avenger 4215 V5 on the bench and ran it up to full throttle to get a real current number instead of trusting the datasheet estimate. Measured 61.5 A per motor at full throttle — that's the number we sized the ESCs against."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-6/body-1.svg",
-          "alt": "Spline fit of thrust versus current at takeoff",
-          "caption": "Spline fit of the bench data — takeoff operating point at 2616 gf per motor, ~14.54 A estimated draw."
+          "text": "February – May 2026"
         },
         {
           "type": "paragraph",
-          "text": "Paired each motor with a Hobbywing Skywalker 80 A V2 ESC, which puts us at roughly 30% current headroom above the worst-case measured draw. Not massive margin, but enough that we're not living right at the ESC's rated limit during takeoff."
-        },
-        {
-          "type": "list",
-          "heading": "Wiring sized against worst case, not typical case",
-          "items": [
-            "Battery output leads: 10 AWG, rated for simultaneous full-throttle draw across all four motors (246 A).",
-            "PM08-CAN leads: 8 AWG, same worst-case basis.",
-            "That worst-case draw is brief — full-throttle-on-all-four is a takeoff-only condition, not sustained — but we sized for it anyway."
-          ]
+          "text": "This period, we ran into an issue with our power module. The PM07 was reporting pack voltage and current that disagreed with a handheld meter. This module uses analog sensing with scaling constants that ship as generic defaults and need to be calibrated against a real meter — something we hadn't done yet, and the readings were especially unreliable at low current, right where our avionics rail sits."
         },
         {
           "type": "paragraph",
-          "text": "Next: re-run this at sustained full throttle for longer than a single spike, since ESC thermal limits are usually a duration problem, not an instantaneous one."
+          "text": "This mattered because the low-battery failsafe is calculated from that current reading, so an inaccurate number meant our return-to-launch trigger point wasn't where we designed it to be. We started investigating whether to move to a module with factory-calibrated digital telemetry instead of maintaining our own calibration."
+        },
+        {
+          "type": "paragraph",
+          "text": "We also built an endurance model using our avionics power budget (35.4 W, ~1.59 A at 22.2 V) combined with per-motor current at takeoff, cruise, and landing, budgeting 80% of the pack's rated capacity as usable. This gave us an estimated flight time of around 30 minutes — a bench-derived estimate we still needed to confirm in flight."
+        },
+        {
+          "type": "paragraph",
+          "text": "To get a real number for the ESCs, we bench-tested each Avenger 4215 V5 motor to full throttle and measured 61.5 A per motor at the takeoff operating point. We paired these with Hobbywing Skywalker 80 A V2 ESCs, giving about 30% current headroom above the measured worst case, and sized our wiring (10 AWG battery leads, 8 AWG PM08-CAN leads) against the full four-motor worst case of 246 A."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next steps: test sustained full-throttle operation over a longer duration, and fly a timed endurance test to check against our 30-minute estimate."
         }
       ]
     },
     {
-      "id": "elec-7",
-      "date": "2026-03-30",
-      "title": "Endurance math: 29.93 minutes, on paper",
-      "summary": "Built the full endurance model combining avionics draw with phase-specific motor currents — comes out to just under 30 minutes on the 28 Ah pack.",
-      "image": "/blogs/electrical/elec-7/hero.svg",
-      "imageAlt": "Thrust versus current curve at cruise operating point",
+      "id": "elec-3",
+      "date": "2026-06-30",
+      "title": "Electrical Update: Power Module Failure and Redesign",
+      "summary": "After a full mission-profile test flight, we noticed smoke coming from the PM07's buck regulator shortly after landing, while the battery was still connected.",
       "tags": [
-        "endurance",
-        "analysis"
+        "failure",
+        "thermal",
+        "power",
+        "PM08-CAN",
+        "architecture"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Put together the endurance model this week instead of just eyeballing flight time. Avionics alone draw a steady 35.4 W — Pixhawk 6C, A8 Mini, M9N GPS, RFD900A, RadioMaster ER8, and the Jetson Orin Nano combined — which works out to about 1.59 A off the 22.2 V nominal pack voltage."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-7/body-1.svg",
-          "alt": "Spline fit at cruise operating point",
-          "caption": "Cruise operating point from the spline fit — 1962 gf per motor, ~10.12 A estimated draw."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-7/body-2.svg",
-          "alt": "Spline fit at landing operating point",
-          "caption": "Landing operating point — 1308 gf per motor, ~5.87 A estimated draw."
+          "text": "June 2026"
         },
         {
           "type": "paragraph",
-          "text": "Combined the per-motor current at takeoff, cruise, and landing with that constant avionics draw, and budgeted only 80% of the pack's rated 28 Ah as usable — didn't want to plan a mission around the last 20% of a lithium pack. Comes out to roughly 29.93 minutes of flight time."
-        },
-        {
-          "type": "list",
-          "heading": "Caveats on this number",
-          "items": [
-            "This is a bench-derived model, not a measured flight time — haven't run a timed endurance flight to check it against yet.",
-            "Doesn't account for wind loading, which will eat into cruise current on a real mission.",
-            "The 80% usable-capacity assumption is conservative on purpose; the real number is probably a bit higher."
-          ]
+          "text": "After a full mission-profile test flight, we noticed smoke coming from the PM07's buck regulator shortly after landing, while the battery was still connected. We disconnected the battery immediately. No other components on that rail were damaged."
         },
         {
           "type": "paragraph",
-          "text": "Next: fly a timed endurance test in calm conditions and see how close the real number lands to 29.93 minutes."
+          "text": "Our working theory is thermal: the PM07 is rated for 90 A continuous with no forced airflow, and while hover current stays well within that rating, a full mission with real climbs and corrections is a more demanding duty cycle. We didn't have current logging in place at the time, so we can't confirm the exact current at failure."
+        },
+        {
+          "type": "paragraph",
+          "text": "Looking back, we'd already measured 246 A as our four-motor worst case back in May, and the PM07's 90 A rating was on record separately — but the two numbers were never compared directly until this failure."
+        },
+        {
+          "type": "paragraph",
+          "text": "We replaced the power distribution setup with a 300 A side-entry PDB for propulsion and a PM08-CAN (200 A continuous) for sensing, sized against the measured worst case rather than typical hover load. The PM08-CAN also reports over DroneCAN instead of analog sensing, giving us factory-calibrated telemetry and removing the scaling-constant issue from the earlier update."
+        },
+        {
+          "type": "paragraph",
+          "text": "After the swap, we confirmed voltage and current readings matched a handheld meter without calibration, and tested the full rail under simultaneous load on the bench before reintegration."
+        },
+        {
+          "type": "paragraph",
+          "text": "Final architecture: a single MAD 6S 28 Ah pack feeding the PM08-CAN (powering the Pixhawk 6C, telemetry radio, receiver, GPS, and release servo) and the 300 A PDB (powering the four ESCs, gimbal, and — via a buck converter — the Jetson Orin Nano). Avionics and propulsion remain on physically separate rails."
+        },
+        {
+          "type": "paragraph",
+          "text": "Next steps: reintegrate into the airframe and document the finalized rail assignments."
         }
       ]
     },
     {
-      "id": "elec-8",
-      "date": "2026-02-22",
-      "title": "The PM07's readings didn't match the meter",
-      "summary": "First power module pick was Holybro's PM07. Once it was integrated, the voltage and current it reported disagreed with what we measured — analog sensing needs a calibration we hadn't done.",
-      "image": "/blogs/electrical/elec-8/hero.svg",
-      "imageAlt": "Bench setup verifying power module telemetry against a meter",
+      "id": "elec-4",
+      "date": "2026-07-31",
+      "title": "Electrical Update: Wiring Incident and Process Changes",
+      "summary": "During reintegration of the new power module, a positive and negative terminal made contact and caused a short.",
       "tags": [
-        "telemetry",
-        "PM07"
+        "incident",
+        "safety",
+        "process"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Our first pick for the sensing and distribution layer was Holybro's PM07. It's a sensible default: analog voltage and current sensing, integrated 5 V regulator, cheap enough that nobody spends a design review arguing about it."
+          "text": "July 2026"
         },
         {
           "type": "paragraph",
-          "text": "Once it was integrated, the numbers coming back were wrong. Pack voltage and current both disagreed with a handheld meter, and not by a tidy fixed offset we could shrug off as a display quirk."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-8/body-1.svg",
-          "alt": "Bench setup for checking reported current against a reference meter",
-          "caption": "Checking reported current and voltage against a meter on the bench."
+          "text": "During reintegration of the new power module, a positive and negative terminal made contact and caused a short. The battery stopped holding charge afterward, reading close to zero volts, and was taken out of service."
         },
         {
           "type": "paragraph",
-          "text": "That's the catch with analog sensing. The module puts out a voltage proportional to current and pack voltage, and the autopilot converts that back into amps and volts using scaling constants — volts per amp, amps per volt. Those ship with defaults, and a default is an educated guess about a generic board, not a calibration of our board with our harness. They're meant to be checked against a meter and ideally a power analyzer. We hadn't done it."
+          "text": "This happened during routine reintegration work, not during anything unusual, which is generally when this kind of incident happens."
         },
         {
           "type": "paragraph",
-          "text": "The other thing about shunt and Hall-effect sensing is that it's least trustworthy at low current. Below a few amps the reading is about as much noise as signal, and our avionics rail lives right in that range."
-        },
-        {
-          "type": "list",
-          "heading": "Why this is worse than a cosmetic bug",
-          "items": [
-            "Remaining capacity is computed from the current reading. Bad current in, bad state of charge out.",
-            "The low-battery failsafe fires off that estimate, so a wrong number moves return-to-launch earlier or later than we designed for.",
-            "We sized the pack around a known margin specifically so we'd know where we stood mid-mission. Uncalibrated telemetry hands that back."
-          ]
+          "text": "As a result, we made several changes to our wiring process: exposed terminals and bus bars are now insulated with heat-shrink or tape before any integration work begins, connections are made one polarity at a time wherever possible, and polarity is checked with a multimeter on any new or modified harness before it's connected. We also wrote down and rehearsed a battery disconnect procedure for the team."
         },
         {
           "type": "paragraph",
-          "text": "We could have calibrated it and moved on — that's the normal fix, and we did start down that road. In parallel we started asking a different question, which was whether we wanted a hand-maintained calibration in the loop at all."
+          "text": "More broadly, we're now logging voltage and current on every flight, since the lack of logging made it hard to diagnose the June regulator failure. Components are sized against measured worst-case draw rather than typical draw, with that number recorded alongside the part selection. And any servo or actuator system gets bench-tested with its real power path (ESC included) before flight, a lesson from earlier payload testing that's held up throughout the season."
         },
         {
           "type": "paragraph",
-          "text": "Next: run dedicated thrust and current tests on the motors with a power analyzer, so the propulsion numbers stand on their own instead of resting on whether we trust this module."
-        }
-      ]
-    },
-    {
-      "id": "elec-9",
-      "date": "2026-01-18",
-      "title": "Sizing the pack, then checking the part that actually bites",
-      "summary": "Sized the battery off combined propulsion and avionics draw with a 20% margin, then checked the C-rating separately — average current isn't what makes a pack sag.",
-      "image": "/blogs/electrical/elec-9/hero.svg",
-      "imageAlt": "Cruise operating point on the thrust versus current curve",
-      "tags": [
-        "battery",
-        "sizing"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Battery sizing came down to one relationship and then a second check that's easy to skip. The first one: required capacity is total average current draw times mission duration, plus margin, divided by the fraction of the pack we're actually willing to use."
-        },
-        {
-          "type": "paragraph",
-          "text": "We put 20% on top of that. The margin isn't decoration. It covers wind we can't predict, maneuvering more aggressive than a planning spreadsheet assumes, capacity that goes missing in cold weather, and the plain fact that a pack's usable capacity is a fair bit less than its rated capacity if you'd rather not deep-discharge cells on every flight."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-9/body-1.svg",
-          "alt": "Spline fit of thrust versus current at the cruise operating point",
-          "caption": "Cruise-point current — the figure the average-draw half of the sizing math leans on."
-        },
-        {
-          "type": "paragraph",
-          "text": "The second check is the C-rating. Capacity times C gives maximum continuous discharge, and that has to clear the highest current we expect in a full-throttle climb, not the mission average. A pack can be sized correctly for average draw and still sag badly under peak load if its C-rating is short, and sag is its own problem: the voltage drops exactly when we're asking for the most thrust, so it eats the margin we thought we had."
-        },
-        {
-          "type": "paragraph",
-          "text": "That's how we landed on the MAD 6S 28 Ah solid-state pack — 140 A continuous, 280 A max, which left room above the peak we were projecting at the time."
-        },
-        {
-          "type": "list",
-          "heading": "What we weren't claiming yet",
-          "items": [
-            "That projected peak was still a paper number in January. The measured one didn't arrive until we got motors onto a test stand.",
-            "We budgeted 80% of rated capacity as usable, which is conservative on purpose and probably leaves something on the table.",
-            "Mission duration is an assumption here, not a result — there's no timed endurance flight behind it."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: build a proper endurance model out of phase-by-phase current instead of one flat average, since takeoff, cruise, and landing don't draw anything like the same."
-        }
-      ]
-    },
-    {
-      "id": "elec-10",
-      "date": "2025-12-12",
-      "title": "Chasing down payload release failures that weren't real",
-      "summary": "47 out of 50 bench releases succeeded — the other 3 turned out to be a test-setup mistake, not a mechanism problem.",
-      "image": "/blogs/electrical/elec-10/hero.svg",
-      "imageAlt": "Bench testing payload release mechanisms",
-      "tags": [
-        "payload",
-        "bench-test"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Ran 50 bench trials of the payload release mechanism and got 47 clean releases. Spent longer than expected chasing down the other 3 failures before realizing it wasn't the mechanism at all."
-        },
-        {
-          "type": "paragraph",
-          "text": "The servo was being bench-tested in isolation without an ESC in the loop. Turns out the servo pulls its power through the ESC's BEC output rather than an independent supply, so testing it standalone with no ESC connected produced power starvation that looked exactly like a mechanical failure."
-        },
-        {
-          "type": "list",
-          "heading": "What we got wrong, and the fix",
-          "items": [
-            "Root cause: servo power path runs through the ESC BEC, not a dedicated rail — missed that in the original bench setup.",
-            "Fix: added the ESC into every servo bench test from now on, matching the actual airframe wiring.",
-            "Re-ran the 3 failed trials with the ESC connected — all 3 released cleanly."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Lesson logged for the whole team: any servo-driven subsystem gets bench-tested with its real power path from now on, not powered on its own for convenience."
-        }
-      ]
-    },
-    {
-      "id": "elec-11",
-      "date": "2025-10-30",
-      "title": "Budgeting the small rail: what the avionics actually pull",
-      "summary": "Built the avionics power budget line by line with the software sub-team — about 35 W on paper, and the entire reason it gets a rail of its own.",
-      "image": "/blogs/electrical/elec-11/hero.svg",
-      "imageAlt": "Sub-teams reviewing the onboard avionics package together",
-      "tags": [
-        "avionics",
-        "power-budget"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Spent this cycle on the least interesting number in the whole build. The software sub-team was settling which onboard avionics package to run, so we sat in on that and put together a line-by-line power budget alongside it: Pixhawk 6C, Holybro M9N GPS, RFD900A telemetry, the RadioMaster ER8 receiver, the SIYI A8 Mini, and the Jetson Orin Nano."
-        },
-        {
-          "type": "paragraph",
-          "text": "Each line came off a datasheet at the duty cycle we expect to run it at, then got added up. First pass came out somewhere around 35 W. On an aircraft where four motors can pull a couple hundred amps between them, that's a rounding error."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-11/body-1.svg",
-          "alt": "Cross-sub-team review session",
-          "caption": "Sitting in with the software sub-team while the avionics package got settled."
-        },
-        {
-          "type": "paragraph",
-          "text": "It still gets its own regulated rail, and that's not caution for its own sake. A dip on the propulsion rail costs thrust for a moment. A dip on this rail can reset the flight controller in the air. Two different failures with very different consequences, so they don't share a supply."
-        },
-        {
-          "type": "list",
-          "heading": "Caveats we wrote down at the time",
-          "items": [
-            "These are datasheet numbers, not measured ones. The Jetson in particular will draw whatever the vision workload asks of it, and \"typical\" on a spec sheet is not a promise.",
-            "An average figure hides transient loads — servo actuation, radio transmit bursts — and those are the ones that stress a regulator.",
-            "Plan is to re-measure the whole rail on the bench once there's real hardware to put a clamp around."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: take this budget and the propulsion current numbers into battery sizing, which is where the two finally get added together."
-        }
-      ]
-    },
-    {
-      "id": "elec-12",
-      "date": "2025-09-14",
-      "title": "The power system starts with a number we didn't pick",
-      "summary": "Mechanical handed over an all-up weight estimate and we turned it into a per-motor thrust requirement — 2:1 thrust-to-weight as the floor, not the goal.",
-      "image": "/blogs/electrical/elec-12/hero.svg",
-      "imageAlt": "Electrical team working through early power system sizing",
-      "tags": [
-        "propulsion",
-        "sizing"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "The electrical side of this build didn't start with a battery or a motor. It started with a number from the mechanical team: an estimated all-up weight of just under 7 kg with payload. Every choice downstream — motors, ESCs, pack, distribution hardware — traces back to that figure, which is a slightly uncomfortable place to begin, because early mass estimates move and ours did."
-        },
-        {
-          "type": "paragraph",
-          "text": "We're treating 2:1 thrust-to-weight as a floor. It's a common starting point for a multirotor that has to stay maneuverable, and the logic is simple enough: we want authority left over to fight a gust and recover attitude while still climbing, not just barely enough to hold a hover. At that weight, 2:1 means roughly 14 kgf of total static thrust, so about 3.5 kgf per motor on a quad."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/electrical/elec-12/body-1.svg",
-          "alt": "Electrical sub-team during early sizing work",
-          "caption": "Early power system sizing, well before any hardware got ordered."
-        },
-        {
-          "type": "paragraph",
-          "text": "The 2:1 figure isn't a law, though it gets quoted like one. The right margin depends on the mission, the wind we expect, and how much control authority the autopilot needs to hold a waypoint in gusts. It gets validated against the actual motor, prop, and ESC combination at the pack voltage we'll really be flying, not accepted from a rule of thumb."
-        },
-        {
-          "type": "list",
-          "heading": "What this one number ends up deciding",
-          "items": [
-            "Motor and prop pairing, checked against manufacturer thrust curves at expected pack voltage rather than the nominal figure on the front of the spec sheet.",
-            "Peak current per motor, which sets the ESC rating.",
-            "Four times that peak, which sets the battery leads, the distribution hardware, and the C-rating the pack has to meet.",
-            "None of it is final until it's been on a test stand and measured."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: hand the thrust requirement to the propulsion trade study, and start building the avionics power budget in parallel, since the same pack has to carry both."
+          "text": "Next steps: fly the timed endurance test that's been pending since March, now that telemetry is reliable enough to trust the result."
         }
       ]
     }
@@ -962,8 +544,6 @@
       "date": "2026-07-20",
       "title": "Storm is airframe-complete",
       "summary": "Airframe build is done — 5 kg quadrotor-X, 4.09:1 thrust-to-weight, and it folds down small enough to fit a personal-item bag.",
-      "image": "/blogs/mechanical/mech-1/hero.svg",
-      "imageAlt": "Storm competition quadrotor airframe",
       "tags": [
         "airframe",
         "SUAS 2026"
@@ -972,12 +552,6 @@
         {
           "type": "paragraph",
           "text": "Called the airframe build complete this week. Storm comes in at 5 kg without payload — a from-scratch quadrotor-X built specifically around the five SUAS 2026 mission tasks instead of adapting an off-the-shelf frame."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-1/body-1.svg",
-          "alt": "Storm quadrotor on display",
-          "caption": "Storm, fully assembled and ready for the next round of flight testing."
         },
         {
           "type": "list",
@@ -999,8 +573,6 @@
       "date": "2026-05-18",
       "title": "Landing gear failed the drop test — here's what we changed",
       "summary": "First landing gear design cracked on a 2 m drop test. Redesigned it, dropped it again, and it held.",
-      "image": "/blogs/mechanical/mech-2/hero.svg",
-      "imageAlt": "Mechanical team inspecting structural components",
       "tags": [
         "structures",
         "testing"
@@ -1009,12 +581,6 @@
         {
           "type": "paragraph",
           "text": "Ran the landing gear through a 2 m drop test and it failed on impact. Not the outcome we wanted, but exactly why we test before committing to a design."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-2/body-1.svg",
-          "alt": "Mechanical sub-team reviewing airframe components",
-          "caption": "Inspecting the failed landing gear before starting the redesign."
         },
         {
           "type": "paragraph",
@@ -1040,8 +606,6 @@
       "date": "2026-04-02",
       "title": "Locking the frame material and mass budget",
       "summary": "Went with sandwich composite plates after tracking mass at the component level — battery and payload alone are 39% of AUW.",
-      "image": "/blogs/mechanical/mech-3/hero.svg",
-      "imageAlt": "Carbon fiber frame construction on Storm",
       "tags": [
         "materials",
         "mass-budget"
@@ -1054,12 +618,6 @@
         {
           "type": "paragraph",
           "text": "Went with sandwich composite construction for the structural plates: a 600 g fiberglass core between two multi-directional carbon fiber face layers. Gets close to solid carbon fiber stiffness-to-weight without the full material cost, which matters when the battery and payload are already eating that much of the budget."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-3/body-1.svg",
-          "alt": "Carbon fiber frame construction on Storm",
-          "caption": "Sandwich composite plates and carbon fiber arms integrated into the airframe."
         },
         {
           "type": "list",
@@ -1081,8 +639,6 @@
       "date": "2026-02-10",
       "title": "Two release mechanisms, one drop test day",
       "summary": "Trap door for the flare, bracket latch for the water bottle — first drop tests landed within 30–75 ft of target from 10 m.",
-      "image": "/blogs/mechanical/mech-4/hero.svg",
-      "imageAlt": "Team reviewing payload mechanism design",
       "tags": [
         "payload",
         "mechanism"
@@ -1091,12 +647,6 @@
         {
           "type": "paragraph",
           "text": "Built two separate release mechanisms since the two payloads don't behave the same way: a servo-actuated trap door for the flare, and a servo-driven bracket latch for the water bottle. Looked at a winch-based delivery system for both early on but dropped it — extra weight and slower deployment time than a 45-minute mission window can really afford."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-4/body-1.svg",
-          "alt": "Cross-sub-team review before integration milestone",
-          "caption": "Preliminary drop test — impact points landed within 30–75 ft of target from 10 m altitude."
         },
         {
           "type": "list",
@@ -1118,8 +668,6 @@
       "date": "2025-10-25",
       "title": "Motor and prop trade study — three options down to one",
       "summary": "Bench-compared three motor options and two props before settling on the Avenger 4215 V5 and the 15558 folding tri-blade.",
-      "image": "/blogs/mechanical/mech-5/hero.svg",
-      "imageAlt": "Propulsion analysis thrust-current curves",
       "tags": [
         "propulsion",
         "trade-study"
@@ -1132,12 +680,6 @@
         {
           "type": "paragraph",
           "text": "Prop comparison came down to two folding tri-blades. The 1248 only made 6676 g of thrust per motor at 3.21 g/W, while the 15558 hit 6902 g at 3.79 g/W — more thrust and meaningfully better efficiency, so that one was the clear pick."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-5/body-1.svg",
-          "alt": "Spline fit at cruise operating point",
-          "caption": "Thrust-current curves from the motor and prop bench comparison."
         },
         {
           "type": "list",

@@ -43,11 +43,12 @@ export default function SponsorshipsPage() {
             Proposal
           </p>
           <h2 className="mt-3 text-3xl leading-[1.05] text-offwhite md:text-4xl">
-            Sponsorship Proposal
+            What partnering with us looks like.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg">
-            Open the full proposal in a new tab, or download a copy to share
-            with your team.
+            Ten pages on who we are, the competitions we&apos;re flying, what
+            each sponsorship package includes, and exactly where the funding
+            goes.
           </p>
         </div>
 
@@ -62,7 +63,7 @@ export default function SponsorshipsPage() {
             className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <ExternalLinkIcon />
-            View Proposal
+            Read the proposal
           </a>
           <a
             href={SPONSORSHIP_PROPOSAL_PDF}
@@ -70,9 +71,9 @@ export default function SponsorshipsPage() {
             className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <DownloadIcon />
-            Download PDF
+            Download a copy
           </a>
-          <p className="text-sm text-offwhite/50 sm:ml-1">PDF · 10 pages</p>
+          <p className="text-sm text-offwhite/50 sm:ml-1">PDF · 15 MB</p>
         </div>
       </PageSection>
     </PageShell>

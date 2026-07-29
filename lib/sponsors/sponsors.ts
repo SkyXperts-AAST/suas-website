@@ -21,8 +21,7 @@ export const SPONSORS: Sponsor[] = [
   {
     name: "MAD Components",
     logoSrc: "/sponsor-mad-components.png",
-    // TODO: add sponsor website URL
-    href: "#",
+    href: "https://mad-motor.com/",
   },
 ];
 

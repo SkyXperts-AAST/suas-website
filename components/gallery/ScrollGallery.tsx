@@ -85,7 +85,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     <div className="relative bg-navy text-offwhite">
       <div
         ref={scrollerRef}
-        className="relative h-[calc(100dvh-4rem)] overflow-y-auto overscroll-y-contain scroll-smooth"
+        className="relative h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto overscroll-y-contain"
         style={{ scrollSnapType: "y mandatory" }}
       >
         <div
@@ -98,7 +98,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
             slideRefs.current[0] = node;
           }}
           data-index={0}
-          className="relative z-10 flex min-h-full flex-col justify-end px-5 pb-16 pt-10 sm:px-6 sm:pb-20 md:justify-center md:px-10 md:pb-24"
+          className="relative z-10 flex h-[calc(100dvh-4rem)] shrink-0 flex-col justify-end overflow-hidden px-5 pb-16 pt-10 sm:px-6 sm:pb-20 md:justify-center md:px-10 md:pb-24"
           style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
         >
           <div className="max-w-3xl">
@@ -129,10 +129,10 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               }}
               data-index={slideIndex}
               aria-label={`${item.title} (${formatIndex(index, items.length)})`}
-              className="relative z-10 flex min-h-full flex-col md:block"
+              className="relative z-10 flex h-[calc(100dvh-4rem)] shrink-0 flex-col overflow-hidden md:block"
               style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
             >
-              <div className="relative min-h-[52dvh] flex-1 bg-[#05071e] md:absolute md:inset-0 md:min-h-0 md:flex-none">
+              <div className="relative min-h-0 flex-1 overflow-hidden bg-[#05071e] md:absolute md:inset-0 md:flex-none">
                 <Image
                   src={item.image}
                   alt={item.imageAlt}
@@ -140,7 +140,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
                   priority={index < 2}
                   sizes="100vw"
                   className={`object-contain object-center transition-transform duration-700 ease-out md:object-cover md:duration-[900ms] ${
-                    isActive ? "scale-100" : "scale-[1.03] md:scale-105"
+                    isActive ? "scale-100" : "scale-100 md:scale-105"
                   }`}
                 />
                 <div className="pointer-events-none absolute inset-0 hidden bg-[#0a1628]/35 md:block" />
@@ -149,19 +149,19 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               </div>
 
               {/* Mobile caption under image */}
-              <div className="shrink-0 border-t border-white/5 bg-[#05071e] px-5 py-5 sm:px-6 sm:py-6 md:hidden">
+              <div className="shrink-0 border-t border-white/5 bg-[#05071e] px-5 py-4 sm:px-6 sm:py-5 md:hidden">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
                   {formatIndex(index, items.length)}
                 </p>
                 {item.category ? (
-                  <p className="mt-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                  <p className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
                     {item.category}
                   </p>
                 ) : null}
-                <h2 className="mt-2 text-xl leading-[1.1] text-offwhite">
+                <h2 className="mt-1.5 text-lg leading-[1.1] text-offwhite sm:text-xl">
                   {item.title}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-offwhite/75">
+                <p className="mt-1.5 line-clamp-3 text-sm leading-5 text-offwhite/75 sm:leading-6">
                   {item.description}
                 </p>
               </div>

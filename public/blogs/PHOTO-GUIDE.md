@@ -39,29 +39,40 @@ Recommended aspect ratio: **16:10** (matches the build log layout). Minimum widt
 
 ## control
 
-### ctrl-1 — Full mission dry run + failsafe trials
+### ctrl-5 — Control update: taming "crazy flight"
 
-- **Folder:** `public/blogs/control/ctrl-1/`
-- **Hero (`hero.svg`):** Storm during the full-mission field test — airborne on a waypoint leg or approaching the search area.
-- **Body 1 (`body-1.svg`):** Outdoor flight during the mission dry run — hover, transit, or landing phase with field visible.
+- **Folder:** `public/blogs/control/ctrl-5/`
+- **Hero (`hero.svg`):** Storm during rate-controller gain tuning and vibration testing.
 
-### ctrl-2 — SITL first, then HITL, before anything flies
+### ctrl-6 — Control update: first clean mission
 
-- **Folder:** `public/blogs/control/ctrl-2/`
-- **Hero (`hero.svg`):** Control team at laptops running SITL/HITL — Gazebo window, mission logs, or Pixhawk on the bench wired for HITL.
-- **Body 1 (`body-1.svg`):** Same session: split screen of simulation + real Pixhawk, or team reviewing SITL logs before HITL handoff.
+- **Folder:** `public/blogs/control/ctrl-6/`
+- **Hero (`hero.svg`):** Storm flying an autonomous three-waypoint test mission.
 
-### ctrl-3 — Locking the autonomy stack and failsafe timers
+### ctrl-7 — Control update: FRR, first flight at altitude
 
-- **Folder:** `public/blogs/control/ctrl-3/`
-- **Hero (`hero.svg`):** Storm avionics bay with Pixhawk 6C, M9N GPS, and wiring visible — clean shot of the locked stack.
-- **Body 1 (`body-1.svg`):** Close-up of the Pixhawk 6C installation, GPS module placement, or telemetry radio wiring in the bay.
+- **Folder:** `public/blogs/control/ctrl-7/`
+- **Hero (`hero.svg`):** Storm during the Flight Readiness Review flight at altitude.
 
-### ctrl-4 — Wiring PX4, ROS 2, and QGC into one pipeline
+### ctrl-8 — Control update: why we stopped trusting the "obvious" API calls
 
-- **Folder:** `public/blogs/control/ctrl-4/`
-- **Hero (`hero.svg`):** Ground control station during the first PX4 + ROS 2 + QGC integration test — operator at laptop with QGroundControl open.
-- **Body 1 (`body-1.svg`):** GCS view: QGroundControl showing vehicle state, mission upload screen, or MAVLink link status during the test.
+- **Folder:** `public/blogs/control/ctrl-8/`
+- **Hero (`hero.svg`):** Companion computer running autonomous mission scripts on the bench.
+
+### ctrl-9 — Control update: the bug that changed how we trigger payload release
+
+- **Folder:** `public/blogs/control/ctrl-9/`
+- **Hero (`hero.svg`):** Payload release mechanism mounted under Storm.
+
+### ctrl-10 — Control update: rules we now write every script around
+
+- **Folder:** `public/blogs/control/ctrl-10/`
+- **Hero (`hero.svg`):** Control team reviewing mission script behaviour before a test run.
+
+### ctrl-11 — Control update: ICMTC 2026, 3rd place and best mission performance
+
+- **Folder:** `public/blogs/control/ctrl-11/`
+- **Hero (`hero.svg`):** Storm flying its competition mission at ICMTC 2026.
 
 ## electrical
 

@@ -273,49 +273,6 @@
       ]
     },
     {
-      "id": "ctrl-1",
-      "date": "2026-07-10",
-      "title": "Full mission dry run + failsafe trials",
-      "summary": "Flew the complete mission end to end — takeoff, search, landing — then spent the rest of the day trying to break the failsafes on purpose.",
-      "image": "/blogs/control/ctrl-1/hero.svg",
-      "imageAlt": "Storm during autonomous field flight testing",
-      "tags": [
-        "field-test",
-        "failsafe"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "First time we ran the complete mission profile back to back instead of testing each phase separately: autonomous takeoff, waypoint navigation out to the search area, the lawnmower search pattern, and landing. No manual intervention needed on any leg."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/control/ctrl-1/body-1.svg",
-          "alt": "Quadcopter hovering during outdoor flight testing",
-          "caption": "Waypoint leg during the full-mission trial — wind was up more than we'd planned for."
-        },
-        {
-          "type": "paragraph",
-          "text": "Spent the second half of the day deliberately triggering failure conditions to check the response: killed telemetry, killed RC, forced a low-battery flag, and flew across the geofence boundary. Every trigger produced the expected response, no missed cases."
-        },
-        {
-          "type": "list",
-          "heading": "Failsafe trial log",
-          "items": [
-            "Telemetry loss → correct RTH trigger, every run.",
-            "RC loss → correct RTH trigger, every run.",
-            "Low battery flag → correct response, every run.",
-            "Geofence breach → flight termination triggered as expected.",
-            "Hardware kill switch on the RC transmitter disarmed the vehicle reliably on command, tested separately from the automated triggers."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: same test matrix again, but with the safety pilot and GCS operator swapping who calls each failsafe, so it isn't just one person's muscle memory being tested."
-        }
-      ]
-    },
-    {
       "id": "ctrl-8",
       "date": "2026-07-06",
       "title": "Control update: why we stopped trusting the \"obvious\" API calls",
@@ -390,47 +347,6 @@
       ]
     },
     {
-      "id": "ctrl-2",
-      "date": "2026-05-22",
-      "title": "SITL first, then HITL, before anything flies",
-      "summary": "Ran the mission software through Gazebo SITL function by function, then onto the real Pixhawk via HITL, before it was allowed anywhere near a real flight.",
-      "image": "/blogs/control/ctrl-2/hero.svg",
-      "imageAlt": "Control team during software integration",
-      "tags": [
-        "simulation",
-        "PX4"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Two-stage validation before Storm's mission software touches actual hardware. First pass was SITL in Gazebo, tested piece by piece — searchAreaEntered(), waypoint navigation, the lawnmower search algorithm — each verified individually before running them together as one simulated mission."
-        },
-        {
-          "type": "paragraph",
-          "text": "Second pass was HITL: same mission code, but now talking to an actual Pixhawk 6C running the real PX4 firmware instead of a simulated flight stack. This is where we've caught driver-level issues before that SITL just can't see, since it isn't exercising the real hardware interfaces."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/control/ctrl-2/body-1.svg",
-          "alt": "Control sub-team integrating autonomy software",
-          "caption": "Reviewing SITL mission logs before handing the same test matrix off to HITL."
-        },
-        {
-          "type": "list",
-          "heading": "Results across both stages",
-          "items": [
-            "All FSM state transitions fired correctly in SITL, no logic changes needed before moving to HITL.",
-            "HITL surfaced one MAVLink timing issue on a state transition that never showed up in simulation — traced and fixed before going further.",
-            "Flight termination triggers verified in both stages with no discrepancies."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: this code goes to physical flight trials now that both simulation stages are clean."
-        }
-      ]
-    },
-    {
       "id": "ctrl-6",
       "date": "2026-05-11",
       "title": "Control update: first clean mission",
@@ -486,89 +402,6 @@
         {
           "type": "paragraph",
           "text": "What took the longest was working out why AutoTune’s first pass made things worse in places. Its D-term can amplify structural resonance in the airframe rather than damp it out. So we kept the P and I terms, which do reflect real airframe response, and re-checked the D terms by hand against vibration data instead of trusting them blind. We treat AutoTune as a starting point now, not an answer."
-        }
-      ]
-    },
-    {
-      "id": "ctrl-3",
-      "date": "2026-03-14",
-      "title": "Locking the autonomy stack and failsafe timers",
-      "summary": "Called it: Pixhawk 6C + PX4, M9N GPS, RFD900A telemetry, and hard numbers on the RTH and termination timers.",
-      "image": "/blogs/control/ctrl-3/hero.svg",
-      "imageAlt": "Storm airframe with avionics stack installed",
-      "tags": [
-        "autopilot",
-        "safety"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Locked the core autonomy hardware and software stack today. Going with the Pixhawk 6C running PX4 — the deciding factor was native ROS 2 and MAVSDK support, which saves us from bolting on extra middleware just to get the autonomy layer talking to the flight controller."
-        },
-        {
-          "type": "paragraph",
-          "text": "GPS is the Holybro M9N — quad-constellation tracking at 25 Hz, which gets us under 2 m of position error. That's the accuracy margin we need to actually hold waypoint thresholds autonomously instead of hoping for the best."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/control/ctrl-3/body-1.svg",
-          "alt": "Storm quadrotor airframe",
-          "caption": "Storm's avionics bay with the Pixhawk 6C stack installed."
-        },
-        {
-          "type": "list",
-          "heading": "Failsafe timers, locked in",
-          "items": [
-            "15 seconds of comms loss → PX4 autonomously triggers RTH.",
-            "90 seconds → flight termination.",
-            "Safety pilot retains independent, single-action override to trigger either response at any time.",
-            "GCS operator has the same independent authority from the ground station."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "These numbers aren't final-final — we'll stress-test them against real comms dropout behavior once RFD900A range testing wraps up."
-        }
-      ]
-    },
-    {
-      "id": "ctrl-4",
-      "date": "2026-01-20",
-      "title": "Wiring PX4, ROS 2, and QGC into one pipeline",
-      "summary": "Got the Jetson's ROS 2 autonomy layer actually talking to PX4 over MAVLink, with QGroundControl sitting on top for the operator.",
-      "image": "/blogs/control/ctrl-4/hero.svg",
-      "imageAlt": "Ground control station during mission rehearsal",
-      "tags": [
-        "software",
-        "integration"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "This session was about getting the pieces to actually talk to each other instead of just working standalone. PX4 stays responsible for stabilization, state estimation, and waypoint execution; the Jetson Orin Nano runs the ROS 2 autonomy layer on top, subscribing to vehicle state and publishing mission commands back down over MAVLink."
-        },
-        {
-          "type": "image",
-          "src": "/blogs/control/ctrl-4/body-1.svg",
-          "alt": "Field operations with ground control monitoring",
-          "caption": "Ground station monitoring during the first end-to-end pipeline test."
-        },
-        {
-          "type": "paragraph",
-          "text": "QGroundControl is what the GCS operator actually watches during a run — flight boundary, vehicle position, ground speed, AGL altitude, all live. It's also the only interface we're using for mission upload, so it needs to hold up for the full 45-minute competition window, not just a quick test flight."
-        },
-        {
-          "type": "list",
-          "heading": "First integration test notes",
-          "items": [
-            "MAVLink bridge held a stable connection for the full test duration, no dropped commands.",
-            "One mission upload needed a retry — QGC timed out on a slow serial handshake, not repeatable so far.",
-            "ROS 2 autonomy commands reached the flight controller with no observed lag."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: keep an eye on that upload timeout if it shows up again, and start running longer sessions to make sure nothing degrades over a full 45-minute window."
         }
       ]
     }

@@ -369,6 +369,22 @@ export default function VehicleCanvas({
       if (controls && window.matchMedia("(pointer: coarse)").matches) {
         controls.touches.one = 0; // CameraControls.ACTION.NONE
       }
+      if (controls) {
+        // camera-controls dollies the camera on wheel by default, calling
+        // preventDefault — which swallows the page scroll for anyone whose
+        // cursor happens to be over the canvas. Zoom isn't essential here
+        // (the tour already frames each component), so give the scroll
+        // gesture back to the page.
+        controls.mouseButtons.wheel = 0; // CameraControls.ACTION.NONE
+
+        // camera-controls also hard-sets touch-action: none on its element
+        // to own every touch gesture, which blocks a single-finger swipe
+        // from ever reaching the page's native scroll. pan-y lets vertical
+        // swipes fall through to page scroll while still leaving mouse
+        // drag-to-rotate (desktop) and pinch-to-zoom (touch) to the library.
+        const canvasEl = containerRef.current?.querySelector("canvas");
+        if (canvasEl) canvasEl.style.touchAction = "pan-y";
+      }
 
       // Ground plane for the soft contact shadow: sit it just under the lowest
       // point of the drone (the legs) and size it to the footprint.

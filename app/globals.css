@@ -126,8 +126,15 @@ html {
 }
 
 @media (min-width: 640px) {
-  body {
-    cursor: none;
+  /* The drone icon follows the pointer at this breakpoint (see CursorDrone),
+     so the native cursor is hidden. Both the universal selector and
+     `!important` are load-bearing: the UA stylesheet gives links their own
+     `cursor`, and Tailwind's `cursor-pointer` utility outranks any plain
+     element selector — without this, every interactive element showed a hand
+     stacked on top of the drone. */
+  body,
+  body * {
+    cursor: none !important;
   }
 }
 

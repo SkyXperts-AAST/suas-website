@@ -78,7 +78,7 @@ export default function SpecialThanks() {
             href="/sponsorships"
             className="inline-flex items-center gap-1 font-medium transition hover:text-accent"
           >
-            Get in touch
+            Support the Mission
             <span aria-hidden="true">→</span>
           </Link>
         </p>

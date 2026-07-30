@@ -540,158 +540,174 @@
   ],
   "mechanical": [
     {
-      "id": "mech-1",
-      "date": "2026-07-20",
-      "title": "Storm is airframe-complete",
-      "summary": "Airframe build is done — 5 kg quadrotor-X, 4.09:1 thrust-to-weight, and it folds down small enough to fit a personal-item bag.",
+      "id": "mech-6",
+      "date": "2026-02-01",
+      "title": "Concept & Requirements",
+      "summary": "Locked mission requirements and landed on a shifted-X quadcopter layout with a servo flare release plus parachute drop for payload delivery.",
       "tags": [
-        "airframe",
-        "SUAS 2026"
+        "requirements",
+        "concept"
       ],
       "body": [
         {
           "type": "paragraph",
-          "text": "Called the airframe build complete this week. Storm comes in at 5 kg without payload — a from-scratch quadrotor-X built specifically around the five SUAS 2026 mission tasks instead of adapting an off-the-shelf frame."
-        },
-        {
-          "type": "list",
-          "heading": "Where the numbers landed",
-          "items": [
-            "Four Avenger 4215 V5 motors, each rated for 6902 g static thrust, against a 6750 g all-up weight including payload — 4.09:1 max thrust-to-weight.",
-            "Folded footprint: 18 × 14 × 8 in, small enough to travel in a personal-item bag for the Design for Rapid Response task.",
-            "That thrust margin is there for gust rejection in wind up to 14 mph and reserve authority during payload drop maneuvers, not just for looking good on paper."
-          ]
+          "text": "Kicked off mechanical development by nailing down mission requirements: payload capacity, portability, endurance, structural strength, maintainability. After comparing configurations, we landed on a shifted-X quadcopter layout for better vision-system field of view without messing up load balance."
         },
         {
           "type": "paragraph",
-          "text": "Airframe done just means it's ready for the next round of flight testing — haven't pushed it anywhere near that 14 mph gust number in real conditions yet."
+          "text": "For payload delivery we looked at a few release concepts before settling on a servo-actuated flare release plus a parachute drop — both faster and safer than the alternatives we tried on paper."
+        },
+        {
+          "type": "paragraph",
+          "text": "We also spent time researching carbon fiber sandwich construction and cylindrical arm aerodynamics — groundwork for the CAD phase starting next."
         }
       ]
     },
     {
-      "id": "mech-2",
-      "date": "2026-05-18",
-      "title": "Landing gear failed the drop test — here's what we changed",
-      "summary": "First landing gear design cracked on a 2 m drop test. Redesigned it, dropped it again, and it held.",
+      "id": "mech-7",
+      "date": "2026-03-05",
+      "title": "CAD Takes Shape",
+      "summary": "Full UAV assembly integrated in SolidWorks; swapped battery packs and upgraded the companion computer from a Raspberry Pi 5 to a Jetson.",
       "tags": [
-        "structures",
+        "CAD",
+        "design"
+      ],
+      "image": "/blogs/mechanical/mech-cad/body-1.png",
+      "imageAlt": "CAD assembly render of the shifted-X quadcopter UAV in SolidWorks",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Full UAV assembly is coming together in SolidWorks — propulsion, payload bay, landing gear, avionics, battery, and release mechanisms all integrated into one compact, serviceable layout."
+        },
+        {
+          "type": "image",
+          "src": "/blogs/mechanical/mech-cad/body-1.png",
+          "alt": "CAD assembly render of the shifted-X quadcopter UAV showing propulsion, payload bay, and landing gear layout",
+          "caption": "Full UAV assembly render in SolidWorks, with propulsion, payload bay, and avionics integrated into one layout."
+        },
+        {
+          "type": "paragraph",
+          "text": "Mid-design we made two big hardware calls: swapped to a new battery pack, and upgraded the companion computer from a Raspberry Pi 5 to a Jetson for more onboard AI headroom. Both meant redesigning the battery bay and electronics compartment from scratch."
+        },
+        {
+          "type": "paragraph",
+          "text": "Manufacturing drawings are next on the list."
+        }
+      ]
+    },
+    {
+      "id": "mech-8",
+      "date": "2026-04-03",
+      "title": "Structural Verification",
+      "summary": "FEA on the carbon fiber sandwich frame confirmed acceptable deformation under thrust and payload loads — cleared to move to fabrication.",
+      "tags": [
+        "FEA",
+        "structures"
+      ],
+      "image": "/blogs/mechanical/mech-fea/body-1.jpg",
+      "imageAlt": "FEA von-Mises stress plot of the quadcopter frame under thrust and payload loading",
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Before cutting anything, we ran FEA on the frame — thrust loads at the four motor mounts, weight and payload load at the center plate. The carbon fiber sandwich frame held up well within acceptable deformation."
+        },
+        {
+          "type": "image",
+          "src": "/blogs/mechanical/mech-fea/body-1.jpg",
+          "alt": "FEA von-Mises stress plot of the quadcopter frame under thrust and payload loading",
+          "caption": "Transient structural FEA of the frame under thrust and payload loads."
+        },
+        {
+          "type": "paragraph",
+          "text": "We ran the numbers by hand too, to cross-check the sim and estimate natural frequency, plus some quick aero calcs on drag from the cylindrical arms in forward flight. Good balance of strength, weight, and efficiency — cleared to move to fabrication."
+        }
+      ]
+    },
+    {
+      "id": "mech-9",
+      "date": "2026-04-20",
+      "title": "Manufacturing Begins",
+      "summary": "Vacuum-bagged and CNC'd the carbon fiber plates, validated dimensions with a full-scale prototype, and completed our first flight-ready build.",
+      "tags": [
+        "manufacturing",
+        "fabrication"
+      ],
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "Carbon fiber plates went through vacuum bagging, then got CNC'd to final shape. We built a full-scale prototype first just to sanity-check dimensions and part placement before committing to CF."
+        },
+        {
+          "type": "paragraph",
+          "text": "Arms and landing gear are 15mm carbon fiber tube, 9 layers multidirectional, motor mounts are 4mm laser-cut aluminum, with 3D-printed brackets tying the arms to the frame."
+        },
+        {
+          "type": "paragraph",
+          "text": "End result: our first complete flight-ready prototype."
+        }
+      ]
+    },
+    {
+      "id": "mech-10",
+      "date": "2026-06-06",
+      "title": "Flight Testing",
+      "summary": "First flight campaign passed all ground checks; flagged vibration sources and a CG tweak, then reinforced the arm mounts and rebalanced propulsion.",
+      "tags": [
+        "flight-test",
         "testing"
       ],
+      "image": "/blogs/mechanical/mech-flight/body-1.jpg",
+      "imageAlt": "Storm in flight during its first flight-test campaign",
       "body": [
         {
           "type": "paragraph",
-          "text": "Ran the landing gear through a 2 m drop test and it failed on impact. Not the outcome we wanted, but exactly why we test before committing to a design."
+          "text": "First real flight campaign. Ground checks (structural, vibration, propulsion, payload deployment) all passed — vibration logs from the flight controller looked clean, and both release mechanisms fired reliably."
+        },
+        {
+          "type": "image",
+          "src": "/blogs/mechanical/mech-flight/body-1.jpg",
+          "alt": "Storm in flight during its first flight-test campaign",
+          "caption": "Storm during the first flight-test campaign."
         },
         {
           "type": "paragraph",
-          "text": "Reworked the leg geometry and rebuilt it, then dropped it from the same 2 m height again. This time it held with no visible damage."
-        },
-        {
-          "type": "list",
-          "heading": "Same day, motor mount test",
-          "items": [
-            "Ran all four motors at full throttle for a sustained 1-minute ground test.",
-            "No deformation, no loosened fasteners, no mount failure observed afterward.",
-            "Full FEA factor-of-safety analysis is still running in parallel — the physical test passing doesn't mean we skip that step."
-          ]
+          "text": "Initial flights confirmed the structure held up, but flagged a couple of vibration sources and a CG tweak we wanted to make. We reinforced the arm mounts, rebalanced propulsion, and shuffled a few internal components around in response."
         },
         {
           "type": "paragraph",
-          "text": "Next: repeat the landing gear drop test from a greater height to find where the new design actually fails, instead of just confirming it clears the minimum bar."
+          "text": "Noticeably smoother after the changes — final validation round is next."
         }
       ]
     },
     {
-      "id": "mech-3",
-      "date": "2026-04-02",
-      "title": "Locking the frame material and mass budget",
-      "summary": "Went with sandwich composite plates after tracking mass at the component level — battery and payload alone are 39% of AUW.",
+      "id": "mech-11",
+      "date": "2026-07-01",
+      "title": "Final Validation",
+      "summary": "Repeated flight tests confirmed structural integrity under real conditions, closing out the mechanical development cycle ahead of competition.",
       "tags": [
-        "materials",
-        "mass-budget"
+        "validation",
+        "SUAS 2026"
       ],
+      "image": "/blogs/mechanical/mech-validation/body-1.jpg",
+      "imageAlt": "Storm on the ground after a final validation flight test",
       "body": [
         {
           "type": "paragraph",
-          "text": "Tracked mass line by line at the component level this cycle instead of just weighing finished assemblies, and it paid off — the battery and payload together account for roughly 39% of all-up weight. That's a big enough chunk that it drove material decisions everywhere else on the frame."
+          "text": "Repeated flight tests confirmed it: structural integrity and reliability hold under real operating conditions. The frame took flight and landing loads with zero damage, and our FEA predictions matched what we saw in the field."
+        },
+        {
+          "type": "image",
+          "src": "/blogs/mechanical/mech-validation/body-1.jpg",
+          "alt": "Storm on the ground after a final validation flight test",
+          "caption": "Storm after the final validation flight-test round."
         },
         {
           "type": "paragraph",
-          "text": "Went with sandwich composite construction for the structural plates: a 600 g fiberglass core between two multi-directional carbon fiber face layers. Gets close to solid carbon fiber stiffness-to-weight without the full material cost, which matters when the battery and payload are already eating that much of the budget."
-        },
-        {
-          "type": "list",
-          "heading": "Manufacturing notes",
-          "items": [
-            "Built a full-scale mockup before committing to composite manufacturing, just to catch dimension and fitment issues cheaply.",
-            "Frame plates are cut by an outsourced composites shop using vacuum bagging, then CNC-finished to final geometry.",
-            "Arms are carbon fiber for the same stiffness-to-weight reasoning as the plates."
-          ]
+          "text": "Telemetry showed low vibration and stable flight throughout. Both payload mechanisms performed consistently."
         },
         {
           "type": "paragraph",
-          "text": "Next: lock the mockup-validated dimensions with the composites shop and start on the actual production plates."
-        }
-      ]
-    },
-    {
-      "id": "mech-4",
-      "date": "2026-02-10",
-      "title": "Two release mechanisms, one drop test day",
-      "summary": "Trap door for the flare, bracket latch for the water bottle — first drop tests landed within 30–75 ft of target from 10 m.",
-      "tags": [
-        "payload",
-        "mechanism"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Built two separate release mechanisms since the two payloads don't behave the same way: a servo-actuated trap door for the flare, and a servo-driven bracket latch for the water bottle. Looked at a winch-based delivery system for both early on but dropped it — extra weight and slower deployment time than a 45-minute mission window can really afford."
-        },
-        {
-          "type": "list",
-          "heading": "First drop test results",
-          "items": [
-            "All test drops released cleanly from both mechanisms.",
-            "Impact points landed within 30 to 75 ft of the target from a 10 m drop altitude — usable, but a wider spread than we want for competition scoring.",
-            "Custom non-structural mounts (landing gear connectors, GPS mount, payload housing, camera bracket) are all FDM-printed in PLA+, holding up fine through this round of testing."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "30–75 ft is too wide a spread to call this done. Next iteration needs tighter release timing or a better drop-point calculation, not just repeated tests of the same setup."
-        }
-      ]
-    },
-    {
-      "id": "mech-5",
-      "date": "2025-10-25",
-      "title": "Motor and prop trade study — three options down to one",
-      "summary": "Bench-compared three motor options and two props before settling on the Avenger 4215 V5 and the 15558 folding tri-blade.",
-      "tags": [
-        "propulsion",
-        "trade-study"
-      ],
-      "body": [
-        {
-          "type": "paragraph",
-          "text": "Bench-tested three motor candidates before picking one. The AT4125 Long Shaft pulled 72 A at full throttle versus 61.5 A for the Avenger 4215 V5 — worse on current draw and more expensive, an easy cut. The T-Motor U7 V2.0 got ruled out too, mostly on cost and because it doesn't fold down well for transport."
-        },
-        {
-          "type": "paragraph",
-          "text": "Prop comparison came down to two folding tri-blades. The 1248 only made 6676 g of thrust per motor at 3.21 g/W, while the 15558 hit 6902 g at 3.79 g/W — more thrust and meaningfully better efficiency, so that one was the clear pick."
-        },
-        {
-          "type": "list",
-          "heading": "Other changes made off the back of this round",
-          "items": [
-            "Motor arms switched from aluminum to carbon fiber for better strength-to-weight over the previous platform.",
-            "Landing gear stance widened for better lateral stability landing in gusty conditions."
-          ]
-        },
-        {
-          "type": "paragraph",
-          "text": "Next: get the selected motor/prop combo mounted on the actual airframe and re-run the thrust-current bench test in that configuration, not just on the test stand."
+          "text": "This closes out the mechanical development cycle — concept, design, validation, manufacturing, testing, iteration — and leaves us with a platform we're confident bringing to competition."
         }
       ]
     }

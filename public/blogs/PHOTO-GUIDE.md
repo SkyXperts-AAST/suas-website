@@ -102,33 +102,31 @@ Recommended aspect ratio: **16:10** (matches the build log layout). Minimum widt
 
 ## mechanical
 
-### mech-1 — Storm is airframe-complete
+### mech-6 — Concept & Requirements
 
-- **Folder:** `public/blogs/mechanical/mech-1/`
-- **Hero (`hero.svg`):** Fully assembled Storm — hero shot of the complete airframe, folded or unfolded.
-- **Body 1 (`body-1.svg`):** Storm on display: clean three-quarter view showing quad-X layout and folded footprint if possible.
+- No image.
 
-### mech-2 — Landing gear failed the drop test — here's what we changed
+### mech-7 — CAD Takes Shape
 
-- **Folder:** `public/blogs/mechanical/mech-2/`
-- **Hero (`hero.svg`):** Failed landing gear after the 2 m drop test, or mechanical team inspecting the cracked part.
-- **Body 1 (`body-1.svg`):** Inspecting the failed gear before redesign — crack or fracture visible.
+- **Folder:** `public/blogs/mechanical/mech-cad/`
+- **Body 1 (`body-1.png`):** CAD assembly render of the shifted-X quadcopter in SolidWorks.
 
-### mech-3 — Locking the frame material and mass budget
+### mech-8 — Structural Verification
 
-- **Folder:** `public/blogs/mechanical/mech-3/`
-- **Hero (`hero.svg`):** Sandwich composite frame plates and carbon fiber arms on Storm — material/construction detail.
-- **Body 1 (`body-1.svg`):** Close-up of composite plate layup, CNC-finished edge, or mockup next to production part.
+- **Folder:** `public/blogs/mechanical/mech-fea/`
+- **Body 1 (`body-1.jpg`):** FEA von-Mises stress plot of the frame under thrust and payload loading.
 
-### mech-4 — Two release mechanisms, one drop test day
+### mech-9 — Manufacturing Begins
 
-- **Folder:** `public/blogs/mechanical/mech-4/`
-- **Hero (`hero.svg`):** Payload release mechanisms — trap door and water-bottle bracket, or drop-test impact markers on the ground.
-- **Body 1 (`body-1.svg`):** Drop test day: impact points marked on the field, or both release mechanisms mounted on the airframe.
+- No image.
 
-### mech-5 — Motor and prop trade study — three options down to one
+### mech-10 — Flight Testing
 
-- **Folder:** `public/blogs/mechanical/mech-5/`
-- **Hero (`hero.svg`):** Motor and prop candidates on the thrust test stand — three motors or two props side by side for comparison.
-- **Body 1 (`body-1.svg`):** Thrust-current curves from the motor/prop trade study — annotated chart showing why Avenger + 15558 won.
+- **Folder:** `public/blogs/mechanical/mech-flight/`
+- **Body 1 (`body-1.jpg`):** Storm in flight during the first flight-test campaign.
+
+### mech-11 — Final Validation
+
+- **Folder:** `public/blogs/mechanical/mech-validation/`
+- **Body 1 (`body-1.jpg`):** Storm on the ground after a final validation flight test.
 

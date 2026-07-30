@@ -6,7 +6,7 @@ import Image from "next/image";
 const milestones = [
   { year: "2023", text: "SkyXperts founded", x: 170, y: 60 },
   { year: "2024–25", text: "Built our first drone and won 2nd place at ICMTC", x: 510, y: 190 },
-  { year: "2025–26", text: "Built a small prototype multirotor to begin testing the mission", x: 170, y: 320 },
+  { year: "2025–26", text: "Upgraded the multirotor with new capabilities.", x: 170, y: 320 },
   { year: "2026", text: "Returned to ICMTC flying Storm — Best Mission Award, 3rd place overall", x: 510, y: 450 },
   { year: "2026", text: "Preparing Storm for SUAS 2026: Storm Response", x: 170, y: 580 },
 ];
@@ -39,11 +39,11 @@ function MobileJourney({ progress }: { progress: number }) {
     <ol className="relative mx-auto mt-10 max-w-md space-y-4 px-1 md:hidden">
       <span
         aria-hidden="true"
-        className="absolute bottom-3 left-[1.15rem] top-3 w-px bg-white/15"
+        className="absolute bottom-3 left-[13.5px] top-3 w-px bg-white/15"
       />
       <span
         aria-hidden="true"
-        className="absolute left-[1.15rem] top-3 w-px origin-top bg-accent/80 transition-[height] duration-300"
+        className="absolute left-[13.5px] top-3 w-px origin-top bg-accent/80 transition-[height] duration-300"
         style={{
           height: `calc(${Math.min(Math.max(progress, 0), 1) * 100}% - 0.75rem)`,
         }}

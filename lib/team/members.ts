@@ -24,17 +24,17 @@ function membersFromNames(names: string[]): TeamMember[] {
 export const leadership: TeamMember[] = [
   {
     name: "Prof. Mohamed Abou El Azm",
-    role: "Supervisor / Dean of Student Affairs",
+    role: "Academic Advisor",
     isSupervisor: true,
     photo: "/team/leadership/prof-mohamed-abou-el-azm.jpeg",
   },
   {
     name: "Mohamed Ragab",
-    role: "Co-Founder",
+    role: "Co-Founder & President",
     photo: "/team/leadership/mohamed-ragab.jpeg",
   },
   {
-    name: "Omar Ossama",
+    name: "Omar Osama",
     role: "Team Lead",
     photo: "/team/leadership/omar-ossama.jpg",
   },
@@ -49,7 +49,7 @@ export const leadership: TeamMember[] = [
     photo: "/team/leadership/yehia-alaa.jpg",
   },
   {
-    name: "Hassan Yasser",
+    name: "Hassan Elshenawy",
     role: "Electrical Head",
     photo: "/team/leadership/hassan-yasser.jpg",
   },
@@ -105,7 +105,6 @@ export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
     groupPhoto: "/team/electrical.JPG",
     members: membersFromNames([
       "Aleyeldin",
-      "Hassan El Shenawy",
       "Rodaina Ramy",
     ]),
   },

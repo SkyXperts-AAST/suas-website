@@ -22,7 +22,7 @@ export const TEAM_LEADS: TeamLead[] = [
     email: "momahrous@edu.aau.at",
   },
   {
-    name: "Eng. Omar Ossama",
+    name: "Eng. Omar Osama",
     role: "Team Leader",
     email: "O.Sharaf0255@student.aast.edu",
   },

@@ -132,7 +132,6 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               sizes="100vw"
               className="object-cover object-center"
             />
-            <div className="absolute inset-0 bg-[#05071e]/70" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#05071e] via-[#0a1628]/75 to-[#0a1628]/55" />
           </div>
 

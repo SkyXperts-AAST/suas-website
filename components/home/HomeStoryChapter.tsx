@@ -23,16 +23,16 @@ export function HomeStoryChapter({
     <div
       className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-xl"} ${className}`.trim()}
     >
-      <p className="font-display text-[13px] font-bold uppercase tracking-[0.2em] text-accent">
-        {label}
-      </p>
       <h2
-        className={`mt-3 font-display text-3xl leading-[1.05] tracking-tight text-offwhite sm:text-4xl lg:text-5xl ${
+        className={`font-display text-3xl leading-[1.05] tracking-tight text-accent sm:text-4xl lg:text-5xl ${
           centered ? "text-balance" : ""
         }`}
       >
-        {title}
+        {label}
       </h2>
+      <p className="mt-3 font-display text-[13px] font-bold uppercase tracking-[0.2em] text-offwhite">
+        {title}
+      </p>
       {description ? (
         <p
           className={`mt-4 text-sm leading-relaxed text-offwhite/70 sm:text-base sm:leading-[1.75] ${

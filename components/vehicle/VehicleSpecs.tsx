@@ -101,12 +101,12 @@ export default function VehicleSpecs() {
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >
-        <p className="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+        <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-5xl">
           The Airframe
-        </p>
-        <h2 className="mt-3 text-4xl leading-[1.05] tracking-tight text-[#F5F5F7] sm:text-5xl">
-          Built for the mission, not the spec sheet
         </h2>
+        <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.16em] text-[#F5F5F7]">
+          Built for the mission, not the spec sheet
+        </p>
         <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-[#F5F5F7]/75">
           Storm is a carbon-fiber quadcopter engineered for stability and
           endurance under real-world flight conditions, built in-house from the

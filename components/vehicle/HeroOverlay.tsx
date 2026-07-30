@@ -44,12 +44,12 @@ export default function HeroOverlay({
           hasLanded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+        <h1 className="font-display text-6xl leading-[0.92] tracking-tight text-[#E31C1C] sm:text-7xl">
           SUAS · USA
-        </p>
-        <h1 className="mt-3 text-6xl leading-[0.92] tracking-tight text-[#F5F5F7] sm:text-7xl">
-          Storm
         </h1>
+        <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.16em] text-[#F5F5F7]">
+          Storm
+        </p>
         <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#F5F5F7]/70">
           Autonomous heavy-lift quadcopter. Built in-house, subsystem by
           subsystem.

@@ -61,12 +61,12 @@ export default function Home() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(227,28,28,0.14),transparent_65%)]"
           />
           <div className="relative">
-            <p className="text-center font-display text-[13px] font-bold uppercase tracking-[0.24em] text-accent">
+            <h2 className="mx-auto max-w-3xl text-balance text-center font-display text-5xl leading-[1.02] tracking-tight text-accent sm:text-6xl lg:text-7xl">
               Timeline
-            </p>
-            <h2 className="mx-auto mt-4 max-w-3xl text-balance text-center font-display text-5xl leading-[1.02] tracking-tight text-offwhite sm:text-6xl lg:text-7xl">
-              From first flight to Storm
             </h2>
+            <p className="mt-4 text-center font-display text-[13px] font-bold uppercase tracking-[0.24em] text-offwhite">
+              From first flight to Storm
+            </p>
             <p className="mx-auto mt-5 max-w-xl text-pretty text-center text-base leading-8 text-offwhite/70 md:text-lg">
               Two and a half years of building, testing, and iterating — from
               a founding idea to an award-winning flight at ICMTC.

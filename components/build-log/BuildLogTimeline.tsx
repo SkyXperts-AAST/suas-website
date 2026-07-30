@@ -187,17 +187,31 @@ function FeaturedEntry({
 
       {entry.image ? (
         <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-4 py-8 md:px-4 md:py-10">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
-            <Image
-              src={entry.image}
-              alt={entry.imageAlt ?? ""}
-              fill
-              sizes="(max-width: 768px) 100vw, 896px"
-              className="object-cover"
-              style={buildLogImagePositionStyle(entry.imagePosition)}
-              priority
-            />
-          </div>
+          {entry.imageWidth && entry.imageHeight ? (
+            <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+              <Image
+                src={entry.image}
+                alt={entry.imageAlt ?? ""}
+                width={entry.imageWidth}
+                height={entry.imageHeight}
+                sizes="(max-width: 768px) 100vw, 896px"
+                className="h-auto w-full"
+                priority
+              />
+            </div>
+          ) : (
+            <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+              <Image
+                src={entry.image}
+                alt={entry.imageAlt ?? ""}
+                fill
+                sizes="(max-width: 768px) 100vw, 896px"
+                className="object-contain"
+                style={buildLogImagePositionStyle(entry.imagePosition)}
+                priority
+              />
+            </div>
+          )}
           {entry.imageAlt ? (
             <figcaption className="mt-3 text-center text-sm leading-relaxed text-offwhite/55 md:text-[0.9375rem]">
               {entry.imageAlt}

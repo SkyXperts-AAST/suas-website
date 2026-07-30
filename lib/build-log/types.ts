@@ -15,6 +15,9 @@ export type BuildLogContentBlock =
       position?: BuildLogImagePosition;
       alt: string;
       caption?: string;
+      /** Real pixel dimensions of the source file. Lets the figure render at the image's true aspect ratio instead of being cropped into a fixed box. */
+      width?: number;
+      height?: number;
     }
   | { type: "list"; heading?: string; items: string[] };
 
@@ -29,6 +32,9 @@ export type BuildLogEntry = {
   /** CSS object-position for the hero / timeline thumbnail. */
   imagePosition?: BuildLogImagePosition;
   imageAlt?: string;
+  /** Real pixel dimensions of `image`. Lets the hero render at the image's true aspect ratio instead of being cropped into a fixed 16:9 box. */
+  imageWidth?: number;
+  imageHeight?: number;
   tags?: string[];
   /** Full entry content. Use `image` blocks to place photos between paragraphs. */
   body?: BuildLogContentBlock[];

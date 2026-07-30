@@ -580,12 +580,6 @@
           "text": "Full UAV assembly is coming together in SolidWorks — propulsion, payload bay, landing gear, avionics, battery, and release mechanisms all integrated into one compact, serviceable layout."
         },
         {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-cad/body-1.png",
-          "alt": "CAD assembly render of the shifted-X quadcopter UAV showing propulsion, payload bay, and landing gear layout",
-          "caption": "Full UAV assembly render in SolidWorks, with propulsion, payload bay, and avionics integrated into one layout."
-        },
-        {
           "type": "paragraph",
           "text": "Mid-design we made two big hardware calls: swapped to a new battery pack, and upgraded the companion computer from a Raspberry Pi 5 to a Jetson for more onboard AI headroom. Both meant redesigning the battery bay and electronics compartment from scratch."
         },
@@ -593,7 +587,9 @@
           "type": "paragraph",
           "text": "Manufacturing drawings are next on the list."
         }
-      ]
+      ],
+      "imageWidth": 681,
+      "imageHeight": 367
     },
     {
       "id": "mech-8",
@@ -612,16 +608,12 @@
           "text": "Before cutting anything, we ran FEA on the frame — thrust loads at the four motor mounts, weight and payload load at the center plate. The carbon fiber sandwich frame held up well within acceptable deformation."
         },
         {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-fea/body-1.jpg",
-          "alt": "FEA von-Mises stress plot of the quadcopter frame under thrust and payload loading",
-          "caption": "Transient structural FEA of the frame under thrust and payload loads."
-        },
-        {
           "type": "paragraph",
           "text": "We ran the numbers by hand too, to cross-check the sim and estimate natural frequency, plus some quick aero calcs on drag from the cylindrical arms in forward flight. Good balance of strength, weight, and efficiency — cleared to move to fabrication."
         }
-      ]
+      ],
+      "imageWidth": 1080,
+      "imageHeight": 511
     },
     {
       "id": "mech-9",
@@ -664,12 +656,6 @@
           "text": "First real flight campaign. Ground checks (structural, vibration, propulsion, payload deployment) all passed — vibration logs from the flight controller looked clean, and both release mechanisms fired reliably."
         },
         {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-flight/body-1.jpg",
-          "alt": "Storm in flight during its first flight-test campaign",
-          "caption": "Storm during the first flight-test campaign."
-        },
-        {
           "type": "paragraph",
           "text": "Initial flights confirmed the structure held up, but flagged a couple of vibration sources and a CG tweak we wanted to make. We reinforced the arm mounts, rebalanced propulsion, and shuffled a few internal components around in response."
         },
@@ -677,7 +663,9 @@
           "type": "paragraph",
           "text": "Noticeably smoother after the changes — final validation round is next."
         }
-      ]
+      ],
+      "imageWidth": 1206,
+      "imageHeight": 869
     },
     {
       "id": "mech-11",
@@ -696,12 +684,6 @@
           "text": "Repeated flight tests confirmed it: structural integrity and reliability hold under real operating conditions. The frame took flight and landing loads with zero damage, and our FEA predictions matched what we saw in the field."
         },
         {
-          "type": "image",
-          "src": "/blogs/mechanical/mech-validation/body-1.jpg",
-          "alt": "Storm on the ground after a final validation flight test",
-          "caption": "Storm after the final validation flight-test round."
-        },
-        {
           "type": "paragraph",
           "text": "Telemetry showed low vibration and stable flight throughout. Both payload mechanisms performed consistently."
         },
@@ -709,7 +691,9 @@
           "type": "paragraph",
           "text": "This closes out the mechanical development cycle — concept, design, validation, manufacturing, testing, iteration — and leaves us with a platform we're confident bringing to competition."
         }
-      ]
+      ],
+      "imageWidth": 1600,
+      "imageHeight": 900
     }
   ]
 }

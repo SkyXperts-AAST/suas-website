@@ -61,16 +61,29 @@ export default function BuildLogEntryBody({
 
         return (
           <figure key={`image-${index}`} className="build-log-prose-figure my-2">
-            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] md:rounded-xl">
-              <Image
-                src={block.src}
-                alt={block.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, 672px"
-                className="object-cover"
-                style={buildLogImagePositionStyle(block.position)}
-              />
-            </div>
+            {block.width && block.height ? (
+              <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+                <Image
+                  src={block.src}
+                  alt={block.alt}
+                  width={block.width}
+                  height={block.height}
+                  sizes="(max-width: 768px) 100vw, 672px"
+                  className="h-auto w-full"
+                />
+              </div>
+            ) : (
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] md:rounded-xl">
+                <Image
+                  src={block.src}
+                  alt={block.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 672px"
+                  className="object-contain"
+                  style={buildLogImagePositionStyle(block.position)}
+                />
+              </div>
+            )}
             {block.caption ? (
               <figcaption className="mt-3 text-sm leading-relaxed text-offwhite/60 md:text-[0.9375rem]">
                 {block.caption}

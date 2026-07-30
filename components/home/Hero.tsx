@@ -11,6 +11,7 @@ export default function Hero() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [introDone, setIntroDone] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -81,12 +82,14 @@ export default function Hero() {
         <video
           ref={videoRef}
           className={`absolute inset-0 z-10 h-full w-full object-cover transition-opacity duration-1000 ${
-            introDone ? "opacity-0" : "opacity-100"
+            videoReady && !introDone ? "opacity-100" : "opacity-0"
           }`}
           src="/landing.mp4"
+          poster="/drone-hero.webp"
           autoPlay
           muted
           playsInline
+          onPlaying={() => setVideoReady(true)}
           onEnded={() => setIntroDone(true)}
           onError={() => setIntroDone(true)}
         />

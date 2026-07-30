@@ -10,8 +10,9 @@ import SpecGrid, { SPEC_RULE } from "./SpecGrid";
  * looks it up by that id, so it has to stay on whatever section lives here.
  */
 
+const DIMENSIONS = { value: "85×85×35 cm", label: "Dimensions (L x W x H)" };
+
 const STATS: ReadonlyArray<{ value: string; label: string }> = [
-  { value: "5 kg", label: "No payload" },
   { value: "6.75 kg", label: "All-up weight" },
   { value: "4.09:1", label: "Max T/W ratio" },
   { value: "~30 min", label: "Flight endurance" },
@@ -26,20 +27,16 @@ const SUPPORTING: SubsystemSpec[] = [
 ];
 
 /**
- * Column dividers: 2-up on mobile, 4-up from `sm`. A divider belongs on every
- * column that doesn't start a row, so the set differs per breakpoint — index 2
- * starts row two on mobile (no rule) but is mid-row on desktop (rule).
+ * Column dividers for the 3-up stat row below Dimensions. Stacks to one
+ * column on mobile (no dividers needed there) and becomes a 3-up row with
+ * dividers between columns from `sm` up.
  *
  * They draw in the shared SPEC_RULE colour, so the strip, the spec rows below
  * it, and the InfoPanel all use one hairline. To drop the dividers entirely,
  * remove the `dividerFor` call in the JSX.
  */
 function dividerFor(index: number): string {
-  const mobile = index % 2 === 1 ? "border-l" : "";
-  const desktop = index > 0 ? "sm:border-l" : "sm:border-l-0";
-  // `sm:border-l` has to win over a mobile `border-l` that shouldn't persist,
-  // hence the explicit reset on the first desktop column.
-  return `${mobile} ${desktop}`;
+  return index > 0 ? "sm:border-l" : "";
 }
 
 // Pre-reveal state, applied imperatively rather than rendered. Rendering it
@@ -115,25 +112,43 @@ export default function VehicleSpecs() {
 
         {/* Stat strip. No cells or boxes — the numbers carry it, separated by
             whitespace and a hairline rule. */}
-        <dl className="mt-14 grid grid-cols-2 gap-y-10 sm:grid-cols-4">
-          {STATS.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={`px-4 text-center ${dividerFor(i)}`}
-              style={{ borderLeftColor: SPEC_RULE }}
+        <dl className="mt-14 flex flex-col gap-y-10">
+          <div className="text-center">
+            <dt className="sr-only">{DIMENSIONS.label}</dt>
+            <dd className="font-mono text-4xl leading-none tracking-tight tabular-nums text-[#FFFFFF] sm:text-[2.75rem]">
+              {DIMENSIONS.value}
+            </dd>
+            <p
+              aria-hidden="true"
+              className="mt-3 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.18em] text-[#4A4E6E]"
             >
-              <dt className="sr-only">{stat.label}</dt>
-              <dd className="font-mono text-4xl leading-none tracking-tight tabular-nums text-[#FFFFFF] sm:text-[2.75rem]">
-                {stat.value}
-              </dd>
-              <p
-                aria-hidden="true"
-                className="mt-3 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.18em] text-[#4A4E6E]"
+              {DIMENSIONS.label}
+            </p>
+          </div>
+
+          <div
+            className="grid grid-cols-1 gap-y-10 border-t pt-10 sm:grid-cols-3"
+            style={{ borderColor: SPEC_RULE }}
+          >
+            {STATS.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`px-4 text-center ${dividerFor(i)}`}
+                style={{ borderLeftColor: SPEC_RULE }}
               >
-                {stat.label}
-              </p>
-            </div>
-          ))}
+                <dt className="sr-only">{stat.label}</dt>
+                <dd className="font-mono text-4xl leading-none tracking-tight tabular-nums text-[#FFFFFF] sm:text-[2.75rem]">
+                  {stat.value}
+                </dd>
+                <p
+                  aria-hidden="true"
+                  className="mt-3 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.18em] text-[#4A4E6E]"
+                >
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </dl>
 
         {/* Airframe configuration, in the same spec-row treatment the InfoPanel

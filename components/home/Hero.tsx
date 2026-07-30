@@ -84,6 +84,7 @@ export default function Hero() {
             introDone ? "opacity-0" : "opacity-100"
           }`}
           src="/landing.mp4"
+          poster="/drone-hero.webp"
           autoPlay
           muted
           playsInline

@@ -25,33 +25,27 @@ export default function Hero() {
     if (reducedMotion) setIntroDone(true);
   }, [reducedMotion]);
 
+  // Abandon the video and reveal the static hero if playback hasn't started
+  // shortly after mount — autoplay can be blocked, throttled, or just slow.
   useEffect(() => {
-    if (introDone || reducedMotion) return;
+    if (reducedMotion || introDone || videoReady) return;
+    const timeoutId = window.setTimeout(() => setIntroDone(true), 4000);
+    return () => window.clearTimeout(timeoutId);
+  }, [reducedMotion, introDone, videoReady]);
 
+  // Once the video is actually playing, fall back to introDone after its
+  // duration in case `onEnded` never fires.
+  useEffect(() => {
+    if (!videoReady || introDone) return;
     const video = videoRef.current;
     if (!video) return;
-
-    let timeoutId = 0;
-
-    const scheduleFallback = () => {
-      const durationMs =
-        Number.isFinite(video.duration) && video.duration > 0
-          ? video.duration * 1000 + 500
-          : 60000;
-      timeoutId = window.setTimeout(() => setIntroDone(true), durationMs);
-    };
-
-    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
-      scheduleFallback();
-    } else {
-      video.addEventListener("loadedmetadata", scheduleFallback, { once: true });
-    }
-
-    return () => {
-      window.clearTimeout(timeoutId);
-      video.removeEventListener("loadedmetadata", scheduleFallback);
-    };
-  }, [introDone, reducedMotion]);
+    const durationMs =
+      Number.isFinite(video.duration) && video.duration > 0
+        ? video.duration * 1000 + 500
+        : 15000;
+    const timeoutId = window.setTimeout(() => setIntroDone(true), durationMs);
+    return () => window.clearTimeout(timeoutId);
+  }, [videoReady, introDone]);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));

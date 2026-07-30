@@ -61,10 +61,10 @@ export default function Home() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(227,28,28,0.14),transparent_65%)]"
           />
           <div className="relative">
-            <h2 className="mx-auto max-w-3xl text-balance text-center font-display text-5xl leading-[1.02] tracking-tight text-accent sm:text-6xl lg:text-7xl">
+            <h2 className="mx-auto max-w-3xl text-balance text-center font-display text-4xl leading-[1.05] tracking-tight text-accent sm:text-5xl lg:text-6xl">
               Timeline
             </h2>
-            <p className="mt-4 text-center font-display text-[13px] font-bold uppercase tracking-[0.24em] text-offwhite">
+            <p className="mt-4 text-center font-display text-sm font-bold uppercase tracking-[0.24em] text-offwhite sm:text-base">
               From first flight to Storm
             </p>
             <p className="mx-auto mt-5 max-w-xl text-pretty text-center text-base leading-8 text-offwhite/70 md:text-lg">

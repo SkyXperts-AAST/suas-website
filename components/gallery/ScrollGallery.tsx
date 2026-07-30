@@ -35,6 +35,18 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
     const root = scrollerRef.current;
     if (!root || items.length === 0) return;
 
+    // Determine which slide is already in view at mount time (e.g. scroll
+    // position restored by the browser on back-navigation) so its caption
+    // starts active instead of sitting dimmed until the next scroll.
+    const initialIndex = slideRefs.current.findIndex((slide) => {
+      if (!slide) return false;
+      const offset = slide.offsetTop - root.scrollTop;
+      return offset > -root.clientHeight / 2 && offset < root.clientHeight / 2;
+    });
+    if (initialIndex >= 0) {
+      setActiveIndex((prev) => (prev === initialIndex ? prev : initialIndex));
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries

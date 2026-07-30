@@ -56,10 +56,10 @@ export default function SpecialThanks() {
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >
-        <h2 className="mx-auto max-w-2xl text-balance font-display text-3xl leading-[1.05] tracking-tight text-accent sm:text-4xl">
+        <h2 className="mx-auto max-w-2xl text-balance font-display text-2xl leading-[1.05] tracking-tight text-accent sm:text-3xl">
           Special Thanks
         </h2>
-        <p className="mt-3 font-display text-[13px] font-bold uppercase tracking-[0.2em] text-[#F5F5F7]">
+        <p className="mt-3 font-display text-sm font-bold uppercase tracking-[0.2em] text-[#F5F5F7] sm:text-base">
           Student-built. Sponsor-backed.
         </p>
         <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#F5F5F7]/70 sm:text-base">

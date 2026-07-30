@@ -60,10 +60,10 @@ export default function AwardHighlight() {
 
       <div className="relative mx-auto max-w-5xl">
         <div className="text-center">
-          <p className="font-display text-[13px] font-bold uppercase tracking-[0.2em] text-accent">
+          <h2 className="font-display text-2xl leading-[1.05] tracking-tight text-accent sm:text-3xl">
             Recognition
-          </p>
-          <p className="mt-2 text-xs uppercase tracking-[0.16em] text-offwhite/50">
+          </h2>
+          <p className="mt-2 text-sm font-bold uppercase tracking-[0.16em] text-offwhite/50 sm:text-base">
             ICMTC 2026
           </p>
         </div>

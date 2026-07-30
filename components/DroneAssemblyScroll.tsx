@@ -60,9 +60,9 @@ function getSectionProgress(section: HTMLElement, sticky: HTMLElement): number {
 function ChapterHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="shrink-0 text-center">
-      <p className="font-display text-[13px] font-bold uppercase tracking-[0.2em] text-accent">
+      <h2 className="font-display text-2xl leading-[1.05] tracking-tight text-accent sm:text-3xl">
         Build
-      </p>
+      </h2>
       {children}
     </div>
   );
@@ -75,9 +75,9 @@ function StaticAssembly() {
 
       <div className="relative z-10 flex flex-col gap-3 px-5 py-10">
         <ChapterHeading>
-          <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl">
+          <p className="mt-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-offwhite sm:text-base">
             Storm, fully assembled
-          </h2>
+          </p>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-offwhite/65 sm:text-base">
             Avionics, power, vision and propulsion, integrated into one
             airframe.{" "}
@@ -208,9 +208,9 @@ export default function DroneAssemblyScroll() {
 
         <div className="relative z-10 flex h-full min-h-0 flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-4 lg:px-8 lg:py-5">
           <ChapterHeading>
-            <h2 className="mt-2 font-display text-2xl leading-[1.05] tracking-tight text-offwhite sm:text-3xl lg:text-4xl">
+            <p className="mt-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-offwhite sm:text-base">
               Scroll to assemble
-            </h2>
+            </p>
             {/* Both states share one slot (stacked, not sequential) so the
                 heading's height never grows when the completion message
                 appears — that growth would shrink the canvas below and force

@@ -23,10 +23,10 @@ export default function VehiclesPage() {
 
       <section className="border-t border-white/5 px-6 py-24 sm:px-12">
         <div className="mx-auto max-w-4xl">
-          <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-5xl">
+          <h2 className="font-display text-3xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-4xl">
             Flight Readiness
           </h2>
-          <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.16em] text-[#F5F5F7]">
+          <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#F5F5F7] sm:text-base">
             Watch our Flight Readiness Review (FRR)
           </p>
           <div className="mt-10">

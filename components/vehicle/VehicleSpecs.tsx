@@ -101,10 +101,10 @@ export default function VehicleSpecs() {
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >
-        <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-5xl">
+        <h2 className="font-display text-3xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-4xl">
           The Airframe
         </h2>
-        <p className="mt-3 text-[13px] font-bold uppercase tracking-[0.16em] text-[#F5F5F7]">
+        <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#F5F5F7] sm:text-base">
           Built for the mission, not the spec sheet
         </p>
         <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-[#F5F5F7]/75">

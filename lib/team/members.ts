@@ -94,6 +94,7 @@ export const subteams: Record<"Mechanical" | "Electrical", SubTeamGroup> = {
     groupPhoto: "/team/electrical.JPG",
     members: membersFromNames([
       "Aleyeldin",
+      "Hassan Elshenawy",
       "Rodaina Ramy",
     ]),
   },

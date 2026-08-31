@@ -17,11 +17,6 @@ export type TeamLead = {
 
 export const TEAM_LEADS: TeamLead[] = [
   {
-    name: "Eng. Mohamed Ragab",
-    role: "Co-Founder & President",
-    email: "momahrous@edu.aau.at",
-  },
-  {
     name: "Eng. Omar Osama",
     role: "Team Leader",
     email: "O.Sharaf0255@student.aast.edu",

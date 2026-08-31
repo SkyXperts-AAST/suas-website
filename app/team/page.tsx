@@ -42,6 +42,23 @@ export default function TeamPage() {
         </div>
       </section>
 
+      {/* Institutional affiliation — ownership context, kept separate from sponsors */}
+      <PageSection className="border-b border-white/10">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center sm:flex-row sm:gap-7 sm:text-left">
+          <Image
+            src="/ric-logo-white.webp"
+            alt="Regional Informatics Center (RIC), Arab Academy for Science, Technology & Maritime Transport"
+            width={520}
+            height={478}
+            className="h-auto w-[200px] shrink-0 md:w-[240px]"
+          />
+          <p className="text-sm leading-7 text-offwhite/75 md:text-base md:leading-8">
+            SkyXperts is the student UAS team of the Regional Informatics Center
+            (RIC), AAST.
+          </p>
+        </div>
+      </PageSection>
+
       <PageSection>
         <div className="mb-8 md:mb-10">
           <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
@@ -51,12 +68,11 @@ export default function TeamPage() {
             Leadership
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-            Faculty supervision and student leadership across software,
-            mechanical, and electrical.
+            Student leadership across software, mechanical, and electrical.
           </p>
         </div>
 
-        <ul className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid grid-cols-2 justify-items-center gap-4 sm:gap-5 lg:grid-cols-4 lg:gap-6">
           {leadership.map((member) => (
             <li key={member.name} className="w-full max-w-[220px]">
               <MemberCard member={member} />

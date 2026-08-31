@@ -23,17 +23,6 @@ function membersFromNames(names: string[]): TeamMember[] {
 
 export const leadership: TeamMember[] = [
   {
-    name: "Prof. Mohamed Abou El Azm",
-    role: "Academic Advisor",
-    isSupervisor: true,
-    photo: "/team/leadership/prof-mohamed-abou-el-azm.jpeg",
-  },
-  {
-    name: "Mohamed Ragab",
-    role: "Co-Founder & President",
-    photo: "/team/leadership/mohamed-ragab.jpeg",
-  },
-  {
     name: "Omar Osama",
     role: "Team Lead",
     photo: "/team/leadership/omar-ossama.jpg",

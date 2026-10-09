@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import MemberCard from "@/components/team/MemberCard";
+import MentorCarousel from "@/components/team/MentorCarousel";
 import SubTeamTabs from "@/components/team/SubTeamTabs";
 import { PageSection, PageShell } from "@/components/layout/PageShell";
-import { leadership } from "@/lib/team/members";
+import { leadership, mentors } from "@/lib/team/members";
 
 export const metadata: Metadata = {
   title: "Team | SkyXperts",
@@ -42,24 +43,37 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Institutional affiliation — ownership context, kept separate from sponsors */}
+      {/* Arab Academy affiliation */}
       <PageSection className="border-b border-white/10">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center sm:flex-row sm:gap-7 sm:text-left">
           <Image
-            src="/ric-logo-white.webp"
-            alt="Regional Informatics Center (RIC), Arab Academy for Science, Technology & Maritime Transport"
+            src="/aast-logo-white.webp"
+            alt="Arab Academy for Science, Technology & Maritime Transport"
             width={520}
-            height={478}
+            height={438}
             className="h-auto w-[200px] shrink-0 md:w-[240px]"
           />
           <p className="text-sm leading-7 text-offwhite/75 md:text-base md:leading-8">
-            SkyXperts is the student UAS team of the Regional Informatics Center
-            (RIC), AAST.
+            SkyXperts is the student UAS team at the Arab Academy for Science,
+            Technology & Maritime Transport.
           </p>
         </div>
       </PageSection>
 
       <PageSection>
+        <div className="mb-10 border-b border-white/10 pb-10 md:mb-12 md:pb-12">
+          <div className="mb-8 md:mb-10">
+            <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
+              Experience behind every flight
+            </p>
+            <h2 className="mt-3 text-4xl leading-[1.05] text-offwhite md:text-5xl">
+              Mentors
+            </h2>
+          </div>
+
+          <MentorCarousel mentors={mentors} />
+        </div>
+
         <div className="mb-8 md:mb-10">
           <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
             Guiding the program
@@ -72,7 +86,7 @@ export default function TeamPage() {
           </p>
         </div>
 
-        <ul className="grid grid-cols-2 justify-items-center gap-4 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+        <ul className="mx-auto grid max-w-[480px] grid-cols-2 justify-items-center gap-4 sm:gap-5 lg:gap-6">
           {leadership.map((member) => (
             <li key={member.name} className="w-full max-w-[220px]">
               <MemberCard member={member} />
@@ -90,8 +104,8 @@ export default function TeamPage() {
             Sub-teams
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-            Explore Software, Mechanical, and Electrical — the crews turning
-            ideas into a flying, thinking machine.
+            Explore Software, Mechanical, Electrical, Web Dev, and Media — the
+            teams turning ideas into a flying, thinking machine.
           </p>
         </div>
 

@@ -26,13 +26,15 @@ export default function GroupPhotoRoster({
         </h3>
       ) : null}
 
-      <p
-        className={`text-base leading-8 text-offwhite/70 md:text-lg md:leading-8 ${
-          title ? "mt-3" : ""
-        }`}
-      >
-        {caption}
-      </p>
+      {members.length > 0 ? (
+        <p
+          className={`text-base leading-8 text-offwhite/70 md:text-lg md:leading-8 ${
+            title ? "mt-3" : ""
+          }`}
+        >
+          {caption}
+        </p>
+      ) : null}
 
       <div className="mt-5 grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
         <div className="relative min-h-[240px] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] md:min-h-[320px]">

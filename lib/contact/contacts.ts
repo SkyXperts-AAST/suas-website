@@ -12,14 +12,12 @@ export const TEAM_EMAIL = "SkyXperts@aast.edu";
 export type TeamLead = {
   name: string;
   role: string;
-  email: string;
 };
 
 export const TEAM_LEADS: TeamLead[] = [
   {
-    name: "Eng. Omar Osama",
+    name: "Yehia Alaa",
     role: "Team Leader",
-    email: "O.Sharaf0255@student.aast.edu",
   },
 ];
 

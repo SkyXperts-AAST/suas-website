@@ -46,14 +46,14 @@ export default function ContactDirectory() {
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-offwhite/70 md:text-base">
           Have a question, want to sponsor us, or just want to say hi? Reach out
-          below or email a lead directly.
+          below or email the team inbox.
         </p>
       </div>
 
       <dl className="mx-auto mt-12 max-w-2xl divide-y divide-white/10 border-y border-white/10">
         {TEAM_LEADS.map((lead) => (
           <div
-            key={lead.email}
+            key={lead.name}
             className="py-7 md:flex md:items-baseline md:justify-between md:gap-8"
           >
             <dt className="leading-tight">
@@ -64,9 +64,6 @@ export default function ContactDirectory() {
                 {lead.role}
               </span>
             </dt>
-            <dd className="mt-2.5 md:mt-0 md:text-right">
-              <EmailLink address={lead.email} />
-            </dd>
           </div>
         ))}
       </dl>

@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import GroupPhotoRoster from "@/components/team/GroupPhotoRoster";
+import MemberCard from "@/components/team/MemberCard";
 import {
   softwareGroups,
   subteams,
@@ -113,21 +114,14 @@ export default function SubTeamTabs() {
                   photoAlt="Control & Navigation sub-team group photo"
                 />
               </div>
-            ) : tab === "Mechanical" ? (
+            ) : tab === "Mechanical" || tab === "Electrical" || tab === "Web Dev" || tab === "Media" ? (
               <GroupPhotoRoster
-                members={subteams.Mechanical.members}
-                groupPhoto={subteams.Mechanical.groupPhoto}
-                blurb={subteams.Mechanical.blurb}
-                photoAlt="Mechanical sub-team group photo"
+                members={subteams[tab].members}
+                groupPhoto={subteams[tab].groupPhoto}
+                blurb={subteams[tab].blurb}
+                photoAlt={`${tab} sub-team group photo`}
               />
-            ) : (
-              <GroupPhotoRoster
-                members={subteams.Electrical.members}
-                groupPhoto={subteams.Electrical.groupPhoto}
-                blurb={subteams.Electrical.blurb}
-                photoAlt="Electrical sub-team group photo"
-              />
-            )}
+            ) : null}
           </div>
         );
       })}

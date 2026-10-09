@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SponsorLogoGrid from "@/components/sponsors/SponsorLogoGrid";
 import { PageHero, PageSection, PageShell } from "@/components/layout/PageShell";
-import { SPONSORSHIP_PROPOSAL_PDF } from "@/lib/sponsors/sponsors";
 
 export const metadata: Metadata = {
   title: "Sponsorships | SkyXperts",
@@ -52,27 +51,23 @@ export default function SponsorshipsPage() {
           </p>
         </div>
 
-        {/* Opens in the browser's own PDF viewer rather than embedding one.
-            An <object> embed shipped the whole 15MB file to every visitor and
-            doesn't render inline on iOS Safari at all. */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a
-            href={SPONSORSHIP_PROPOSAL_PDF}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            disabled
             className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <ExternalLinkIcon />
             Read the proposal
-          </a>
-          <a
-            href={SPONSORSHIP_PROPOSAL_PDF}
-            download
+          </button>
+          <button
+            type="button"
+            disabled
             className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <DownloadIcon />
             Download a copy
-          </a>
+          </button>
         </div>
       </PageSection>
     </PageShell>

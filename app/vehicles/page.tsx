@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import VehicleCanvas from "@/components/vehicle/VehicleCanvas";
 import VehicleSpecs from "@/components/vehicle/VehicleSpecs";
-import FrrVideo from "@/components/vehicle/FrrVideo";
 
 export const metadata: Metadata = {
   title: "Vehicles | SkyXperts",
@@ -30,7 +29,9 @@ export default function VehiclesPage() {
             Watch our Flight Readiness Review (FRR)
           </p>
           <div className="mt-10">
-            <FrrVideo />
+            <div className="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-[#0A0E3F]/80 text-center text-sm font-medium uppercase tracking-[0.16em] text-[#D9DDE7] shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+              Video placeholder for future content
+            </div>
           </div>
         </div>
       </section>

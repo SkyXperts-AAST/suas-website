@@ -13,7 +13,7 @@ const REASON_LABELS: Record<string, string> = {
 	other: "Other",
 };
 
-const RECIPIENT_EMAIL = "SkyXperts@aast.edu";
+const RECIPIENT_EMAIL = "ffathy2004@gmail.com";
 
 interface ContactPayload {
 	name: string;

@@ -64,6 +64,9 @@ export default function ContactDirectory() {
                 {lead.role}
               </span>
             </dt>
+            <dd className="mt-3 md:mt-0 md:text-right">
+              <EmailLink address={lead.email} />
+            </dd>
           </div>
         ))}
       </dl>

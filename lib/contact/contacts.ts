@@ -6,18 +6,20 @@ export type ContactReason =
   | "join-team"
   | "other";
 
-/** Shared team inbox: listed directly and used by the contact form's mailto. */
+/** Shared team inbox shown on the contact page and after successful submissions. */
 export const TEAM_EMAIL = "SkyXperts@aast.edu";
 
 export type TeamLead = {
   name: string;
   role: string;
+  email: string;
 };
 
 export const TEAM_LEADS: TeamLead[] = [
   {
     name: "Yehia Alaa",
     role: "Team Leader",
+    email: "ffathy2004@gmail.com",
   },
 ];
 

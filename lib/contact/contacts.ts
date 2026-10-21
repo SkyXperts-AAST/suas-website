@@ -19,7 +19,7 @@ export const TEAM_LEADS: TeamLead[] = [
   {
     name: "Yehia Alaa",
     role: "Team Leader",
-    email: "ffathy2004@gmail.com",
+    email: "yalaa7455@gmail.com",
   },
 ];
 

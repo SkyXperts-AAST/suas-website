@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Image as ImageIcon } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -17,6 +18,39 @@ type ScrollGalleryProps = {
 
 function formatIndex(index: number, total: number) {
   return `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+}
+
+function GalleryPhotoPlaceholder({ title }: { title: string }) {
+  return (
+    <div
+      role="img"
+      aria-label={`${title} photo coming soon`}
+      className="absolute inset-0 flex items-center justify-center overflow-hidden bg-[#07101f] px-6 text-center"
+    >
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(227,28,28,0.14),transparent_55%),linear-gradient(135deg,#0a1628,#05071e)]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:48px_48px]"
+      />
+      <div className="relative z-10 flex max-w-lg flex-col items-center">
+        <span className="flex size-16 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent shadow-[0_0_50px_rgba(227,28,28,0.12)]">
+          <ImageIcon aria-hidden="true" size={28} strokeWidth={1.5} />
+        </span>
+        <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-accent">
+          A new moment is taking shape
+        </p>
+        <p className="mt-3 text-3xl leading-tight text-offwhite sm:text-4xl md:text-5xl">
+          Photo coming soon
+        </p>
+        <p className="mt-3 text-sm leading-6 text-offwhite/60 sm:text-base">
+          We&apos;re getting this SkyXperts story ready to share.
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default function ScrollGallery({ items }: ScrollGalleryProps) {
@@ -118,15 +152,19 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               Darkened harder than the photo slides' own overlays, since full
               headline copy sits on top of this one. */}
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image
-              src={introItem.image}
-              alt=""
-              aria-hidden="true"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center"
-            />
+                {introItem.image ? (
+                  <Image
+                    src={introItem.image}
+                    alt=""
+                    aria-hidden="true"
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                ) : (
+                  <GalleryPhotoPlaceholder title={introItem.title} />
+                )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#05071e] via-[#0a1628]/75 to-[#0a1628]/55" />
           </div>
 
@@ -162,16 +200,20 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
               style={{ scrollSnapAlign: "start", scrollSnapStop: "always" }}
             >
               <div className="relative min-h-0 flex-1 overflow-hidden bg-[#05071e] md:absolute md:inset-0 md:flex-none">
-                <Image
-                  src={item.image}
-                  alt={item.imageAlt}
-                  fill
-                  priority={index < 2}
-                  sizes="100vw"
-                  className={`object-contain object-center transition-transform duration-700 ease-out md:object-cover md:duration-[900ms] ${
-                    isActive ? "scale-100" : "scale-100 md:scale-105"
-                  }`}
-                />
+                {item.image ? (
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    priority={index < 2}
+                    sizes="100vw"
+                    className={`object-contain object-center transition-transform duration-700 ease-out md:object-cover md:duration-[900ms] ${
+                      isActive ? "scale-100" : "scale-100 md:scale-105"
+                    }`}
+                  />
+                ) : (
+                  <GalleryPhotoPlaceholder title={item.title} />
+                )}
                 <div className="pointer-events-none absolute inset-0 hidden bg-[#0a1628]/35 md:block" />
                 <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-[#05071e]/95 via-[#0a1628]/30 to-[#0a1628]/20 md:block" />
                 <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#05071e]/55 via-transparent to-[#05071e]/40 md:block" />

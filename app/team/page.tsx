@@ -63,10 +63,10 @@ export default function TeamPage() {
       <PageSection>
         <div className="mb-10 border-b border-white/10 pb-10 md:mb-12 md:pb-12">
           <div className="mb-8 md:mb-10">
-            <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
+            <p className="eyebrow">
               Experience behind every flight
             </p>
-            <h2 className="mt-3 text-4xl leading-[1.05] text-offwhite md:text-5xl">
+            <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
               Mentors
             </h2>
           </div>
@@ -75,10 +75,10 @@ export default function TeamPage() {
         </div>
 
         <div className="mb-8 md:mb-10">
-          <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
+          <p className="eyebrow">
             Guiding the program
           </p>
-          <h2 className="mt-3 text-4xl leading-[1.05] text-offwhite md:text-5xl">
+          <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
             Leadership
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
@@ -97,10 +97,10 @@ export default function TeamPage() {
 
       <PageSection className="border-t border-white/10">
         <div className="mb-8 md:mb-10">
-          <p className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
+          <p className="eyebrow">
             Where the work happens
           </p>
-          <h2 className="mt-3 text-4xl leading-[1.05] text-offwhite md:text-5xl">
+          <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
             Sub-teams
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">

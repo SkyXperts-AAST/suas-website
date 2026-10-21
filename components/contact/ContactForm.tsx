@@ -61,7 +61,7 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="rounded-3xl border border-white/15 bg-[#07101f]/80 p-10 text-center shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-14">
+      <div className="rounded-md border border-white/15 bg-[#07101f]/80 p-10 text-center md:p-14">
         <span className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
           <svg
             width="22"
@@ -98,7 +98,7 @@ export default function ContactForm() {
             setStatus("idle");
             setForm(INITIAL_STATE);
           }}
-          className="mt-6 rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-offwhite transition hover:border-white/35 hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="mt-6 rounded-sm border border-white/20 px-5 py-2.5 text-sm font-semibold text-offwhite transition hover:border-white/35 hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           Send another request
         </button>
@@ -109,7 +109,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-white/15 bg-[#07101f]/80 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-12"
+      className="rounded-md border border-white/15 bg-[#07101f]/80 p-8 md:p-12"
     >
       <div className="text-center">
         <h2 className="text-3xl leading-[1.02] text-offwhite md:text-4xl">
@@ -199,7 +199,7 @@ export default function ContactForm() {
       {status === "error" && (
         <p
           role="alert"
-          className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm font-medium text-red-400"
+          className="mt-6 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm font-medium text-red-400"
         >
           {errorMessage}
         </p>
@@ -209,7 +209,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-10 py-4 text-base font-semibold text-white shadow-lg shadow-accent/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101f] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-accent px-10 py-4 text-base font-semibold text-white transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101f] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
         >
           {status === "loading" && (
             <svg
@@ -241,7 +241,7 @@ export default function ContactForm() {
 }
 
 const inputClassName =
-  "mt-2 w-full rounded-xl border border-white/15 bg-[#0a1628]/80 px-4 py-3.5 text-base text-offwhite placeholder:text-offwhite/35 outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20";
+  "mt-2 w-full rounded-md border border-white/15 bg-[#0a1628]/80 px-4 py-3.5 text-base text-offwhite placeholder:text-offwhite/35 outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20";
 
 function Field({
   label,

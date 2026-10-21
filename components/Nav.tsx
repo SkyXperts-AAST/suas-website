@@ -58,8 +58,10 @@ function DesktopNavLink({
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className={`text-sm font-bold tracking-[0.01em] transition-colors duration-200 focus:outline-none focus-visible:text-accent ${
-        active ? "text-accent" : "text-white/75 hover:text-white"
+      className={`relative py-5 text-[0.8125rem] font-medium uppercase tracking-[0.12em] transition-colors duration-200 focus:outline-none focus-visible:text-accent ${
+        active
+          ? "text-white after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-accent"
+          : "text-white/65 hover:text-white"
       }`}
     >
       {label}
@@ -230,7 +232,7 @@ export default function Nav() {
             />
             <div
               id="mobile-nav-menu"
-              className="nav-glass absolute inset-x-3 top-[calc(100%+0.375rem)] z-50 overflow-hidden rounded-xl border border-white/10 shadow-2xl shadow-black/40"
+              className="nav-glass absolute inset-x-3 top-[calc(100%+0.375rem)] z-50 overflow-hidden rounded-md border border-white/10 shadow-2xl shadow-black/40"
             >
               <ul className="py-1">
                 {MOBILE_MORE.map((link) => {

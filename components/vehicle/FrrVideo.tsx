@@ -26,7 +26,7 @@ export default function FrrVideo() {
 
   return (
     <div
-      className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/8 bg-[#0A0E3F]"
+      className="relative aspect-video w-full overflow-hidden rounded-md border border-white/8 bg-[#0A0E3F]"
       style={{ boxShadow: "0 20px 60px rgba(0, 0, 0, 0.45)" }}
     >
       {playing ? (

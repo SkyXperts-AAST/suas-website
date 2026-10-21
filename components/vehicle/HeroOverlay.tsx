@@ -44,10 +44,10 @@ export default function HeroOverlay({
           hasLanded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="font-display text-[13px] font-bold uppercase tracking-[0.16em] text-[#E31C1C]">
+        <p className="eyebrow">
           SUAS · USA
         </p>
-        <h1 className="mt-3 text-6xl leading-[0.92] tracking-tight text-[#F5F5F7] sm:text-7xl">
+        <h1 className="mt-4 text-6xl leading-[0.92] text-[#F5F5F7] sm:text-8xl">
           Storm
         </h1>
         <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#F5F5F7]/70">
@@ -62,13 +62,13 @@ export default function HeroOverlay({
           <button
             onClick={onExplore}
             disabled={tourActive || !hasLanded}
-            className="rounded-full bg-[#E31C1C] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#E31C1C]/20 transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E3F] disabled:cursor-default disabled:bg-[#E31C1C]/50"
+            className="rounded-sm bg-[#E31C1C] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0E3F] disabled:cursor-default disabled:bg-[#E31C1C]/50"
           >
             {tourActive ? "Tour Running…" : "Explore Components"}
           </button>
           <button
             onClick={onMoreInfo}
-            className="rounded-full border border-[#F5F5F7]/40 px-6 py-2.5 text-sm font-semibold text-[#F5F5F7] backdrop-blur-sm transition hover:border-[#F5F5F7] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60"
+            className="rounded-sm border border-[#F5F5F7]/40 px-6 py-2.5 text-sm font-semibold text-[#F5F5F7] backdrop-blur-sm transition hover:border-[#F5F5F7] hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60"
           >
             More Info
           </button>

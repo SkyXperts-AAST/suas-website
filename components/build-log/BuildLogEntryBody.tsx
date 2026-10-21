@@ -62,7 +62,7 @@ export default function BuildLogEntryBody({
         return (
           <figure key={`image-${index}`} className="build-log-prose-figure my-2">
             {block.width && block.height ? (
-              <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+              <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-md">
                 <Image
                   src={block.src}
                   alt={block.alt}
@@ -73,7 +73,7 @@ export default function BuildLogEntryBody({
                 />
               </div>
             ) : (
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] md:rounded-xl">
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-white/[0.02] md:rounded-md">
                 <Image
                   src={block.src}
                   alt={block.alt}

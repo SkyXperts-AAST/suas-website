@@ -55,16 +55,12 @@ export default function Home() {
       {/* CHAPTER 02 — TIMELINE (the narrative centerpiece, given extra scale
           and its own spotlighted panel so it reads as the story's high point) */}
       <section id="timeline" className="scroll-mt-24 px-6 py-20 md:py-28">
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.02] px-6 py-14 sm:px-12 sm:py-20">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(227,28,28,0.14),transparent_65%)]"
-          />
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-md border border-white/10 bg-white/[0.015] px-6 py-14 sm:px-12 sm:py-20">
           <div className="relative">
-            <h2 className="mx-auto max-w-3xl text-balance text-center font-display text-4xl leading-[1.05] tracking-tight text-accent sm:text-5xl lg:text-6xl">
+            <h2 className="heading-rule heading-rule-center mx-auto max-w-3xl text-balance text-center text-4xl text-offwhite sm:text-5xl lg:text-6xl">
               Timeline
             </h2>
-            <p className="mt-4 text-center font-display text-sm font-bold uppercase tracking-[0.24em] text-offwhite sm:text-base">
+            <p className="kicker mt-4 text-center">
               From first flight to Storm
             </p>
             <p className="mx-auto mt-5 max-w-xl text-pretty text-center text-base leading-8 text-offwhite/70 md:text-lg">

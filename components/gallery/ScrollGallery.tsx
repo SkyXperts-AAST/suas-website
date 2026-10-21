@@ -118,7 +118,7 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
   if (items.length === 0) {
     return (
       <div className="relative bg-navy px-6 py-20 text-offwhite">
-        <p className="mx-auto max-w-lg rounded-2xl border border-white/10 bg-white/5 px-6 py-10 text-center text-offwhite/70">
+        <p className="mx-auto max-w-lg rounded-md border border-white/10 bg-white/5 px-6 py-10 text-center text-offwhite/70">
           Gallery photos coming soon.
         </p>
       </div>
@@ -137,11 +137,6 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
         className="relative h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto overscroll-y-contain"
         style={{ scrollSnapType: "y mandatory" }}
       >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[28rem] bg-[radial-gradient(circle_at_top,rgba(227,28,28,0.18),transparent_55%)]"
-        />
-
         <section
           ref={(node) => {
             slideRefs.current[0] = node;
@@ -226,11 +221,11 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
 
               {/* Mobile caption under image */}
               <div className="shrink-0 border-t border-white/5 bg-[#05071e] px-5 py-4 sm:px-6 sm:py-5 md:hidden">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+                <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-accent">
                   {formatIndex(index, photoItems.length)}
                 </p>
                 {item.category ? (
-                  <p className="mt-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                  <p className="mt-1.5 font-mono text-[0.7rem] font-medium uppercase tracking-[0.16em] text-offwhite/55">
                     {item.category}
                   </p>
                 ) : null}
@@ -249,11 +244,11 @@ export default function ScrollGallery({ items }: ScrollGalleryProps) {
                 }`}
               >
                 <div className="max-w-2xl">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent">
+                  <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-accent">
                     {formatIndex(index, photoItems.length)}
                   </p>
                   {item.category ? (
-                    <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-offwhite/55">
+                    <p className="mt-3 font-mono text-[0.7rem] font-medium uppercase tracking-[0.16em] text-offwhite/55">
                       {item.category}
                     </p>
                   ) : null}

@@ -23,7 +23,7 @@ export default function SponsorshipsPage() {
 
       <PageSection>
         <div className="mb-8 md:mb-10">
-          <p className="font-display text-sm font-bold uppercase tracking-[0.16em] text-accent md:text-base">
+          <p className="eyebrow">
             Partners
           </p>
           <h2 className="mt-3 text-3xl leading-[1.05] text-offwhite md:text-4xl">
@@ -38,7 +38,7 @@ export default function SponsorshipsPage() {
 
       <PageSection className="border-t border-white/10">
         <div className="mb-8 md:mb-10">
-          <p className="font-display text-sm font-bold uppercase tracking-[0.16em] text-accent md:text-base">
+          <p className="eyebrow">
             Proposal
           </p>
           <h2 className="mt-3 text-3xl leading-[1.05] text-offwhite md:text-4xl">
@@ -55,7 +55,7 @@ export default function SponsorshipsPage() {
           <button
             type="button"
             disabled
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <ExternalLinkIcon />
             Read the proposal
@@ -63,7 +63,7 @@ export default function SponsorshipsPage() {
           <button
             type="button"
             disabled
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+            className="inline-flex items-center justify-center gap-2 rounded-sm border border-accent/40 bg-accent/15 px-5 py-2.5 text-sm font-semibold text-accent transition hover:border-accent/55 hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
           >
             <DownloadIcon />
             Download a copy

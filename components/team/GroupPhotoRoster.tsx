@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
 import type { TeamMember } from "@/lib/team/members";
@@ -17,12 +20,13 @@ export default function GroupPhotoRoster({
   title,
   photoAlt = "Team group photo",
 }: GroupPhotoRosterProps) {
+  const [photoFailed, setPhotoFailed] = useState(false);
   const caption = `Picture left to right: ${members.map((m) => m.name).join(", ")}.`;
 
   return (
     <div>
       {title ? (
-        <h3 className="font-display text-base font-bold uppercase tracking-[0.16em] text-accent md:text-lg">
+        <h3 className="eyebrow">
           {title}
         </h3>
       ) : null}
@@ -38,14 +42,15 @@ export default function GroupPhotoRoster({
       ) : null}
 
       <div className="mt-5 grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
-        <div className="relative min-h-[240px] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] md:min-h-[320px]">
-          {groupPhoto ? (
+        <div className="relative min-h-[240px] overflow-hidden rounded-md border border-white/10 bg-white/[0.03] md:min-h-[320px]">
+          {groupPhoto && !photoFailed ? (
             <Image
               src={groupPhoto}
               alt={photoAlt}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
+              onError={() => setPhotoFailed(true)}
             />
           ) : (
             <div

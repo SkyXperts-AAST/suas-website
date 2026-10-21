@@ -58,11 +58,6 @@ export const mentors: TeamMember[] = [
     photo: "/team/leadership/Mentors/Moustafa-Adly.jpg",
   },
   {
-    name: "Omar Aman",
-    role: "Mentor",
-    photo: "/team/leadership/Mentors/Omar-Aman.jpg",
-  },
-  {
     name: "Osama Hesham",
     role: "Mentor",
     photo: "/team/leadership/Mentors/Osama-Hesham.jpg",
@@ -97,13 +92,13 @@ export const softwareGroups = {
   computerVision: {
     blurb:
       "Computer Vision is how Storm sees, and how it makes sense of what it's looking at. The team stitches scattered aerial footage into clean, high-resolution maps, and it trains detection models that can find a single target in a messy landscape while the drone is still moving.",
-    groupPhoto: "/team/vision.JPG",
+    groupPhoto: undefined,
     members: membersFromNames(["Yasmin Ahmed"]),
   } satisfies SubTeamGroup,
   controlAndNavigation: {
     blurb:
       "Control & Navigation handles the reflexes. They keep Storm steady, hold it on course, and make the split-second calls during takeoff, landing, and whatever goes wrong in between. That last part is the difference between a drone that flies and one you can actually trust.",
-    groupPhoto: "/team/control.JPG",
+    groupPhoto: undefined,
     members: membersFromNames([
       "Nour Allam",
       "Jana El Wazzan",
@@ -117,13 +112,11 @@ export const subteams: Record<"Mechanical" | "Electrical" | "Web Dev" | "Media",
   Mechanical: {
     blurb:
       "Mechanical builds the body everything else bolts onto. They shape the airframe and structure, which has to stay light enough to fly and tough enough to survive landing after landing. It folds down to travel too, and they care about how it looks while it does all of that.",
-    groupPhoto: "/team/mechanical.JPG",
     members: membersFromNames(["Salma"]),
   },
   Electrical: {
     blurb:
       "Electrical keeps Storm powered. They design the architecture behind every subsystem: batteries sized correctly, wiring kept clean, and current arriving where it's needed the moment it's needed, from the first spin of the props to the last.",
-    groupPhoto: "/team/electrical.JPG",
     members: [],
   },
   "Web Dev": {

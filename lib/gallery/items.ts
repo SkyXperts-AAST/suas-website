@@ -1,6 +1,5 @@
 import type { GalleryItem } from "./types";
 
-// Only list photos that exist in public/gallery/.
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
     id: "flight-test",
@@ -25,7 +24,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Team on the line",
     description:
       "Cross-sub-team review before a major integration milestone and flight readiness check.",
-    image: "/gallery/team.jpg",
     imageAlt: "Engineering team collaborating around a table",
     category: "Team",
   },
@@ -34,7 +32,6 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     title: "Leadership",
     description:
       "SkyXperts student leaders guiding the SUAS program.",
-    image: "/gallery/leaders.jpg",
     imageAlt: "SkyXperts leadership team group photo",
     category: "Team",
   },

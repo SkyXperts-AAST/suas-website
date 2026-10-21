@@ -50,14 +50,17 @@ export default function MemberCard({ member }: MemberCardProps) {
             sizes="220px"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
+          <div className="relative flex h-full flex-col items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(227,28,28,0.12),transparent_60%),linear-gradient(135deg,#0a1628,#05071e)]">
             <span
               aria-hidden="true"
-              className={`font-display text-3xl font-bold tracking-wide ${
+              className={`font-display text-4xl font-bold tracking-wide ${
                 supervisor ? "text-accent" : "text-offwhite/70"
               }`}
             >
               {initials || "?"}
+            </span>
+            <span className="mt-3 rounded-full border border-white/10 bg-[#07101f]/60 px-2.5 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.14em] text-offwhite/50">
+              Portrait coming soon
             </span>
           </div>
         )}

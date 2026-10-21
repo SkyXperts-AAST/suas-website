@@ -98,10 +98,10 @@ export default function VehicleSpecs() {
           revealed ? "translate-y-0 opacity-100" : ""
         }`}
       >
-        <h2 className="font-display text-3xl leading-[1.05] tracking-tight text-[#E31C1C] sm:text-4xl">
+        <h2 className="heading-rule text-4xl text-offwhite sm:text-5xl">
           The Airframe
         </h2>
-        <p className="mt-3 text-sm font-bold uppercase tracking-[0.16em] text-[#F5F5F7] sm:text-base">
+        <p className="kicker mt-4">
           Built for the mission, not the spec sheet
         </p>
         <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-[#F5F5F7]/75">
@@ -115,12 +115,12 @@ export default function VehicleSpecs() {
         <dl className="mt-14 flex flex-col gap-y-10">
           <div className="text-center">
             <dt className="sr-only">{DIMENSIONS.label}</dt>
-            <dd className="font-mono text-4xl leading-none tracking-tight tabular-nums text-[#FFFFFF] sm:text-[2.75rem]">
+            <dd className="font-mono text-3xl font-medium leading-none tabular-nums text-[#FFFFFF] sm:text-[2.5rem]">
               {DIMENSIONS.value}
             </dd>
             <p
               aria-hidden="true"
-              className="mt-3 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.18em] text-[#4A4E6E]"
+              className="mt-3 font-mono text-[0.7rem] font-medium uppercase leading-tight tracking-[0.16em] text-offwhite/55"
             >
               {DIMENSIONS.label}
             </p>
@@ -137,12 +137,12 @@ export default function VehicleSpecs() {
                 style={{ borderLeftColor: SPEC_RULE }}
               >
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-mono text-4xl leading-none tracking-tight tabular-nums text-[#FFFFFF] sm:text-[2.75rem]">
+                <dd className="font-mono text-3xl font-medium leading-none tabular-nums text-[#FFFFFF] sm:text-[2.5rem]">
                   {stat.value}
                 </dd>
                 <p
                   aria-hidden="true"
-                  className="mt-3 text-[0.65rem] font-semibold uppercase leading-tight tracking-[0.18em] text-[#4A4E6E]"
+                  className="mt-3 font-mono text-[0.7rem] font-medium uppercase leading-tight tracking-[0.16em] text-offwhite/55"
                 >
                   {stat.label}
                 </p>

@@ -17,7 +17,7 @@ export default function SponsorLogo({
   // bigger and given breathing room instead of being boxed in.
   const frameClass = compact
     ? "group flex h-16 w-40 items-center justify-center transition sm:h-20 sm:w-48"
-    : "group flex h-32 w-full items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-6 transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.05] sm:h-40";
+    : "group flex h-32 w-full items-center justify-center rounded-md border border-white/10 bg-white/[0.03] px-6 py-6 transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.05] sm:h-40";
 
   // Rendered as a soft white silhouette so every logo reads cleanly against
   // navy regardless of its own colors (some, like dark wordmarks, would

@@ -58,11 +58,6 @@ export const mentors: TeamMember[] = [
     photo: "/team/leadership/Mentors/Moustafa-Adly.jpg",
   },
   {
-    name: "Omar Aman",
-    role: "Mentor",
-    photo: "/team/leadership/Mentors/Omar-Aman.jpg",
-  },
-  {
     name: "Osama Hesham",
     role: "Mentor",
     photo: "/team/leadership/Mentors/Osama-Hesham.jpg",

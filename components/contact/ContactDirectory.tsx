@@ -38,7 +38,7 @@ export default function ContactDirectory() {
   return (
     <div>
       <div className="text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-offwhite/50">
+        <p className="kicker">
           Direct contact
         </p>
         <h2 className="mt-2 text-2xl leading-[1.05] text-offwhite md:text-3xl">
@@ -72,7 +72,7 @@ export default function ContactDirectory() {
       </dl>
 
       <dl className="mx-auto mt-7 max-w-2xl md:flex md:items-baseline md:justify-between md:gap-8">
-        <dt className="text-xs font-bold uppercase tracking-[0.18em] text-offwhite/40">
+        <dt className="kicker !text-offwhite/45">
           Team email
         </dt>
         <dd className="mt-2 md:mt-0 md:text-right">

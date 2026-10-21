@@ -136,7 +136,7 @@ function FeaturedEntry({
   onGoOlder,
 }: FeaturedEntryProps) {
   return (
-    <article className="build-log-featured build-log-article overflow-hidden rounded-xl border border-white/20 bg-[#0a1628]/90 shadow-[0_12px_40px_rgba(0,0,0,0.35)] sm:rounded-none">
+    <article className="build-log-featured build-log-article overflow-hidden rounded-md border border-white/20 bg-[#0a1628]/90 sm:rounded-none">
       <header
         id="build-log-topic-top"
         className="build-log-article-header mx-auto max-w-4xl scroll-mt-[calc(3.5rem+env(safe-area-inset-top))] border-b border-white/10 px-4 py-8 md:scroll-mt-20 md:px-4 md:py-10"
@@ -188,7 +188,7 @@ function FeaturedEntry({
       {entry.image ? (
         <figure className="build-log-article-hero mx-auto w-full max-w-5xl px-4 py-8 md:px-4 md:py-10">
           {entry.imageWidth && entry.imageHeight ? (
-            <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+            <div className="overflow-hidden rounded-lg border border-white/10 md:rounded-md">
               <Image
                 src={entry.image}
                 alt={entry.imageAlt ?? ""}
@@ -200,7 +200,7 @@ function FeaturedEntry({
               />
             </div>
           ) : (
-            <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-xl">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-white/10 md:rounded-md">
               <Image
                 src={entry.image}
                 alt={entry.imageAlt ?? ""}
@@ -745,9 +745,6 @@ export default function BuildLogTimeline({
         aria-hidden="true"
         className="build-log-timeline-bg pointer-events-none absolute inset-y-0 left-1/2 z-0 w-screen min-h-full -translate-x-1/2 overflow-hidden bg-navy"
       >
-        <div className="absolute left-0 top-32 h-72 w-72 -translate-x-1/3 rounded-full bg-sky-500/10 blur-3xl" />
-        <div className="absolute right-0 top-1/3 h-80 w-80 translate-x-1/4 rounded-full bg-white/5 blur-3xl" />
-
         <div className="absolute inset-x-0 top-[8%] mx-auto aspect-square w-[min(92vw,36rem)] opacity-[0.14] md:top-[10%] md:w-[min(72vw,42rem)] md:opacity-[0.18]">
           <Image
             src="/drone-nobackground.png"

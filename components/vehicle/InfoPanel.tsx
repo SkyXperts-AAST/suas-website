@@ -148,7 +148,7 @@ export default function InfoPanel({
         // mirrored by PANEL_SHEET_FRAC in VehicleCanvas, which pans the
         // selected component into the band above the sheet — raising it here
         // without raising it there parks components behind the panel.
-        "absolute inset-x-3 bottom-3 z-20 max-h-[45%] overflow-y-auto rounded-2xl",
+        "absolute inset-x-3 bottom-3 z-20 max-h-[45%] overflow-y-auto rounded-md",
         // md+: floating right-hand rail. Inset on all sides (rather than flush
         // to the viewport) so the drop shadow has somewhere to fall and the
         // card reads as hovering over the scene.
@@ -226,13 +226,13 @@ export default function InfoPanel({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={tour.onEnd}
-                    className="rounded-full border border-white/15 px-4 py-1.5 text-xs font-semibold text-[#F5F5F7]/80 transition hover:border-white/40 hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60"
+                    className="rounded-sm border border-white/15 px-4 py-1.5 text-xs font-semibold text-[#F5F5F7]/80 transition hover:border-white/40 hover:bg-white/5 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F5F5F7]/60"
                   >
                     End Tour
                   </button>
                   <button
                     onClick={tour.onNext}
-                    className="rounded-full bg-[#E31C1C] px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C]"
+                    className="rounded-sm bg-[#E31C1C] px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-[#c81616] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E31C1C]"
                   >
                     {tour.index + 1 === tour.total ? "Finish" : "Next →"}
                   </button>

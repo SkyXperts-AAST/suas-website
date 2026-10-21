@@ -60,7 +60,7 @@ function getSectionProgress(section: HTMLElement, sticky: HTMLElement): number {
 function ChapterHeading({ children }: { children: React.ReactNode }) {
   return (
     <div className="shrink-0 text-center">
-      <h2 className="font-display text-2xl leading-[1.05] tracking-tight text-accent sm:text-3xl">
+      <h2 className="heading-rule heading-rule-center text-3xl text-offwhite sm:text-4xl">
         Build
       </h2>
       {children}
@@ -71,11 +71,9 @@ function ChapterHeading({ children }: { children: React.ReactNode }) {
 function StaticAssembly() {
   return (
     <section className="relative bg-navy" aria-label="Storm assembly diagram">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
-
       <div className="relative z-10 flex flex-col gap-3 px-5 py-10">
         <ChapterHeading>
-          <p className="mt-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-offwhite sm:text-base">
+          <p className="kicker mt-3">
             Storm, fully assembled
           </p>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-offwhite/65 sm:text-base">
@@ -90,7 +88,7 @@ function StaticAssembly() {
           </p>
         </ChapterHeading>
 
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
+        <div className="relative overflow-hidden rounded-md border border-white/10 bg-[#050d18]">
           <Image
             src="/drone-assembled.webp"
             alt="Storm, fully assembled"
@@ -204,11 +202,9 @@ export default function DroneAssemblyScroll() {
         ref={stickyRef}
         className="sticky top-16 h-[calc(100dvh-4rem)] overflow-hidden"
       >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgba(227,28,28,0.08),transparent_70%)]" />
-
-        <div className="relative z-10 flex h-full min-h-0 flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-4 lg:px-8 lg:py-5">
+          <div className="relative z-10 flex h-full min-h-0 flex-col gap-3 px-5 py-4 sm:px-6 sm:py-5 lg:gap-4 lg:px-8 lg:py-5">
           <ChapterHeading>
-            <p className="mt-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-offwhite sm:text-base">
+            <p className="kicker mt-3">
               Scroll to assemble
             </p>
             {/* Both states share one slot (stacked, not sequential) so the
@@ -241,14 +237,14 @@ export default function DroneAssemblyScroll() {
             </div>
           </ChapterHeading>
 
-          <div className="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#050d18]">
+          <div className="relative min-h-0 flex-1 overflow-hidden rounded-md border border-white/10 bg-[#050d18]">
             <DroneAssemblyCanvas
               scrollApi={scrollApi}
               reducedMotion={reducedMotion}
               invalidateRef={invalidateRef}
             />
 
-            <div className="nav-glass absolute right-2.5 top-2.5 z-20 max-h-[calc(100%-3rem)] w-[10.5rem] overflow-y-auto overscroll-contain rounded-xl border border-white/10 p-2 shadow-lg shadow-black/30 [scrollbar-width:none] sm:right-4 sm:top-4 sm:w-56 sm:p-2.5 [&::-webkit-scrollbar]:hidden">
+            <div className="nav-glass absolute right-2.5 top-2.5 z-20 max-h-[calc(100%-3rem)] w-[10.5rem] overflow-y-auto overscroll-contain rounded-md border border-white/10 p-2 shadow-lg shadow-black/30 [scrollbar-width:none] sm:right-4 sm:top-4 sm:w-56 sm:p-2.5 [&::-webkit-scrollbar]:hidden">
               <div className="mb-1.5 flex items-center justify-between gap-2">
                 <p className="font-display text-[9px] font-bold uppercase tracking-[0.16em] text-white/50 sm:text-[10px]">
                   Build order

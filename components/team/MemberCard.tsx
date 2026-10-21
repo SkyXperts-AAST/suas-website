@@ -20,14 +20,14 @@ export default function MemberCard({ member }: MemberCardProps) {
 
   return (
     <article
-      className={`relative mx-auto flex w-full max-w-[220px] flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-0.5 ${
+      className={`relative mx-auto flex w-full max-w-[220px] flex-col overflow-hidden rounded-md border transition hover:-translate-y-0.5 ${
         supervisor
           ? "border-accent/35 bg-accent/[0.06] hover:border-accent/50"
           : "border-white/10 bg-white/[0.03] hover:border-white/20"
       }`}
     >
       {supervisor ? (
-        <span className="absolute left-2 top-2 z-10 rounded-full border border-accent/30 bg-[#0a1628]/80 px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
+        <span className="absolute left-2 top-2 z-10 rounded-sm border border-accent/30 bg-[#0a1628]/80 px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
           Faculty
         </span>
       ) : null}

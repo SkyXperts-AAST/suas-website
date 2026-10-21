@@ -42,7 +42,7 @@ export default function SpecGrid({
             ...(i > 0 ? { borderTop: `1px solid ${SPEC_RULE}` } : {}),
           }}
         >
-          <dt className="text-xs leading-snug text-[#4A4E6E]">{spec.label}</dt>
+          <dt className="text-xs leading-snug text-offwhite/55">{spec.label}</dt>
           <dd className="font-mono text-[0.8125rem] leading-snug tabular-nums text-[#F5F5F7]">
             {spec.value}
           </dd>

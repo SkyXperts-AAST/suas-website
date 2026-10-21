@@ -29,7 +29,7 @@ export default function MentorCarousel({ mentors }: MentorCarouselProps) {
         type="button"
         onClick={showPrevious}
         aria-label="Previous mentor"
-        className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-offwhite transition hover:border-accent/50 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex size-10 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-white/[0.04] text-offwhite transition hover:border-accent/50 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <ChevronLeft aria-hidden="true" size={20} />
       </button>
@@ -42,7 +42,7 @@ export default function MentorCarousel({ mentors }: MentorCarouselProps) {
         type="button"
         onClick={showNext}
         aria-label="Next mentor"
-        className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-offwhite transition hover:border-accent/50 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+        className="flex size-10 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-white/[0.04] text-offwhite transition hover:border-accent/50 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <ChevronRight aria-hidden="true" size={20} />
       </button>

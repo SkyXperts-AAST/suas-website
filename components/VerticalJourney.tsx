@@ -63,7 +63,7 @@ function MobileJourney({ progress }: { progress: number }) {
               }`}
             />
             <div
-              className={`flex-1 rounded-xl border p-4 transition-all duration-500 ${
+              className={`flex-1 rounded-md border p-4 transition-all duration-500 ${
                 active
                   ? "border-accent/40 bg-accent/[0.08] opacity-100 shadow-[0_0_30px_-8px_rgba(227,28,28,0.5)]"
                   : "border-white/10 bg-white/[0.04] opacity-55"
@@ -200,7 +200,7 @@ export default function ScatteredJourney() {
           return (
             <div
               key={i}
-              className={`absolute w-48 rounded-xl border p-4 text-center backdrop-blur-sm transition-all duration-500 sm:w-52 ${
+              className={`absolute w-48 rounded-md border p-4 text-center backdrop-blur-sm transition-all duration-500 sm:w-52 ${
                 active
                   ? "scale-100 border-accent/40 bg-accent/[0.08] opacity-100 shadow-[0_0_30px_-8px_rgba(227,28,28,0.5)]"
                   : "scale-95 border-white/10 bg-white/[0.04] opacity-40"

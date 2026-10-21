@@ -68,7 +68,7 @@ export default function SubTeamTabs() {
                   document.getElementById(`${baseId}-tab-${last}`)?.focus();
                 }
               }}
-              className={`rounded-full px-5 py-2.5 text-base font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${
+              className={`rounded-sm px-5 py-2.5 text-base font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${
                 selected
                   ? "border border-accent/40 bg-accent/15 text-accent"
                   : "border border-white/10 bg-white/[0.03] text-offwhite/70 hover:border-white/20 hover:bg-white/[0.06] hover:text-offwhite"

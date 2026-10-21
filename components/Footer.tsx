@@ -100,7 +100,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className={`inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-offwhite/60 transition ${hoverClass}`}
+                className={`inline-flex h-9 w-9 items-center justify-center rounded-sm border border-white/10 bg-white/[0.04] text-offwhite/60 transition ${hoverClass}`}
               >
                 <Icon className="h-4 w-4" />
               </a>

@@ -24,13 +24,13 @@ export function HomeStoryChapter({
       className={`${centered ? "mx-auto max-w-3xl text-center" : "max-w-xl"} ${className}`.trim()}
     >
       <h2
-        className={`font-display text-2xl leading-[1.05] tracking-tight text-accent sm:text-3xl lg:text-4xl ${
-          centered ? "text-balance" : ""
+        className={`heading-rule text-3xl text-offwhite sm:text-4xl lg:text-5xl ${
+          centered ? "heading-rule-center text-balance" : ""
         }`}
       >
         {label}
       </h2>
-      <p className="mt-3 font-display text-sm font-bold uppercase tracking-[0.2em] text-offwhite sm:text-base">
+      <p className="kicker mt-4">
         {title}
       </p>
       {description ? (
@@ -50,7 +50,7 @@ export function HomeSectionBridge() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none h-px w-full bg-gradient-to-r from-transparent via-white/12 to-transparent"
+      className="pointer-events-none h-px w-full bg-white/10"
     />
   );
 }

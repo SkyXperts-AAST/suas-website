@@ -66,12 +66,7 @@ function FlightPathAccent() {
 }
 
 export function PageBadge({ label }: { label: string }) {
-  return (
-    <p className="font-display inline-flex items-center gap-2 rounded-full border border-accent/30 bg-[#0a1628]/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-accent backdrop-blur-sm">
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
-      {label}
-    </p>
-  );
+  return <p className="eyebrow">{label}</p>;
 }
 
 type PageHeroContentProps = {
@@ -152,7 +147,7 @@ export function PageSection({
 
 export function ComingSoonPanel({ message = "Coming soon." }: { message?: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-14 text-center backdrop-blur-sm">
+    <div className="rounded-md border border-white/10 bg-white/[0.03] px-6 py-14 text-center backdrop-blur-sm">
       <p className="text-sm font-semibold uppercase tracking-[0.16em] text-offwhite/45">
         In progress
       </p>

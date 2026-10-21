@@ -33,7 +33,7 @@ export default function SubTeamNav() {
             href={teamHref(team.slug)}
             data-build-log-team={team.slug}
             aria-current={active ? "page" : undefined}
-            className={`group relative flex flex-col items-center gap-2 rounded-xl border border-white/10 px-3 py-3.5 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:flex-row sm:justify-center sm:gap-2.5 sm:rounded-none sm:border-0 sm:px-3 sm:py-1 sm:pb-4 md:gap-3 md:px-4 ${
+            className={`group relative flex flex-col items-center gap-2 rounded-md border border-white/10 px-3 py-3.5 text-center transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:flex-row sm:justify-center sm:gap-2.5 sm:rounded-none sm:border-0 sm:px-3 sm:py-1 sm:pb-4 md:gap-3 md:px-4 ${
               active
                 ? "border-accent/30 bg-accent/10 text-offwhite sm:border-0 sm:bg-transparent"
                 : "text-offwhite/55 hover:border-white/20 hover:text-offwhite/85 sm:hover:border-0"

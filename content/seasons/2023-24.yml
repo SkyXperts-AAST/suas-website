@@ -1,0 +1,11 @@
+id: 2023-24
+label: "2023–24"
+current: false
+title: "Founding season"
+summary: >-
+  SkyXperts started at AAST with a handful of students who wanted to build real
+  autonomous aircraft instead of only reading about them.
+milestones:
+  - date: "2023"
+    title: "SkyXperts founded"
+    detail: "A small group of AAST students sets out to design, build and fly their own UAVs."

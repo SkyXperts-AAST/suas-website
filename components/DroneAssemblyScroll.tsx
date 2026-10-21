@@ -80,10 +80,10 @@ function StaticAssembly() {
             Avionics, power, vision and propulsion, integrated into one
             airframe.{" "}
             <Link
-              href="/vehicles"
+              href="#vehicle-top"
               className="font-medium text-accent underline-offset-2 hover:underline"
             >
-              Explore every subsystem →
+              Explore every subsystem ↑
             </Link>
           </p>
         </ChapterHeading>
@@ -228,10 +228,10 @@ export default function DroneAssemblyScroll() {
               >
                 Storm is fully assembled.{" "}
                 <Link
-                  href="/vehicles"
+                  href="#vehicle-top"
                   className="pointer-events-auto font-medium text-accent underline-offset-2 hover:underline"
                 >
-                  Explore every subsystem →
+                  Explore every subsystem ↑
                 </Link>
               </p>
             </div>

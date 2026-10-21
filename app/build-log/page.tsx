@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import Redirect from "@/components/layout/Redirect";
 
-export default function BuildLogPage() {
-  redirect("/build-log/computer-vision");
+export const metadata = { title: "Journal | SkyXperts", robots: { index: false } };
+
+export default function BuildLogMoved() {
+  return <Redirect to="/journal?type=build-log" />;
 }

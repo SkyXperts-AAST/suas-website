@@ -1,0 +1,15 @@
+# Every sponsor, past and present. Seasons list which sponsors backed them.
+- id: makers
+  name: Makers Electronics
+  logo: /sponsor-makers.png
+  url: https://makerselectronics.com/
+
+- id: pcbway
+  name: PCBWay
+  logo: /sponsor-pcbway.webp
+  url: https://www.pcbway.com
+
+- id: mad-components
+  name: MAD Components
+  logo: /sponsor-mad-components.png
+  url: https://mad-motor.com/

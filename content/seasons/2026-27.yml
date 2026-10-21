@@ -1,0 +1,76 @@
+id: 2026-27
+label: "2026–27"
+current: true
+title: "Building on Storm"
+summary: >-
+  A new intake joins through the training phase while the core team builds on
+  what Storm proved at ICMTC and SUAS.
+sponsors: [makers, pcbway, mad-components]
+recruitment:
+  open: false
+  note: "Applications for 2026–27 are closed. The next intake opens at the start of next season."
+milestones:
+  - date: "2026"
+    title: "New intake and training phase"
+    detail: "Interviews, orientation and a hands-on training phase for new members."
+leadership:
+  - person: yehia-alaa
+    role: Team Leader
+  - person: nour-allam
+    role: Software Head
+# Mentors listed here appear as active mentors on the Team page.
+# Remove someone from this list when they stop mentoring; they stay in the
+# Legacy pages of the seasons they were part of.
+mentors:
+  - mohammed-ragab
+  - abdelrahman-hikal
+  - ahmed-el-sayed
+  - aya-ragab
+  - belal-abo-el-khier
+  - fares-fathy
+  - moustafa-adly
+  - osama-hesham
+  - yehia-sharawy
+  - youssef-mehana
+structure:
+  - id: software
+    name: Software
+    summary: "Perception, autonomy and the tools that tie them together."
+    teams:
+      - id: computer-vision
+        name: Computer Vision
+        summary: >-
+          Mapping and detection: turning raw aerial footage into maps and
+          finding targets from the air in real time.
+      - id: control
+        name: Control
+        summary: >-
+          Flight software and autonomy logic: stable flight, navigation and
+          mission behaviour.
+      - id: web-dev
+        name: Website Development
+        summary: "skyxperts.com, the build log and the team's digital tools."
+  - id: electrical
+    name: Electrical
+    summary: "Everything that powers, computes and communicates on board."
+    teams:
+      - id: power-propulsion
+        name: Power & Propulsion
+        summary: "Batteries, ESCs, motors and props, sized and tested as one system."
+      - id: flight-systems
+        name: Flight Systems & Computing
+        summary: "Flight controller, companion computer, sensors and wiring."
+      - id: rf-comms
+        name: RF, Telemetry & Comms
+        summary: "Radio links, telemetry and video downlink between aircraft and ground."
+  - id: mechanical
+    name: Mechanical
+    summary: >-
+      Airframe design, manufacturing, assembly and structural testing.
+  - id: marketing
+    name: Marketing
+    summary: "How the team is seen, funded and remembered."
+    teams:
+      - id: sponsorship-media
+        name: Sponsorship & Social Media
+        summary: "Sponsor relations, social channels and the content calendar."

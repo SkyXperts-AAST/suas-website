@@ -1,115 +1,126 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import MemberCard from "@/components/team/MemberCard";
-import MentorCarousel from "@/components/team/MentorCarousel";
-import SubTeamTabs from "@/components/team/SubTeamTabs";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { PageSection, PageShell } from "@/components/layout/PageShell";
-import { leadership, mentors } from "@/lib/team/members";
+import OrgChart from "@/components/team/OrgChart";
+import SubTeamGrid from "@/components/team/SubTeamGrid";
+import PersonCard from "@/components/ui/PersonCard";
+import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
+import { getCurrentSeason } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Team | SkyXperts",
-  description: "Meet the SkyXperts SUAS sub-teams and leadership.",
+  description:
+    "How SkyXperts is organised: leadership, mentors, departments and sub-teams for the current season.",
 };
 
 export default function TeamPage() {
+  const season = getCurrentSeason();
+
   return (
     <PageShell>
-      {/* Hero — full team photo (uncropped), text at the bottom edge */}
-      <section className="relative aspect-[16/9] w-full overflow-hidden border-b border-white/10 bg-navy md:max-h-[720px]">
+      {/* Hero: full team photo, title on the bottom edge */}
+      <section className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-navy sm:aspect-[16/9] md:max-h-[720px]">
         <Image
           src="/team/groupPhoto.jpg"
-          alt=""
+          alt="The SkyXperts team"
           fill
           priority
           className="object-cover"
           sizes="100vw"
-          aria-hidden="true"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-navy/90 via-navy/25 to-transparent"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent"
         />
-
-        <div className="absolute inset-x-0 bottom-0 z-20 px-6 pb-4 text-center md:pb-6">
-          <div className="mx-auto w-full max-w-3xl">
-            <h1 className="text-5xl leading-[1.02] text-offwhite drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)] md:text-7xl">
-              Our Team
-            </h1>
-            <p className="mx-auto mt-3 max-w-2xl text-lg leading-8 text-offwhite drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] md:text-xl md:leading-9">
-              The people advancing horizons — engineers and operators behind
-              every flight of Storm.
-            </p>
-          </div>
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-6 pb-8 md:pb-12">
+          <p className="eyebrow">{season.label} season</p>
+          <h1 className="mt-3 text-5xl text-offwhite md:text-7xl">Our Team</h1>
+          <p className="mt-3 max-w-xl text-base text-offwhite/80 md:text-lg">
+            Students from across AAST designing, building and flying
+            autonomous aircraft, with mentors who have done it before.
+          </p>
         </div>
       </section>
 
-      {/* Arab Academy affiliation */}
-      <PageSection className="border-b border-white/10">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center sm:flex-row sm:gap-7 sm:text-left">
-          <Image
-            src="/aast-logo-white.webp"
-            alt="Arab Academy for Science, Technology & Maritime Transport"
-            width={520}
-            height={438}
-            className="h-auto w-[200px] shrink-0 md:w-[240px]"
+      <PageSection className="pt-16 md:pt-24">
+        <SectionHeading
+          eyebrow="Structure"
+          title="How we're"
+          accent="organised"
+          intro="A student board runs the team. Four departments own the engineering and the outreach, and each splits into sub-teams with a clear job. Mentors advise across all of them."
+        />
+        <Reveal className="mt-12">
+          <OrgChart
+            leadership={season.leadership}
+            mentors={season.mentors}
+            structure={season.structure}
           />
-          <p className="text-sm leading-7 text-offwhite/75 md:text-base md:leading-8">
-            SkyXperts is the student UAS team at the Arab Academy for Science,
-            Technology & Maritime Transport.
-          </p>
-        </div>
+        </Reveal>
       </PageSection>
 
       <PageSection>
-        <div className="mb-10 border-b border-white/10 pb-10 md:mb-12 md:pb-12">
-          <div className="mb-8 md:mb-10">
-            <p className="eyebrow">
-              Experience behind every flight
-            </p>
-            <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
-              Mentors
-            </h2>
-          </div>
-
-          <MentorCarousel mentors={mentors} />
+        <SectionHeading
+          eyebrow="Departments"
+          title="Who does"
+          accent="what"
+          intro="Every part of the aircraft, and every part of the team around it, has an owner."
+        />
+        <div className="mt-14">
+          <SubTeamGrid structure={season.structure} />
         </div>
-
-        <div className="mb-8 md:mb-10">
-          <p className="eyebrow">
-            Guiding the program
-          </p>
-          <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
-            Leadership
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-            Student leadership across software, mechanical, and electrical.
-          </p>
-        </div>
-
-        <ul className="mx-auto grid max-w-[480px] grid-cols-2 justify-items-center gap-4 sm:gap-5 lg:gap-6">
-          {leadership.map((member) => (
-            <li key={member.name} className="w-full max-w-[220px]">
-              <MemberCard member={member} />
-            </li>
-          ))}
-        </ul>
       </PageSection>
 
-      <PageSection className="border-t border-white/10">
-        <div className="mb-8 md:mb-10">
-          <p className="eyebrow">
-            Where the work happens
-          </p>
-          <h2 className="mt-4 text-4xl text-offwhite md:text-5xl">
-            Sub-teams
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-offwhite/70 md:text-lg md:leading-8">
-            Explore Software, Mechanical, Electrical, Web Dev, and Media — the
-            teams turning ideas into a flying, thinking machine.
-          </p>
-        </div>
+      {season.leadership.length ? (
+        <PageSection>
+          <SectionHeading eyebrow="Board" title="Leadership" align="left" />
+          <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+            {season.leadership.map((r, i) => (
+              <Reveal as="li" key={r.person.id} delay={i * 80}>
+                <PersonCard person={r.person} role={r.role} />
+              </Reveal>
+            ))}
+          </ul>
+        </PageSection>
+      ) : null}
 
-        <SubTeamTabs />
+      {season.mentors.length ? (
+        <PageSection>
+          <SectionHeading
+            eyebrow="Advisory"
+            title="Mentors"
+            align="left"
+            intro="Former members who still give their time: reviewing designs, running training and helping each sub-team when it gets stuck."
+          />
+          <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+            {season.mentors.map((p, i) => (
+              <Reveal as="li" key={p.id} delay={(i % 5) * 70}>
+                <PersonCard person={p} role="Mentor" />
+              </Reveal>
+            ))}
+          </ul>
+        </PageSection>
+      ) : null}
+
+      <PageSection className="pb-24">
+        <div className="panel bg-grid flex flex-col items-start gap-6 p-8 md:flex-row md:items-center md:justify-between md:p-12">
+          <div>
+            <p className="eyebrow">Legacy</p>
+            <h2 className="mt-3 text-3xl text-offwhite md:text-4xl">Everyone who built SkyXperts</h2>
+            <p className="mt-3 max-w-xl text-offwhite/65">
+              Past rosters, alumni and mentors from every season, with what each
+              team built and where it competed.
+            </p>
+          </div>
+          <Link
+            href="/legacy"
+            className="inline-flex shrink-0 items-center gap-2 rounded-sm border border-white/20 px-5 py-3 text-sm font-semibold text-offwhite transition hover:border-accent hover:text-accent"
+          >
+            See past seasons <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </PageSection>
     </PageShell>
   );

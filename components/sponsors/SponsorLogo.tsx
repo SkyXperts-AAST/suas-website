@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Sponsor } from "@/lib/sponsors/sponsors";
+import type { Sponsor } from "@/lib/content/types";
 
 type SponsorLogoProps = {
   sponsor: Sponsor;
@@ -11,7 +11,8 @@ export default function SponsorLogo({
   sponsor,
   compact = false,
 }: SponsorLogoProps) {
-  const isExternal = sponsor.href.startsWith("http");
+  const href = sponsor.url ?? "#";
+  const isExternal = href.startsWith("http");
 
   // No card, no white fill — logos sit directly on the dark background, just
   // bigger and given breathing room instead of being boxed in.
@@ -25,9 +26,9 @@ export default function SponsorLogo({
   const logoTreatment =
     "opacity-70 brightness-0 invert transition duration-300 group-hover:opacity-100 group-hover:brightness-100 group-hover:invert-0 group-focus-visible:opacity-100 group-focus-visible:brightness-100 group-focus-visible:invert-0";
 
-  const content = sponsor.logoSrc ? (
+  const content = sponsor.logo ? (
     <Image
-      src={sponsor.logoSrc}
+      src={sponsor.logo}
       alt={sponsor.name}
       width={compact ? 200 : 260}
       height={compact ? 80 : 104}
@@ -50,7 +51,7 @@ export default function SponsorLogo({
 
   return (
     <a
-      href={sponsor.href}
+      href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       aria-label={sponsor.name}

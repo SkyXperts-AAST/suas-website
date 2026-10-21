@@ -1,0 +1,65 @@
+# Every person who has been part of SkyXperts.
+# id: lowercase-with-dashes, unique. Seasons reference people by id.
+# photo: path under public/ (optional). linkedin: full URL (optional).
+
+- id: yehia-alaa
+  name: Yehia Alaa
+  photo: /team/leadership/yehia-alaa.jpg
+
+- id: nour-allam
+  name: Nour Allam
+
+- id: mohammed-ragab
+  name: Mohammed Ragab
+  photo: /team/leadership/Mentors/Mohammed-Ragab.jpg
+
+- id: abdelrahman-hikal
+  name: Abdelrahman Hikal
+  photo: /team/leadership/Mentors/Abdelrahman-Hikal.png
+
+- id: ahmed-el-sayed
+  name: Ahmed El Sayed
+  photo: /team/leadership/Mentors/Ahmed-El-Sayed.jpg
+
+- id: aya-ragab
+  name: Aya Ragab
+  photo: /team/leadership/Mentors/Aya-Ragab.jpg
+
+- id: belal-abo-el-khier
+  name: Belal Abo El Khier
+  photo: /team/leadership/Mentors/Belal-Abo-El-Khier.jpg
+
+- id: fares-fathy
+  name: Fares Fathy
+  photo: /team/leadership/Mentors/Fares-Fathy.jpg
+
+- id: moustafa-adly
+  name: Moustafa Adly
+  photo: /team/leadership/Mentors/Moustafa-Adly.jpg
+
+- id: osama-hesham
+  name: Osama Hesham
+  photo: /team/leadership/Mentors/Osama-Hesham.jpg
+
+- id: yehia-sharawy
+  name: Yehia Sharawy
+  photo: /team/leadership/Mentors/Yehia-Sharawy.jpeg
+
+- id: youssef-mehana
+  name: Youssef Mehana
+  photo: /team/leadership/Mentors/Youssef-Mehana.jpg
+
+- id: yasmin-ahmed
+  name: Yasmin Ahmed
+
+- id: jana-el-wazzan
+  name: Jana El Wazzan
+
+- id: darine-elkilany
+  name: Darine Elkilany
+
+- id: omar-abdrabo
+  name: Omar Abdrabo
+
+- id: salma
+  name: Salma

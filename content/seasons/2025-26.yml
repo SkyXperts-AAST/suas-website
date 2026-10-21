@@ -1,0 +1,74 @@
+id: 2025-26
+label: "2025–26"
+current: false
+title: "The Storm season"
+summary: >-
+  We upgraded the multirotor into Storm, a heavy-lift autonomous quadcopter,
+  returned to ICMTC to take Best Mission and 3rd overall, and prepared Storm for
+  SUAS 2026.
+vehicles: [storm]
+sponsors: [makers, pcbway, mad-components]
+competitions:
+  - name: "ICMTC"
+    edition: "2026"
+    vehicle: storm
+    results: ["Best Mission Award", "3rd place overall"]
+  - name: "SUAS"
+    edition: "2026"
+    vehicle: storm
+    results: ["Competed with Storm Response"]
+milestones:
+  - date: "2025–26"
+    title: "Multirotor upgraded into Storm"
+    detail: "New airframe, power system and onboard autonomy."
+  - date: "2026"
+    title: "Best Mission and 3rd overall at ICMTC"
+    detail: "Storm's first competition."
+  - date: "2026"
+    title: "SUAS 2026"
+    detail: "Storm Response, our first SUAS entry."
+structure:
+  - id: software
+    name: Software
+    teams:
+      - id: computer-vision
+        name: Computer Vision
+        summary: >-
+          How Storm sees. Stitches aerial footage into high-resolution maps and
+          trains detection models that find a single target in a messy
+          landscape while the drone is still moving.
+        members: [yasmin-ahmed]
+      - id: control
+        name: Control & Navigation
+        summary: >-
+          The reflexes. Keeps Storm steady and on course, and makes the
+          split-second calls during takeoff, landing and everything in between.
+        members: [nour-allam, jana-el-wazzan, darine-elkilany, omar-abdrabo]
+  - id: mechanical-dept
+    name: Mechanical
+    teams:
+      - id: mechanical
+        name: Mechanical
+        summary: >-
+          The airframe and structure everything bolts onto: light enough to fly,
+          tough enough to survive landing after landing, and foldable to travel.
+        members: [salma]
+  - id: electrical-dept
+    name: Electrical
+    teams:
+      - id: electrical
+        name: Electrical
+        summary: >-
+          Power architecture for every subsystem: batteries sized correctly,
+          clean wiring, and current where it's needed the moment it's needed.
+  - id: outreach
+    name: Outreach
+    teams:
+      - id: web-dev
+        name: Web Dev
+        summary: "The website and the team's digital presence."
+        members: [yasmin-ahmed]
+      - id: media
+        name: Media
+        summary: "Documents flights, meetings and milestones."
+        members: [salma]

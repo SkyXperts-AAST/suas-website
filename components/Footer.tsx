@@ -5,10 +5,11 @@ import Logo from "@/components/Logo";
 
 const NAV_LINKS = [
   { href: "/team", label: "Team" },
-  { href: "/vehicles", label: "Vehicles" },
+  { href: "/fleet", label: "Fleet" },
+  { href: "/journal", label: "Journal" },
+  { href: "/legacy", label: "Legacy" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/build-log", label: "Build Log" },
-  { href: "/sponsorships", label: "Sponsorships" },
+  { href: "/sponsorships", label: "Sponsors" },
   { href: "/contact", label: "Contact" },
 ] as const;
 

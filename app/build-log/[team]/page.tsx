@@ -1,46 +1,15 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import BuildLogTeamView from "@/components/build-log/BuildLogTeamView";
-import { getEntriesForTeam } from "@/lib/build-log/loadEntries";
-import { getSubTeam, isSubTeamSlug, SUB_TEAMS } from "@/lib/build-log/teams";
+import Redirect from "@/components/layout/Redirect";
 
-type BuildLogTeamPageProps = {
-  params: Promise<{ team: string }>;
-};
+export const metadata = { title: "Journal | SkyXperts", robots: { index: false } };
+
+// The old per-team build log URLs, kept so existing links still land somewhere.
+const OLD_TEAMS = ["computer-vision", "control", "electrical", "mechanical"];
 
 export function generateStaticParams() {
-  return SUB_TEAMS.map((team) => ({ team: team.slug }));
+  return OLD_TEAMS.map((team) => ({ team }));
 }
 
-export async function generateMetadata({
-  params,
-}: BuildLogTeamPageProps): Promise<Metadata> {
-  const { team: teamSlug } = await params;
-  const team = getSubTeam(teamSlug);
-
-  if (!team) {
-    return { title: "Build Log | SkyXperts" };
-  }
-
-  return {
-    title: `${team.name} Build Log | SkyXperts`,
-    description: team.description,
-  };
-}
-
-export default async function BuildLogTeamPage({ params }: BuildLogTeamPageProps) {
-  const { team: teamSlug } = await params;
-
-  if (!isSubTeamSlug(teamSlug)) {
-    notFound();
-  }
-
-  const team = getSubTeam(teamSlug);
-  const entries = await getEntriesForTeam(teamSlug);
-
-  if (!team) {
-    notFound();
-  }
-
-  return <BuildLogTeamView team={team} entries={entries} teamSlug={teamSlug} />;
+export default async function BuildLogTeamMoved({ params }: { params: Promise<{ team: string }> }) {
+  const { team } = await params;
+  return <Redirect to={`/journal?team=${team}`} />;
 }

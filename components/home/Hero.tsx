@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Logo from "@/components/Logo";
 
 /** Full-screen splash: landing clip with a bottom-centered watermark wordmark,
@@ -117,12 +118,24 @@ export default function Hero() {
           introDone ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
         }`}
       >
-        <h1 className="font-display text-5xl leading-[1.02] tracking-tight text-[#F5F5F7] drop-shadow-[0_2px_24px_rgba(0,0,0,0.5)] sm:text-6xl md:text-7xl">
-          Meet Storm. Engineered to respond.
+        <p className="eyebrow-center">AAST · Student UAS team · Est. 2023</p>
+        <h1 className="mt-5 max-w-4xl text-balance font-display text-5xl leading-[1.02] text-[#F5F5F7] drop-shadow-[0_2px_24px_rgba(0,0,0,0.5)] sm:text-6xl md:text-7xl">
+          We design, build and fly <span className="text-accent">autonomous aircraft.</span>
         </h1>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.35em] text-[#F5F5F7]/70">
-          AAST · Student UAS Team
-        </p>
+        <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/fleet"
+            className="rounded-sm bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#c81616]"
+          >
+            Explore the fleet
+          </Link>
+          <Link
+            href="/journal"
+            className="rounded-sm border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/5"
+          >
+            Read the journal
+          </Link>
+        </div>
       </div>
     </section>
   );

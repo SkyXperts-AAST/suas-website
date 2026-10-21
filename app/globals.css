@@ -193,351 +193,280 @@ html {
   }
 }
 
-/* Build log — light reading mode */
-.build-log-reading-switch {
-  border-color: rgba(255, 255, 255, 0.16);
-  background-color: rgba(10, 22, 40, 0.78);
-  color: #f5f5f7;
+/* ------------------------------------------------------------------------
+   Shared building blocks for the season/fleet/journal pages.
+   ------------------------------------------------------------------------ */
+
+/* Centered eyebrow with a hairline on each side. */
+.eyebrow-center {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-reading-switch {
-  border-color: rgba(10, 22, 40, 0.12);
-  background-color: rgba(255, 255, 255, 0.94);
-  color: #0a1628;
-  box-shadow: 0 8px 32px rgba(10, 22, 40, 0.12);
+.eyebrow-center::before,
+.eyebrow-center::after {
+  content: "";
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
 }
 
-.build-log-reading[data-reading-mode="light"] {
-  color: #0a1628;
+/* Faint engineering grid, used behind panels and diagrams. */
+.bg-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-page-shell {
-  background: #eef1f6;
-  color: #0a1628;
+/* Card surface. A 2px accent line grows across the top edge on hover. */
+.panel {
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.375rem;
+  background: rgb(255 255 255 / 0.025);
+  transition:
+    border-color 250ms ease,
+    background-color 250ms ease,
+    transform 250ms ease;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-page-shell > .pointer-events-none {
-  display: none;
+.panel-hover::before {
+  content: "";
+  position: absolute;
+  inset: -1px -1px auto -1px;
+  height: 2px;
+  border-radius: 0.375rem 0.375rem 0 0;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms ease;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-hero {
-  border-color: rgba(10, 22, 40, 0.1);
+.panel-hover:hover,
+.panel-hover:focus-within {
+  border-color: rgb(255 255 255 / 0.2);
+  background: rgb(255 255 255 / 0.04);
+  transform: translateY(-2px);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-hero h1,
-.build-log-reading[data-reading-mode="light"] .build-log-hero .text-offwhite,
-.build-log-reading[data-reading-mode="light"] .build-log-hero .text-offwhite\/85 {
-  color: #0a1628;
+.panel-hover:hover::before,
+.panel-hover:focus-within::before {
+  transform: scaleX(1);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-hero .text-offwhite\/75 {
-  color: rgba(10, 22, 40, 0.72);
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(245 245 247 / 0.7);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-hero .rounded-full {
-  border-color: rgba(227, 28, 28, 0.22);
-  background-color: #ffffff;
+/* Scroll reveal. Hidden state is only applied once JS has mounted (see
+   components/ui/Reveal), so content never ships invisible. */
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(14px);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav {
-  border-color: rgba(10, 22, 40, 0.12);
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a {
-  color: rgba(10, 22, 40, 0.55);
+/* Sponsor marquee: two identical tracks slide left forever. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a[aria-current="page"] {
-  color: #0a1628;
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav .text-offwhite\/40,
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav .text-offwhite\/55,
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav .text-offwhite\/65 {
-  color: rgba(10, 22, 40, 0.45);
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a[aria-current="page"] .text-offwhite\/40 {
-  color: rgba(10, 22, 40, 0.55);
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-section {
-  color: #0a1628;
+/* Org chart connectors: a light pulse travels along each line. */
+@keyframes pulse-x {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-team-header h2,
-.build-log-reading[data-reading-mode="light"] .build-log-team-header p {
-  color: #0a1628;
+@keyframes pulse-y {
+  from {
+    background-position: 0 -40%;
+  }
+  to {
+    background-position: 0 140%;
+  }
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-team-header p:last-child {
-  color: rgba(10, 22, 40, 0.72);
+.wire-x,
+.wire-y {
+  background-color: rgb(227 28 28 / 0.28);
+  background-repeat: no-repeat;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-bg {
-  background: #eef1f6;
+.wire-x {
+  background-image: linear-gradient(90deg, transparent, #ff5a4f, transparent);
+  background-size: 30% 100%;
+  animation: pulse-x 3.2s linear infinite;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-bg > * {
-  display: none;
+.wire-y {
+  background-image: linear-gradient(180deg, transparent, #ff5a4f, transparent);
+  background-size: 100% 45%;
+  animation: pulse-y 2.4s linear infinite;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-featured {
-  border-color: rgba(10, 22, 40, 0.12);
-  background: #ffffff;
-  box-shadow: 0 10px 40px rgba(10, 22, 40, 0.08);
+@keyframes node-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(227 28 28 / 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgb(227 28 28 / 0.12);
+  }
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-article-header,
-.build-log-reading[data-reading-mode="light"] .build-log-article-footer {
-  border-color: rgba(10, 22, 40, 0.1);
+.node-live {
+  animation: node-glow 3.2s ease-in-out infinite;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-article-header h1,
-.build-log-reading[data-reading-mode="light"] .build-log-article-deck,
-.build-log-reading[data-reading-mode="light"] .build-log-article-hero figcaption,
-.build-log-reading[data-reading-mode="light"] .build-log-article-footer p {
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-article-deck {
-  color: rgba(10, 22, 40, 0.78);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-article-hero figcaption {
-  color: rgba(10, 22, 40, 0.58);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-article-hero > div,
-.build-log-reading[data-reading-mode="light"] .build-log-prose-figure > div {
-  border-color: rgba(10, 22, 40, 0.12);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-prose-aside {
-  border-color: rgba(10, 22, 40, 0.1);
-  background: #f7f8fb;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-prose-aside h3 {
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured .border-b {
-  border-color: rgba(10, 22, 40, 0.1);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured h3,
-.build-log-reading[data-reading-mode="light"] .build-log-featured h1,
-.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite {
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite\/40 {
-  color: rgba(10, 22, 40, 0.55);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured button {
-  border-color: rgba(10, 22, 40, 0.14);
-  background: #f7f8fb;
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured button:hover:not(:disabled) {
-  border-color: rgba(10, 22, 40, 0.24);
-  background: #ffffff;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured button:disabled {
-  border-color: rgba(10, 22, 40, 0.08);
-  color: rgba(10, 22, 40, 0.28);
-  background: #f7f8fb;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-prose p,
-.build-log-reading[data-reading-mode="light"] .build-log-prose li {
-  color: rgba(10, 22, 40, 0.92);
+/* Long-form article typography for journal posts. */
+.prose-journal {
   font-size: 1.0625rem;
-  line-height: 1.85;
+  line-height: 1.8;
+  color: rgb(245 245 247 / 0.82);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/50 {
-  color: rgba(10, 22, 40, 0.58);
+.prose-journal > * + * {
+  margin-top: 1.25em;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/65 {
-  color: rgba(10, 22, 40, 0.68);
+.prose-journal h2,
+.prose-journal h3 {
+  margin-top: 2em;
+  color: var(--color-offwhite);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose .bg-offwhite\/50 {
-  background-color: rgba(10, 22, 40, 0.42);
+.prose-journal h2 {
+  font-size: 1.75rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose figure > div {
-  border-color: rgba(10, 22, 40, 0.12);
-  background: #f7f8fb;
+.prose-journal h3 {
+  font-size: 1.375rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-divider .h-px {
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(10, 22, 40, 0.18),
-    rgba(10, 22, 40, 0.08)
-  );
+.prose-journal strong {
+  color: var(--color-offwhite);
+  font-weight: 600;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-divider h4,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-divider .text-offwhite\/45 {
-  color: rgba(10, 22, 40, 0.55);
+.prose-journal a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.build-log-timeline-rail {
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.05),
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.05)
-  );
+.prose-journal ul,
+.prose-journal ol {
+  padding-left: 1.25rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-section .build-log-timeline-scroll-fade.bg-gradient-to-r {
-  background: linear-gradient(to right, #eef1f6, transparent);
+.prose-journal ul {
+  list-style: square;
 }
 
-.build-log-reading[data-reading-mode="light"]
-  .build-log-timeline-section
-  .build-log-timeline-scroll-fade.bg-gradient-to-l {
-  background: linear-gradient(to left, #eef1f6, transparent);
+.prose-journal ol {
+  list-style: decimal;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card {
-  background: #ffffff;
-  border-color: rgba(10, 22, 40, 0.12);
+.prose-journal li + li {
+  margin-top: 0.4em;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card.border-accent\/70 {
-  background: #fff8f8;
+.prose-journal li::marker {
+  color: var(--color-accent);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/80 {
-  color: #0a1628;
+.prose-journal img {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 0.375rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/75,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/60,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/50,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/40,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/70,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .text-offwhite\/35 {
-  color: rgba(10, 22, 40, 0.68);
+.prose-journal blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.25rem;
+  color: rgb(245 245 247 / 0.7);
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .border-white\/10 {
-  border-color: rgba(10, 22, 40, 0.12);
+.prose-journal code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgb(255 255 255 / 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 0.2rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .border-white\/30,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-card .bg-\[\#0a1628\] {
-  border-color: rgba(10, 22, 40, 0.22);
-  background: #ffffff;
+.prose-journal pre {
+  overflow-x: auto;
+  background: rgb(0 0 0 / 0.3);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.375rem;
+  padding: 1rem 1.25rem;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/90,
-.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/88,
-.build-log-reading[data-reading-mode="light"] .build-log-prose-aside .text-offwhite\/88 {
-  color: rgba(10, 22, 40, 0.92);
+.prose-journal pre code {
+  background: none;
+  padding: 0;
 }
 
-.build-log-reading[data-reading-mode="light"] .build-log-prose-figure figcaption,
-.build-log-reading[data-reading-mode="light"] .build-log-prose .text-offwhite\/60 {
-  color: rgba(10, 22, 40, 0.58);
-}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .wire-x,
+  .wire-y,
+  .node-live {
+    animation: none;
+  }
 
-.build-log-reading[data-reading-mode="light"] .build-log-article-footer .text-offwhite\/45 {
-  color: rgba(10, 22, 40, 0.55);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite\/78 {
-  color: rgba(10, 22, 40, 0.78);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-featured .text-offwhite\/55 {
-  color: rgba(10, 22, 40, 0.58);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-slot-label {
-  color: rgba(10, 22, 40, 0.55);
-}
-
-.build-log-reading[data-reading-mode="light"]
-  .build-log-timeline-section
-  button[aria-current="true"]
-  .build-log-timeline-slot-label {
-  color: rgba(10, 22, 40, 0.68);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-dot.border-white\/30,
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-dot.bg-\[\#0a1628\] {
-  border-color: rgba(10, 22, 40, 0.25);
-  background: #ffffff;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-rail {
-  background: linear-gradient(
-    to right,
-    rgba(10, 22, 40, 0.08),
-    rgba(10, 22, 40, 0.28),
-    rgba(10, 22, 40, 0.08)
-  );
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-empty-state {
-  border-color: rgba(10, 22, 40, 0.12);
-  background: #ffffff;
-  color: rgba(10, 22, 40, 0.72);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a.border-accent\/30.bg-accent\/10 {
-  border-color: rgba(227, 28, 28, 0.22);
-  background: rgba(227, 28, 28, 0.08);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a .text-offwhite {
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-subteam-nav a .text-offwhite\/85 {
-  color: rgba(10, 22, 40, 0.82);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite,
-.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite\/70 {
-  color: #0a1628;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-team-header .text-offwhite\/70 {
-  color: rgba(10, 22, 40, 0.72);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-timeline-section button.focus-visible\:ring-offset-\[\#0a1628\]:focus-visible {
-  --tw-ring-offset-color: #eef1f6;
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-reading-switch button.border-white\/20 {
-  border-color: rgba(10, 22, 40, 0.18);
-  background: rgba(10, 22, 40, 0.06);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-reading-switch button.border-accent\/50 {
-  border-color: rgba(227, 28, 28, 0.35);
-  background: rgba(227, 28, 28, 0.12);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-hero .border-accent\/30 {
-  border-color: rgba(227, 28, 28, 0.22);
-}
-
-.build-log-reading[data-reading-mode="light"] .build-log-hero .bg-\[\#0a1628\]\/70 {
-  background-color: rgba(255, 255, 255, 0.94);
+  .reveal-armed {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SponsorLogoGrid from "@/components/sponsors/SponsorLogoGrid";
+import { getCurrentSeason, getSeasons } from "@/lib/content";
 import { PageHero, PageSection, PageShell } from "@/components/layout/PageShell";
 
 export const metadata: Metadata = {
@@ -8,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function SponsorshipsPage() {
+  const current = getCurrentSeason();
+  const history = getSeasons().filter((s) => s.sponsors.length);
   return (
     <PageShell>
       <PageHero
@@ -27,13 +30,27 @@ export default function SponsorshipsPage() {
             Partners
           </p>
           <h2 className="mt-3 text-3xl leading-[1.05] text-offwhite md:text-4xl">
-            Our Sponsors
+            Our {current.label} sponsors
           </h2>
         </div>
 
         <div className="mx-auto max-w-4xl">
-          <SponsorLogoGrid />
+          <SponsorLogoGrid sponsors={current.sponsors} />
         </div>
+
+        {history.length > 1 ? (
+          <div className="mx-auto mt-14 max-w-4xl">
+            <p className="kicker">Sponsor history</p>
+            <dl className="mt-4 divide-y divide-white/10 border-y border-white/10">
+              {history.map((s) => (
+                <div key={s.id} className="grid gap-2 py-4 sm:grid-cols-[8rem_1fr]">
+                  <dt className="font-display text-lg text-offwhite">{s.label}</dt>
+                  <dd className="text-offwhite/70">{s.sponsors.map((sp) => sp.name).join(" · ")}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ) : null}
       </PageSection>
 
       <PageSection className="border-t border-white/10">

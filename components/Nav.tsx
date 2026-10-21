@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   HiBuildingOffice2,
   HiClipboardDocumentList,
+  HiClock,
   HiEllipsisHorizontal,
   HiEnvelope,
   HiHome,
@@ -18,24 +19,26 @@ import Logo from "@/components/Logo";
 
 const DESKTOP_LINKS = [
   { href: "/team", label: "Team" },
-  { href: "/vehicles", label: "Vehicles" },
+  { href: "/fleet", label: "Fleet" },
+  { href: "/journal", label: "Journal" },
+  { href: "/legacy", label: "Legacy" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/build-log", label: "Build Log" },
-  { href: "/sponsorships", label: "Sponsorships" },
-  { href: "/contact", label: "Contact Us" },
+  { href: "/sponsorships", label: "Sponsors" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 const MOBILE_PRIMARY = [
   { href: "/", label: "Home", icon: HiHome, exact: true },
   { href: "/team", label: "Team", icon: HiUserGroup },
-  { href: "/vehicles", label: "Vehicles", icon: HiRocketLaunch },
-  { href: "/build-log", label: "Log", icon: HiClipboardDocumentList },
+  { href: "/fleet", label: "Fleet", icon: HiRocketLaunch },
+  { href: "/journal", label: "Journal", icon: HiClipboardDocumentList },
 ] as const;
 
 const MOBILE_MORE = [
+  { href: "/legacy", label: "Legacy", icon: HiClock },
   { href: "/gallery", label: "Gallery", icon: HiPhoto },
-  { href: "/sponsorships", label: "Sponsorships", icon: HiBuildingOffice2 },
-  { href: "/contact", label: "Contact Us", icon: HiEnvelope },
+  { href: "/sponsorships", label: "Sponsors", icon: HiBuildingOffice2 },
+  { href: "/contact", label: "Contact", icon: HiEnvelope },
 ] as const;
 
 function isActive(pathname: string, href: string, exact = false) {

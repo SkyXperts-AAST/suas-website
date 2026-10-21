@@ -1,0 +1,20 @@
+id: 2024-25
+label: "2024–25"
+current: false
+title: "First airframe"
+summary: >-
+  The team designed and built its first multirotor and took it to ICMTC, where
+  it placed second.
+vehicles: [first-multirotor]
+competitions:
+  - name: "ICMTC"
+    edition: "2025"
+    vehicle: first-multirotor
+    results: ["2nd place"]
+milestones:
+  - date: "2024–25"
+    title: "First drone built and flown"
+    detail: "Our first in-house multirotor goes from CAD to flight."
+  - date: "2025"
+    title: "2nd place at ICMTC"
+    detail: "First competition outing, finishing second."

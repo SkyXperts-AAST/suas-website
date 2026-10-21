@@ -1,0 +1,24 @@
+slug: storm
+name: Storm
+kind: multirotor
+status: active
+seasons: [2025-26]
+tagline: "Autonomous heavy-lift quadcopter"
+summary: >-
+  A carbon-fibre X-configuration quadcopter engineered for stability and
+  endurance under real flight conditions. Built in-house and tested at every
+  stage, Storm took Best Mission and 3rd overall at ICMTC 2026 and flew our
+  first SUAS entry.
+image: /drone-nobackground.png
+photo: /drone-hero.webp
+specs:
+  - { label: "Configuration", value: "Quadcopter, X-config" }
+  - { label: "Dimensions", value: "85 × 85 × 35 cm" }
+  - { label: "All-up weight", value: "6.75 kg" }
+  - { label: "Max thrust-to-weight", value: "4.09 : 1" }
+  - { label: "Endurance", value: "~30 min" }
+  - { label: "Frame", value: "Carbon fibre / fibreglass sandwich composite" }
+achievements:
+  - "Best Mission Award, ICMTC 2026"
+  - "3rd place overall, ICMTC 2026"
+  - "SUAS 2026 entry"

@@ -5,7 +5,7 @@ type: build-log
 season: 2025-26
 team: control
 summary: "A full dry run of the ICMTC mission plan, then FRR at meaningfully higher altitude than anything we’d tested at. Altitude tracking came in at 0.13 m RMSE."
-tags: ["field-test", "validation", "SUAS 2026"]
+tags: ["field-test", "validation"]
 legacyId: ctrl-7
 ---
 

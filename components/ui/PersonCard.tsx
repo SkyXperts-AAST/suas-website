@@ -75,9 +75,12 @@ export default function PersonCard({
           )}
         </h3>
         {role ? (
-          <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-offwhite/50">
+          <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-accent/90">
             {role}
           </p>
+        ) : null}
+        {person.title ? (
+          <p className="mt-1.5 text-xs leading-snug text-offwhite/55">{person.title}</p>
         ) : null}
       </div>
     </article>

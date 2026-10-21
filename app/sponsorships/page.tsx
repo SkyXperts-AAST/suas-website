@@ -5,7 +5,7 @@ import { PageHero, PageSection, PageShell } from "@/components/layout/PageShell"
 
 export const metadata: Metadata = {
   title: "Sponsorships | SkyXperts",
-  description: "Partner with SkyXperts SUAS and support our competition program.",
+  description: "Partner with SkyXperts and support our competition program.",
 };
 
 export default function SponsorshipsPage() {

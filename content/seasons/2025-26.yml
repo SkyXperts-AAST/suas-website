@@ -3,72 +3,36 @@ label: "2025–26"
 current: false
 title: "The Storm season"
 summary: >-
-  We upgraded the multirotor into Storm, a heavy-lift autonomous quadcopter,
-  returned to ICMTC to take Best Mission and 3rd overall, and prepared Storm for
-  SUAS 2026.
-vehicles: [storm]
+  The 2025 quadcopter was rebuilt around a new body and became Storm. It took
+  3rd overall and the Best Mission Performance Award at ICMTC 2026. Sonic, a
+  fixed-wing, was built the same season.
+vehicles: [storm, sonic]
 sponsors: [makers, pcbway, mad-components]
 competitions:
   - name: "ICMTC"
     edition: "2026"
+    detail: "10th International Competition of the Military Technical College, UAV Challenge (UAVC-9), Cairo, 11–16 July 2026"
     vehicle: storm
-    results: ["Best Mission Award", "3rd place overall"]
-  - name: "SUAS"
-    edition: "2026"
-    vehicle: storm
-    results: ["Competed with Storm Response"]
+    results: ["3rd place overall", "Best Mission Performance Award"]
+media:
+  video: /media/icmtc26-recap.mp4
+  poster: /media/icmtc26-recap.jpg
+  caption: "ICMTC 2026."
+  shape: square
 milestones:
   - date: "2025–26"
-    title: "Multirotor upgraded into Storm"
-    detail: "New airframe, power system and onboard autonomy."
+    title: "The 2025 quadcopter becomes Storm"
+    detail: "New body, power system and onboard autonomy."
+  - date: "Sep 2025"
+    title: "Alamein International Air Show"
+    detail: "Second year at the air show."
+  - date: "2025–26"
+    title: "Techne Summit partnership"
+    detail: "Partnered with Techne Summit across 2025 and 2026."
   - date: "2026"
-    title: "Best Mission and 3rd overall at ICMTC"
+    title: "Organised MARVL"
+    detail: "Ran AAST's multirotor competition, the Multi-rotor Aerial Remote Vehicle League."
+  - date: "11–16 Jul 2026"
+    title: "3rd place and Best Mission Performance at ICMTC 2026"
     detail: "Storm's first competition."
-  - date: "2026"
-    title: "SUAS 2026"
-    detail: "Storm Response, our first SUAS entry."
-structure:
-  - id: software
-    name: Software
-    teams:
-      - id: computer-vision
-        name: Computer Vision
-        summary: >-
-          How Storm sees. Stitches aerial footage into high-resolution maps and
-          trains detection models that find a single target in a messy
-          landscape while the drone is still moving.
-        members: [yasmin-ahmed]
-      - id: control
-        name: Control & Navigation
-        summary: >-
-          The reflexes. Keeps Storm steady and on course, and makes the
-          split-second calls during takeoff, landing and everything in between.
-        members: [nour-allam, jana-el-wazzan, darine-elkilany, omar-abdrabo]
-  - id: mechanical-dept
-    name: Mechanical
-    teams:
-      - id: mechanical
-        name: Mechanical
-        summary: >-
-          The airframe and structure everything bolts onto: light enough to fly,
-          tough enough to survive landing after landing, and foldable to travel.
-        members: [salma]
-  - id: electrical-dept
-    name: Electrical
-    teams:
-      - id: electrical
-        name: Electrical
-        summary: >-
-          Power architecture for every subsystem: batteries sized correctly,
-          clean wiring, and current where it's needed the moment it's needed.
-  - id: outreach
-    name: Outreach
-    teams:
-      - id: web-dev
-        name: Web Dev
-        summary: "The website and the team's digital presence."
-        members: [yasmin-ahmed]
-      - id: media
-        name: Media
-        summary: "Documents flights, meetings and milestones."
-        members: [salma]
+# TODO: 2025-26 leadership and member roster (names need approval first).

@@ -3,9 +3,15 @@ label: "2023–24"
 current: false
 title: "Founding season"
 summary: >-
-  SkyXperts started at AAST with a handful of students who wanted to build real
-  autonomous aircraft instead of only reading about them.
+  SkyXperts was founded at AAST on 4 August 2023 by students who wanted to build
+  real autonomous aircraft instead of only reading about them. The first season
+  went into research, fundamentals and a 3D-printed F450 that taught the team
+  to build and fly.
+vehicles: [f450-trainer]
 milestones:
-  - date: "2023"
+  - date: "4 Aug 2023"
     title: "SkyXperts founded"
-    detail: "A small group of AAST students sets out to design, build and fly their own UAVs."
+    detail: "Founded at AAST Abo Qir, Alexandria. First season: research and fundamentals."
+  - date: "2023–24"
+    title: "First drone: a 3D-printed F450"
+    detail: "Printed in-house, then upgraded part by part with custom designs."

@@ -45,7 +45,7 @@ export default function HeroOverlay({
         }`}
       >
         <p className="eyebrow">
-          SUAS · USA
+          ICMTC 2026 · 3rd place
         </p>
         <h1 className="mt-4 text-6xl leading-[0.92] text-[#F5F5F7] sm:text-8xl">
           Storm

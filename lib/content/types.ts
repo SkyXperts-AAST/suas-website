@@ -3,6 +3,8 @@
 export type Person = {
   id: string;
   name: string;
+  /** Current role or affiliation, e.g. "Researcher, SRTA-City". */
+  title?: string;
   photo?: string;
   linkedin?: string;
 };
@@ -21,6 +23,10 @@ export type SubTeam = {
   name: string;
   summary?: string;
   lead?: Person;
+  /** Head not yet announced. */
+  leadTBA?: boolean;
+  /** Name of another department that co-owns this team. */
+  sharedWith?: string;
   members: Person[];
 };
 
@@ -29,15 +35,26 @@ export type Department = {
   name: string;
   summary?: string;
   lead?: Person;
+  leadTBA?: boolean;
   teams: SubTeam[];
 };
 
 export type Competition = {
   name: string;
   edition: string;
+  /** Full competition name, venue and dates. */
+  detail?: string;
   vehicle?: string;
   results: string[];
 };
+
+export type MediaClip = {
+  video: string;
+  poster?: string;
+  caption?: string;
+  shape?: "wide" | "square" | "vertical";
+};
+export type Photo = { src: string; alt: string };
 
 export type Milestone = { date: string; title: string; detail?: string };
 
@@ -52,8 +69,9 @@ export type Season = {
   vehicles: string[];
   sponsors: Sponsor[];
   leadership: SeasonRole[];
-  mentors: Person[];
+  mentors: SeasonRole[];
   structure: Department[];
+  media?: MediaClip;
   recruitment?: { open: boolean; note: string; url?: string };
 };
 
@@ -77,6 +95,8 @@ export const FLEET_STATUS_LABEL: Record<FleetStatus, string> = {
 export type Vehicle = {
   slug: string;
   name: string;
+  /** No official name yet; `name` is descriptive. */
+  nameTBA: boolean;
   kind: FleetKind;
   status: FleetStatus;
   seasons: string[];
@@ -88,6 +108,10 @@ export type Vehicle = {
   photo?: string;
   specs: { label: string; value: string }[];
   achievements: string[];
+  gallery: Photo[];
+  video?: { src: string; poster?: string; caption?: string; vertical?: boolean };
+  /** A side project built alongside this vehicle, e.g. its UGV. */
+  companion?: { name: string; summary: string; image?: string };
 };
 
 export type PostType = "build-log" | "story" | "recap" | "tutorial" | "announcement";

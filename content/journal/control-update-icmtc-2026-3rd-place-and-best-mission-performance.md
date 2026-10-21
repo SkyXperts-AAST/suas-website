@@ -5,7 +5,7 @@ type: build-log
 season: 2025-26
 team: control
 summary: "3rd overall and best mission performance at ICMTC 2026. Mission 1 flew 1.72 km across 9 waypoints with a mid-mission payload drop at 0.12 m altitude RMSE."
-tags: ["field-test", "SUAS 2026", "payload"]
+tags: ["field-test", "payload"]
 legacyId: ctrl-11
 ---
 

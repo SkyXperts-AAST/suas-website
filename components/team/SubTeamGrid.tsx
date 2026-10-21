@@ -38,7 +38,7 @@ export default function SubTeamGrid({ structure }: { structure: Department[] }) 
       {structure.map((dept, d) => {
         const cards: SubTeam[] = dept.teams.length
           ? dept.teams
-          : [{ id: dept.id, name: dept.name, summary: dept.summary, lead: dept.lead, members: [] }];
+          : [{ id: dept.id, name: dept.name, summary: dept.summary, lead: dept.lead, leadTBA: dept.leadTBA, members: [] }];
         return (
           <section key={dept.id} id={`dept-${dept.id}`} className="scroll-mt-28">
             <div className="flex flex-col gap-2 border-b border-white/10 pb-4 md:flex-row md:items-end md:justify-between">
@@ -47,6 +47,9 @@ export default function SubTeamGrid({ structure }: { structure: Department[] }) 
                   {String(d + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-2 text-3xl text-offwhite">{dept.name}</h3>
+                <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-offwhite/50">
+                  {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head to be announced" : null}
+                </p>
               </div>
               {dept.teams.length && dept.summary ? (
                 <p className="max-w-md text-sm text-offwhite/60 md:text-right">{dept.summary}</p>
@@ -57,13 +60,23 @@ export default function SubTeamGrid({ structure }: { structure: Department[] }) 
                 const Icon = iconFor(team.id);
                 return (
                   <Reveal as="li" key={team.id} delay={t * 90}>
-                    <article id={`team-${team.id}`} className="panel panel-hover group flex h-full scroll-mt-28 flex-col p-6">
+                    <article id={`team-${dept.id}-${team.id}`} className="panel panel-hover group flex h-full scroll-mt-28 flex-col p-6">
                       <span className="flex h-11 w-11 items-center justify-center rounded-sm border border-accent/30 bg-accent/10 text-accent transition group-hover:bg-accent group-hover:text-white">
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <h4 className="mt-5 text-xl text-offwhite">{team.name}</h4>
+                      {team.sharedWith ? (
+                        <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent">
+                          Joint with {team.sharedWith}
+                        </p>
+                      ) : null}
                       {team.summary ? (
                         <p className="mt-2 text-sm leading-relaxed text-offwhite/65">{team.summary}</p>
+                      ) : null}
+                      {team.leadTBA ? (
+                        <p className="mt-auto border-t border-white/10 pt-4 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-offwhite/45">
+                          Head to be announced
+                        </p>
                       ) : null}
                       {team.lead || team.members.length ? (
                         <div className="mt-auto border-t border-white/10 pt-4">

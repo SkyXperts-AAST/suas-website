@@ -6,11 +6,11 @@ seasons: [2025-26]
 tagline: "Autonomous heavy-lift quadcopter"
 summary: >-
   A carbon-fibre X-configuration quadcopter engineered for stability and
-  endurance under real flight conditions. Built in-house and tested at every
-  stage, Storm took Best Mission and 3rd overall at ICMTC 2026 and flew our
-  first SUAS entry.
+  endurance under real flight conditions. Storm is the 2025 competition
+  quadcopter rebuilt around a new body. It took 3rd overall and the Best
+  Mission Performance Award at ICMTC 2026.
 image: /drone-nobackground.png
-photo: /drone-hero.webp
+photo: /media/storm-field.webp
 specs:
   - { label: "Configuration", value: "Quadcopter, X-config" }
   - { label: "Dimensions", value: "85 × 85 × 35 cm" }
@@ -19,6 +19,20 @@ specs:
   - { label: "Endurance", value: "~30 min" }
   - { label: "Frame", value: "Carbon fibre / fibreglass sandwich composite" }
 achievements:
-  - "Best Mission Award, ICMTC 2026"
   - "3rd place overall, ICMTC 2026"
-  - "SUAS 2026 entry"
+  - "Best Mission Performance Award, ICMTC 2026"
+gallery:
+  - { src: /media/storm-mission.webp, alt: "Storm hovering over the ICMTC 2026 range with the UGV underneath" }
+  - { src: /media/storm-closeup.webp, alt: "Storm on the grass, camera and antennas visible" }
+  - { src: /media/storm-dusk.webp, alt: "Storm at dusk on the AAST field" }
+  - { src: /media/storm-sky.webp, alt: "Storm in flight against a clear sky" }
+video:
+  src: /media/storm-flight.mp4
+  poster: /media/storm-flight.jpg
+  caption: "Storm flying over the AAST Abo Qir field."
+companion:
+  name: "ICMTC 2026 UGV"
+  summary: >-
+    A small ground vehicle that Storm carries and deploys during the mission,
+    then drives on its own after release. Built alongside Storm as a side
+    project.

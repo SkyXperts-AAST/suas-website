@@ -1,4 +1,4 @@
-import type { Department, Person, SeasonRole } from "@/lib/content/types";
+import type { Department, SeasonRole } from "@/lib/content/types";
 
 /**
  * How the team is organised this season, drawn as a live wiring diagram:
@@ -13,7 +13,7 @@ export default function OrgChart({
   structure,
 }: {
   leadership: SeasonRole[];
-  mentors: Person[];
+  mentors: SeasonRole[];
   structure: Department[];
 }) {
   const cols = structure.length;
@@ -49,7 +49,7 @@ export default function OrgChart({
             />
             <Node title="Mentors" kicker="Advisory" dashed>
               <p className="mt-2 text-sm text-offwhite/70">
-                {mentors.length} mentors across every sub-team
+                Founder and {mentors.length - 1} mentors across every sub-team
               </p>
             </Node>
           </div>
@@ -76,7 +76,11 @@ export default function OrgChart({
                   style={{ animationDelay: `${i * 0.35}s` }}
                   aria-hidden="true"
                 />
-                <Node title={dept.name} kicker="Department" href={`#dept-${dept.id}`} />
+                <Node title={dept.name} kicker="Department" href={`#dept-${dept.id}`}>
+                  <p className="mt-1 text-xs text-offwhite/55">
+                    {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head: to be announced" : null}
+                  </p>
+                </Node>
                 {dept.teams.length ? (
                   <ul className="relative mt-0 flex w-full flex-col items-center">
                     {dept.teams.map((team, j) => (
@@ -87,10 +91,15 @@ export default function OrgChart({
                           aria-hidden="true"
                         />
                         <a
-                          href={`#team-${team.id}`}
+                          href={`#team-${dept.id}-${team.id}`}
                           className="w-full max-w-[13rem] rounded-sm border border-white/10 bg-navy/80 px-3 py-2 text-center text-[0.8125rem] text-offwhite/80 transition hover:border-accent/60 hover:text-offwhite"
                         >
                           {team.name}
+                          {team.sharedWith ? (
+                            <span className="mt-0.5 block font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-accent/80">
+                              Shared with {team.sharedWith}
+                            </span>
+                          ) : null}
                         </a>
                       </li>
                     ))}
@@ -108,16 +117,25 @@ export default function OrgChart({
         {structure.map((dept) => (
           <li key={dept.id} className="relative">
             <span aria-hidden="true" className="absolute -left-6 top-5 h-px w-6 bg-accent/40" />
-            <Node title={dept.name} kicker="Department" href={`#dept-${dept.id}`} full />
+            <Node title={dept.name} kicker="Department" href={`#dept-${dept.id}`} full>
+              <p className="mt-1 text-xs text-offwhite/55">
+                {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head: to be announced" : null}
+              </p>
+            </Node>
             {dept.teams.length ? (
               <ul className="mt-2 space-y-2 border-l border-white/10 pl-4">
                 {dept.teams.map((team) => (
                   <li key={team.id}>
                     <a
-                      href={`#team-${team.id}`}
+                      href={`#team-${dept.id}-${team.id}`}
                       className="block rounded-sm border border-white/10 bg-navy/80 px-3 py-2 text-sm text-offwhite/80"
                     >
                       {team.name}
+                      {team.sharedWith ? (
+                        <span className="ml-2 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-accent/80">
+                          Shared with {team.sharedWith}
+                        </span>
+                      ) : null}
                     </a>
                   </li>
                 ))}

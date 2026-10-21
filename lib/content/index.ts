@@ -53,6 +53,10 @@ function listFiles(dir: string, ext: string): string[] {
     .sort();
 }
 
+function isTBA(value: unknown): boolean {
+  return typeof value === "string" && value.trim().toUpperCase() === "TBA";
+}
+
 function str(value: unknown): string {
   return value === undefined || value === null ? "" : String(value);
 }
@@ -77,6 +81,7 @@ export function getPeople(): Map<string, Person> {
     map.set(id, {
       id,
       name: str(row.name),
+      title: row.title ? str(row.title) : undefined,
       photo: row.photo ? str(row.photo) : undefined,
       linkedin: row.linkedin ? str(row.linkedin) : undefined,
     });
@@ -138,12 +143,15 @@ export function getSeasons(): Season[] {
       id: str(dept.id),
       name: str(dept.name),
       summary: dept.summary ? str(dept.summary) : undefined,
-      lead: dept.lead ? person(str(dept.lead), file) : undefined,
+      lead: isTBA(dept.lead) || !dept.lead ? undefined : person(str(dept.lead), file),
+      leadTBA: isTBA(dept.lead),
       teams: ((dept.teams as Record<string, unknown>[]) ?? []).map((team) => ({
         id: str(team.id),
         name: str(team.name),
         summary: team.summary ? str(team.summary) : undefined,
-        lead: team.lead ? person(str(team.lead), file) : undefined,
+        lead: isTBA(team.lead) || !team.lead ? undefined : person(str(team.lead), file),
+        leadTBA: isTBA(team.lead),
+        sharedWith: team.sharedWith ? str(team.sharedWith) : undefined,
         members: strList(team.members).map((pid) => person(pid, file)),
       })),
     }));
@@ -153,6 +161,7 @@ export function getSeasons(): Season[] {
     ).map((row) => ({
       name: str(row.name),
       edition: str(row.edition),
+      detail: row.detail ? str(row.detail) : undefined,
       vehicle: row.vehicle ? str(row.vehicle) : undefined,
       results: strList(row.results),
     }));
@@ -180,7 +189,24 @@ export function getSeasons(): Season[] {
       vehicles: strList(raw.vehicles),
       sponsors,
       leadership,
-      mentors: strList(raw.mentors).map((pid) => person(pid, file)),
+      mentors: ((raw.mentors as unknown[]) ?? []).map((row) =>
+        typeof row === "string"
+          ? { person: person(row, file), role: "Mentor" }
+          : {
+              person: person(str((row as Record<string, unknown>).person), file),
+              role: str((row as Record<string, unknown>).role) || "Mentor",
+            },
+      ),
+      media: raw.media
+        ? {
+            video: str((raw.media as Record<string, unknown>).video),
+            poster: str((raw.media as Record<string, unknown>).poster) || undefined,
+            caption: str((raw.media as Record<string, unknown>).caption) || undefined,
+            shape: (["wide", "square", "vertical"] as const).find(
+              (x) => x === (raw.media as Record<string, unknown>).shape,
+            ),
+          }
+        : undefined,
       structure,
       recruitment: recruitment
         ? { open: recruitment.open === true, note: str(recruitment.note), url: recruitment.url ? str(recruitment.url) : undefined }
@@ -211,7 +237,7 @@ export function getSeason(id: string): Season | undefined {
 export function peopleInSeason(season: Season): Set<string> {
   const ids = new Set<string>();
   season.leadership.forEach((r) => ids.add(r.person.id));
-  season.mentors.forEach((p) => ids.add(p.id));
+  season.mentors.forEach((r) => ids.add(r.person.id));
   season.structure.forEach((d) => {
     if (d.lead) ids.add(d.lead.id);
     d.teams.forEach((t) => {
@@ -252,9 +278,12 @@ export function getFleet(): Vehicle[] {
     const status = str(raw.status) as FleetStatus;
     if (!KINDS.includes(kind)) fail(file, `\`kind\` must be one of ${KINDS.join(", ")}.`);
     if (!STATUSES.includes(status)) fail(file, `\`status\` must be one of ${STATUSES.join(", ")}.`);
+    const video = raw.video as Record<string, unknown> | undefined;
+    const companion = raw.companion as Record<string, unknown> | undefined;
     return {
       slug,
       name: str(raw.name),
+      nameTBA: raw.nameTBA === true,
       kind,
       status,
       seasons: strList(raw.seasons),
@@ -267,6 +296,16 @@ export function getFleet(): Vehicle[] {
         value: str(s.value),
       })),
       achievements: strList(raw.achievements),
+      gallery: ((raw.gallery as Record<string, unknown>[]) ?? []).map((g) => ({
+        src: str(g.src),
+        alt: str(g.alt),
+      })),
+      video: video
+        ? { src: str(video.src), poster: str(video.poster) || undefined, caption: str(video.caption) || undefined, vertical: video.vertical === true }
+        : undefined,
+      companion: companion
+        ? { name: str(companion.name), summary: str(companion.summary), image: str(companion.image) || undefined }
+        : undefined,
     } satisfies Vehicle;
   });
   const order = (v: Vehicle) => STATUSES.indexOf(v.status);

@@ -1,0 +1,14 @@
+slug: f450-trainer
+name: "F450"
+nameTBA: true
+kind: multirotor
+status: active
+seasons: [2023-24]
+tagline: "Our first drone, and still our test and training platform"
+summary: >-
+  The first drone SkyXperts built: a 3D-printed F450 that the team has kept
+  improving with its own custom parts. Today it is the main testing drone and
+  the aircraft new members learn to pilot on.
+specs:
+  - { label: "Frame", value: "F450, 3D-printed" }
+  - { label: "Role", value: "Testing and pilot training" }

@@ -1,15 +1,28 @@
 # Every sponsor, past and present. Seasons list which sponsors backed them.
-- id: makers
-  name: Makers Electronics
-  logo: /sponsor-makers.png
-  url: https://makerselectronics.com/
-
 - id: pcbway
   name: PCBWay
-  logo: /sponsor-pcbway.webp
+  logo: /sponsors/pcbway.webp
   url: https://www.pcbway.com
+
+- id: makers
+  name: Makers Electronics
+  logo: /sponsors/makers.png
+  url: https://makerselectronics.com/
+
+- id: dassault
+  name: Dassault Systèmes SOLIDWORKS
+  logo: /sponsors/solidworks.png
+  url: https://www.solidworks.com/
+
+- id: simnet
+  name: Simnet
+  logo: /sponsors/simnet.png
+
+- id: arabtech
+  name: Arabtech
+  logo: /sponsors/arabtech.png
 
 - id: mad-components
   name: MAD Components
-  logo: /sponsor-mad-components.png
+  logo: /sponsors/mad-components.png
   url: https://mad-motor.com/

@@ -1,6 +1,16 @@
-# Every person who has been part of SkyXperts.
+# Every person shown on the site. Only add someone once their name is
+# approved for publication.
 # id: lowercase-with-dashes, unique. Seasons reference people by id.
-# photo: path under public/ (optional). linkedin: full URL (optional).
+# photo: path under public/ (optional). title: current role or affiliation,
+# shown under their name (optional). linkedin: full URL (optional).
+#
+# TODO: add approved member names and portraits (portraits are in
+# F:\editing\SkyX\newseasonedit\Website Media\Team Members).
+
+- id: mohamed-ragab
+  name: Mohamed Ragab
+  title: MSc, Universität Klagenfurt
+  photo: /team/leadership/Mentors/Mohammed-Ragab.jpg
 
 - id: yehia-alaa
   name: Yehia Alaa
@@ -9,16 +19,17 @@
 - id: nour-allam
   name: Nour Allam
 
-- id: mohammed-ragab
-  name: Mohammed Ragab
-  photo: /team/leadership/Mentors/Mohammed-Ragab.jpg
+- id: darine-elkilany
+  name: Darine Elkilany
 
 - id: abdelrahman-hikal
   name: Abdelrahman Hikal
+  title: UAV Mechanical Engineer, Tornex
   photo: /team/leadership/Mentors/Abdelrahman-Hikal.png
 
 - id: ahmed-el-sayed
   name: Ahmed El Sayed
+  title: Infrastructure Specialist, IBM
   photo: /team/leadership/Mentors/Ahmed-El-Sayed.jpg
 
 - id: aya-ragab
@@ -31,35 +42,26 @@
 
 - id: fares-fathy
   name: Fares Fathy
+  title: Researcher, SRTA-City
   photo: /team/leadership/Mentors/Fares-Fathy.jpg
 
 - id: moustafa-adly
   name: Moustafa Adly
+  title: Tornex
   photo: /team/leadership/Mentors/Moustafa-Adly.jpg
 
 - id: osama-hesham
   name: Osama Hesham
+  title: PhD, University of Tennessee, Knoxville
   photo: /team/leadership/Mentors/Osama-Hesham.jpg
 
-- id: yehia-sharawy
-  name: Yehia Sharawy
+- id: yehia-shaarawy
+  name: Yehia Shaarawy
+  title: Tornex
   photo: /team/leadership/Mentors/Yehia-Sharawy.jpeg
 
-- id: youssef-mehana
-  name: Youssef Mehana
-  photo: /team/leadership/Mentors/Youssef-Mehana.jpg
-
-- id: yasmin-ahmed
-  name: Yasmin Ahmed
-
-- id: jana-el-wazzan
-  name: Jana El Wazzan
-
-- id: darine-elkilany
-  name: Darine Elkilany
-
-- id: omar-abdrabo
-  name: Omar Abdrabo
-
-- id: salma
-  name: Salma
+# TODO: confirm before re-adding. Hidden while it's unclear whether this is
+# the "Youssef" who should not appear on the site.
+# - id: youssef-mehana
+#   name: Youssef Mehana
+#   photo: /team/leadership/Mentors/Youssef-Mehana.jpg

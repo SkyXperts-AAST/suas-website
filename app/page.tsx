@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Hero from "@/components/home/Hero";
+import LoopVideo from "@/components/media/LoopVideo";
 import PostCard from "@/components/ui/PostCard";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -20,7 +21,7 @@ const PROCESS = [
   { title: "Design", text: "Requirements from the mission rules, then CAD, simulation and FEA before anything is cut." },
   { title: "Build", text: "Airframe, power, avionics and software made in-house, each owned by a sub-team." },
   { title: "Test", text: "Bench tests, tethered runs, then flight after flight until the data agrees with the model." },
-  { title: "Compete", text: "ICMTC and SUAS, where the work is judged against the best student teams." },
+  { title: "Compete", text: "Competitions like ICMTC, where the work is judged against other university teams." },
 ];
 
 export default function Home() {
@@ -71,11 +72,12 @@ export default function Home() {
               We build. <span className="text-accent">We don&apos;t just study.</span>
             </h2>
             <p className="mt-6 leading-relaxed text-offwhite/70 md:text-lg">
-              SkyXperts started at AAST with a handful of students who wanted to
-              build real autonomous aircraft instead of reading about them. We&apos;re
-              a full team now, covering avionics, structures, vision and control,
-              designing and flying vehicles from scratch. Competitions are where
-              we prove the work.
+              SkyXperts started in 2023 at AAST Abo Qir, Alexandria, with a handful
+              of students who wanted to build real autonomous aircraft instead of
+              reading about them. We&apos;re a full team now, working out of Abo Qir
+              and AAST El Alamein, covering structures, electronics, vision and
+              control, and designing and flying vehicles from scratch. Competitions
+              are where we prove the work.
             </p>
             <Link href="/team" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-offwhite hover:text-accent">
               Meet the team <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -142,6 +144,34 @@ export default function Home() {
           </div>
         </section>
       ) : null}
+
+      {/* In the field */}
+      <section className="px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading eyebrow="In the field" title="Where the work" accent="gets tested" />
+          <div className="mt-12 grid gap-4 md:grid-cols-3 md:grid-rows-2">
+            <Reveal className="md:col-span-2 md:row-span-2">
+              <LoopVideo
+                src="/media/storm-flight.mp4"
+                poster="/media/storm-flight.jpg"
+                aspect="aspect-video md:aspect-auto md:h-full"
+                className="h-full [&>div]:h-full"
+              />
+            </Reveal>
+            <Reveal delay={90} className="relative aspect-video overflow-hidden rounded-md border border-white/10 md:aspect-auto">
+              <Image src="/media/storm-mission.webp" alt="Storm flying low over a desert runway at ICMTC 2026" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            </Reveal>
+            <Reveal delay={180} className="relative aspect-video overflow-hidden rounded-md border border-white/10 md:aspect-auto">
+              <Image src="/media/icmtc25-flag.webp" alt="The team with the AAST flag at ICMTC 2025" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            </Reveal>
+          </div>
+          <p className="mt-6 text-center">
+            <Link href="/gallery" className="font-mono text-xs uppercase tracking-[0.16em] text-accent hover:underline">
+              Open the gallery →
+            </Link>
+          </p>
+        </div>
+      </section>
 
       {/* Track record */}
       {competitions.length ? (

@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import LoopVideo from "@/components/media/LoopVideo";
+import PhotoGrid from "@/components/media/PhotoGrid";
 import PostCard from "@/components/ui/PostCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { getFleet, getPosts, getSeasons, getVehicle, toSummary } from "@/lib/content";
@@ -53,6 +55,9 @@ export default async function VehiclePage({ params }: Props) {
               </span>
             </p>
             <h1 className="mt-4 text-6xl text-offwhite md:text-7xl">{vehicle.name}</h1>
+            {vehicle.nameTBA ? (
+              <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-offwhite/45">Name to be announced</p>
+            ) : null}
             <p className="mt-2 text-lg text-offwhite/60">{vehicle.tagline}</p>
             <p className="mt-6 max-w-xl leading-relaxed text-offwhite/75">{vehicle.summary}</p>
             <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-offwhite/45">
@@ -96,6 +101,45 @@ export default async function VehiclePage({ params }: Props) {
               </div>
             ))}
           </dl>
+        </section>
+      ) : null}
+
+      {vehicle.video ? (
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <SectionHeading eyebrow="Footage" title="In the air" align="left" />
+          <LoopVideo
+            className={vehicle.video.vertical ? "mt-8 max-w-sm" : "mt-8"}
+            src={vehicle.video.src}
+            poster={vehicle.video.poster}
+            caption={vehicle.video.caption}
+            aspect={vehicle.video.vertical ? "aspect-[9/16]" : "aspect-video"}
+          />
+        </section>
+      ) : null}
+
+      {vehicle.gallery.length ? (
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <SectionHeading eyebrow="Gallery" title="Photos" align="left" />
+          <div className="mt-8">
+            <PhotoGrid photos={vehicle.gallery} />
+          </div>
+        </section>
+      ) : null}
+
+      {vehicle.companion ? (
+        <section className="mx-auto max-w-6xl px-6 py-16">
+          <div className="panel bg-grid grid gap-8 overflow-hidden p-8 md:grid-cols-[1fr_1fr] md:items-center md:p-12">
+            <div>
+              <p className="eyebrow">Side project</p>
+              <h2 className="mt-4 text-3xl text-offwhite md:text-4xl">{vehicle.companion.name}</h2>
+              <p className="mt-4 leading-relaxed text-offwhite/70">{vehicle.companion.summary}</p>
+            </div>
+            {vehicle.companion.image ? (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-white">
+                <Image src={vehicle.companion.image} alt={vehicle.companion.name} fill sizes="(max-width: 768px) 100vw, 40vw" className="object-contain p-4" />
+              </div>
+            ) : null}
+          </div>
         </section>
       ) : null}
 

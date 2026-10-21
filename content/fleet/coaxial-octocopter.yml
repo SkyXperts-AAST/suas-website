@@ -1,0 +1,14 @@
+slug: coaxial-octocopter
+name: "Coaxial Octocopter"
+nameTBA: true
+kind: multirotor
+status: active
+seasons: [2024-25]
+tagline: "Testbed for new frames and materials"
+summary: >-
+  Eight motors on four arms in an X frame, with two motors facing each other
+  on every arm. Built mainly for testing and prototyping new frames and
+  materials.
+specs:
+  - { label: "Configuration", value: "Coaxial X8" }
+  - { label: "Motors", value: "8, two per arm" }

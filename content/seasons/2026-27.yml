@@ -4,72 +4,105 @@ current: true
 title: "Building on Storm"
 summary: >-
   A new intake joins through the training phase while the core team builds on
-  what Storm proved at ICMTC and SUAS.
-sponsors: [makers, pcbway, mad-components]
+  Storm and Sonic and starts on a VTOL.
+sponsors: [pcbway, makers, dassault, simnet, arabtech]
 recruitment:
   open: false
   note: "Applications for 2026–27 are closed. The next intake opens at the start of next season."
 milestones:
-  - date: "2026"
-    title: "New intake and training phase"
-    detail: "Interviews, orientation and a hands-on training phase for new members."
+  - date: "Aug 2026"
+    title: "Orientation and training phase"
+    detail: "New members start with fundamentals, tools and safety before joining a sub-team."
+  - date: "Sep 2026"
+    title: "Alamein International Air Show"
+    detail: "Third year at the air show."
+  - date: "2026–27"
+    title: "VTOL in development"
+    detail: "A new VTOL aircraft is being built in-house."
 leadership:
   - person: yehia-alaa
     role: Team Leader
   - person: nour-allam
     role: Software Head
-# Mentors listed here appear as active mentors on the Team page.
-# Remove someone from this list when they stop mentoring; they stay in the
-# Legacy pages of the seasons they were part of.
+# Mentors listed here appear on the Team page. Use { person, role } to give
+# someone a role other than "Mentor".
 mentors:
-  - mohammed-ragab
-  - abdelrahman-hikal
+  - { person: mohamed-ragab, role: Founder & President }
   - ahmed-el-sayed
+  - fares-fathy
+  - abdelrahman-hikal
+  - moustafa-adly
+  - yehia-shaarawy
+  - osama-hesham
   - aya-ragab
   - belal-abo-el-khier
-  - fares-fathy
-  - moustafa-adly
-  - osama-hesham
-  - yehia-sharawy
-  - youssef-mehana
+# lead: a person id, or TBA. sharedWith: another department that co-owns a team.
+# TODO: member rosters per sub-team (names need approval first).
 structure:
   - id: software
     name: Software
-    summary: "Perception, autonomy and the tools that tie them together."
+    lead: nour-allam
+    summary: "Flight software, perception and the team's own tools."
     teams:
+      - id: control
+        name: Control
+        lead: darine-elkilany
+        summary: >-
+          Flight controller setup, PID tuning, waypoint navigation and
+          ground-station operation.
       - id: computer-vision
         name: Computer Vision
         summary: >-
-          Mapping and detection: turning raw aerial footage into maps and
-          finding targets from the air in real time.
-      - id: control
-        name: Control
-        summary: >-
-          Flight software and autonomy logic: stable flight, navigation and
-          mission behaviour.
+          Detection and vision models: the code that finds a target from the
+          air, on board, in real time.
       - id: web-dev
         name: Website Development
-        summary: "skyxperts.com, the build log and the team's digital tools."
+        summary: "This website and the team's digital tools."
   - id: electrical
     name: Electrical
+    lead: TBA
     summary: "Everything that powers, computes and communicates on board."
     teams:
-      - id: power-propulsion
-        name: Power & Propulsion
-        summary: "Batteries, ESCs, motors and props, sized and tested as one system."
-      - id: flight-systems
-        name: Flight Systems & Computing
-        summary: "Flight controller, companion computer, sensors and wiring."
-      - id: rf-comms
-        name: RF, Telemetry & Comms
-        summary: "Radio links, telemetry and video downlink between aircraft and ground."
+      - id: electronics
+        name: Electronics
+        summary: "Power distribution, wiring and the boards that carry it."
+      - id: systems
+        name: Systems
+        summary: "Integrating every electrical subsystem into one working aircraft."
+      - id: embedded-systems
+        name: Embedded Systems
+        summary: "Firmware and microcontrollers for payloads and onboard hardware."
+      - id: propulsion
+        name: Propulsion System
+        sharedWith: Mechanical
+        summary: >-
+          Motor, ESC, propeller and battery selection matched to mission weight
+          and endurance. Owned jointly with Mechanical.
   - id: mechanical
     name: Mechanical
-    summary: >-
-      Airframe design, manufacturing, assembly and structural testing.
+    lead: TBA
+    summary: "Everything that has to survive the flight it is asked to make."
+    teams:
+      - id: aerodynamics
+        name: Aerodynamics
+        summary: >-
+          Wing, tail and airframe shaping to improve lift and drag on
+          fixed-wing and multirotor builds.
+      - id: structural-design
+        name: Structural Design
+        summary: >-
+          Fuselages, frames and mounts: strong enough to fly, light enough to
+          lift.
+      - id: propulsion
+        name: Propulsion System
+        sharedWith: Electrical
+        summary: >-
+          Thrust, mounting and airflow for the propulsion set. Owned jointly
+          with Electrical.
   - id: marketing
     name: Marketing
-    summary: "How the team is seen, funded and remembered."
+    lead: TBA
+    summary: "Funding, partnerships and the team's public voice."
     teams:
       - id: sponsorship-media
         name: Sponsorship & Social Media

@@ -1,0 +1,10 @@
+slug: vtol
+name: "VTOL"
+nameTBA: true
+kind: vtol
+status: development
+seasons: [2026-27]
+tagline: "In development"
+summary: >-
+  A vertical take-off and landing aircraft currently being built in-house.
+photo: /media/vtol.webp

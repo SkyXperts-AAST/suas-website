@@ -92,12 +92,12 @@ export default function TeamPage() {
             eyebrow="Advisory"
             title="Mentors"
             align="left"
-            intro="Former members who still give their time: reviewing designs, running training and helping each sub-team when it gets stuck."
+            intro="The founder and former members who still give their time: reviewing designs, running training and helping each sub-team when it gets stuck."
           />
           <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-            {season.mentors.map((p, i) => (
-              <Reveal as="li" key={p.id} delay={(i % 5) * 70}>
-                <PersonCard person={p} role="Mentor" />
+            {season.mentors.map((m, i) => (
+              <Reveal as="li" key={m.person.id} delay={(i % 5) * 70}>
+                <PersonCard person={m.person} role={m.role} />
               </Reveal>
             ))}
           </ul>

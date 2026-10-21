@@ -25,8 +25,16 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain p-8 transition duration-700 group-hover:scale-[1.04]"
           />
+        ) : vehicle.photo ? (
+          <Image
+            src={vehicle.photo}
+            alt={vehicle.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition duration-700 group-hover:scale-[1.04]"
+          />
         ) : (
-          <span className="font-display text-6xl text-offwhite/10">{vehicle.name}</span>
+          <span className="px-6 text-center font-display text-4xl text-offwhite/10">{vehicle.name}</span>
         )}
         <span className="chip absolute left-4 top-4 bg-navy/70">
           <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[vehicle.status]}`} aria-hidden="true" />
@@ -42,6 +50,9 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             {vehicle.name}
           </Link>
         </h3>
+        {vehicle.nameTBA ? (
+          <p className="mt-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-offwhite/40">Name to be announced</p>
+        ) : null}
         <p className="mt-1 text-sm text-offwhite/60">{vehicle.tagline}</p>
         {keySpecs.length ? (
           <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-white/10 pt-4">

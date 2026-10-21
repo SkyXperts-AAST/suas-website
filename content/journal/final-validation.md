@@ -7,7 +7,7 @@ team: mechanical
 summary: "Repeated flight tests confirmed structural integrity under real conditions, closing out the mechanical development cycle ahead of competition."
 cover: "/blogs/mechanical/mech-validation/body-1.jpg"
 coverAlt: "Storm during final validation flight test"
-tags: ["validation", "SUAS 2026"]
+tags: ["validation"]
 legacyId: mech-11
 ---
 

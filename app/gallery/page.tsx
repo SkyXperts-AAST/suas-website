@@ -5,7 +5,7 @@ import { GALLERY_ITEMS } from "@/lib/gallery/items";
 export const metadata: Metadata = {
   title: "Gallery | SkyXperts",
   description:
-    "Scroll through SkyXperts SUAS build moments, field tests, and competition preparation.",
+    "Field tests, competitions and the people behind SkyXperts.",
 };
 
 export default function GalleryPage() {

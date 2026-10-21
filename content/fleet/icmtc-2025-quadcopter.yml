@@ -1,0 +1,36 @@
+slug: icmtc-2025-quadcopter
+name: "ICMTC 2025 Quadcopter"
+kind: multirotor
+status: retired
+seasons: [2024-25]
+tagline: "Our first competition airframe, and the body Storm grew from"
+summary: >-
+  The team's first in-house competition airframe: a carbon-fibre X-quad with
+  16-inch propellers, an OAK-D camera and a Raspberry Pi 5 with a Coral TPU for
+  onboard flag detection. It reached 150 m and placed 2nd at ICMTC 2025, then
+  was rebuilt around a new body to become Storm.
+photo: /media/quad25-ugv.webp
+specs:
+  - { label: "Configuration", value: "Quadcopter, X-config" }
+  - { label: "Design weight", value: "7.47 kg with payload" }
+  - { label: "Propellers", value: "16 in" }
+  - { label: "Frame", value: "2 mm carbon fibre, nylon-CF printed parts" }
+  - { label: "Vision", value: "OAK-D, YOLOv8 on Coral TPU" }
+  - { label: "Peak altitude", value: "150 m (ICMTC 2025)" }
+achievements:
+  - "2nd place, ICMTC 2025"
+gallery:
+  - { src: /media/quad25-render.webp, alt: "CAD render of the 2025 quadcopter with the UGV underneath" }
+  - { src: /media/quad25-ugv-2.webp, alt: "The 2025 quadcopter with its UGV mounted underneath" }
+  - { src: /media/icmtc25-team.webp, alt: "The team at ICMTC 2025" }
+video:
+  src: /media/icmtc25-pov.mp4
+  poster: /media/icmtc25-pov.jpg
+  caption: "Onboard view from the ICMTC 2025 mission."
+companion:
+  name: "ICMTC 2025 UGV"
+  summary: >-
+    A two-wheel ground vehicle carried under the drone and lowered on a
+    motorised winch or released after landing, then driven autonomously. It
+    used its own motor torque to right itself after an imperfect landing.
+  image: /media/ugv25-render.webp

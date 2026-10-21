@@ -1,20 +1,33 @@
 id: 2024-25
 label: "2024–25"
 current: false
-title: "First airframe"
+title: "First competition, first podium"
 summary: >-
-  The team designed and built its first multirotor and took it to ICMTC, where
-  it placed second.
-vehicles: [first-multirotor]
+  The team flew its first drone, designed its first custom quadcopter and took
+  it to its first competition. At ICMTC 2025 it climbed to 150 m and placed
+  second, carrying a small UGV built alongside it.
+vehicles: [icmtc-2025-quadcopter, coaxial-octocopter, fixed-wing-trainer]
 competitions:
   - name: "ICMTC"
     edition: "2025"
-    vehicle: first-multirotor
+    detail: "9th International Competition of the Military Technical College, UAV Challenge (UAVC-8), Cairo"
+    vehicle: icmtc-2025-quadcopter
     results: ["2nd place"]
+media:
+  video: /media/icmtc25-150m.mp4
+  poster: /media/icmtc25-150m.jpg
+  caption: "ICMTC 2025: the climb to 150 m."
+  shape: vertical
 milestones:
-  - date: "2024–25"
-    title: "First drone built and flown"
-    detail: "Our first in-house multirotor goes from CAD to flight."
-  - date: "2025"
-    title: "2nd place at ICMTC"
-    detail: "First competition outing, finishing second."
+  - date: "1 Aug 2024"
+    title: "First drone flies"
+    detail: "From CAD model to a flying airframe."
+  - date: "Sep 2024"
+    title: "Alamein International Air Show"
+    detail: "First of three appearances at the air show."
+  - date: "Jan 2025"
+    title: "Coaxial octocopter testbed"
+    detail: "Eight motors on four arms, built to try new frames and materials."
+  - date: "24 Jul 2025"
+    title: "2nd place at ICMTC 2025"
+    detail: "First competition entered, first podium taken. Peak altitude 150 m."

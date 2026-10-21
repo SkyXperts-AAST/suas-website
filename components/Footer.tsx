@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa6";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa6";
 import Logo from "@/components/Logo";
 
 const NAV_LINKS = [
@@ -19,6 +19,12 @@ const SOCIAL = [
     label: "Instagram",
     icon: FaInstagram,
     hoverClass: "hover:border-[#E4405F]/40 hover:text-[#E4405F]",
+  },
+  {
+    href: "https://www.facebook.com/p/SkyXperts-UAVs-Club-100093202966212/",
+    label: "Facebook",
+    icon: FaFacebook,
+    hoverClass: "hover:border-[#1877F2]/40 hover:text-[#1877F2]",
   },
   {
     href: "https://tiktok.com/@skyxperts",
@@ -64,8 +70,8 @@ export default function Footer() {
             />
           </Link>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-offwhite/60">
-            A student team at AAST designing, building, and flying autonomous
-            aircraft from the ground up.
+            A student team at AAST Abo Qir, Alexandria, designing, building and
+            flying autonomous aircraft from the ground up.
           </p>
           <p className="mt-3 font-display text-xs font-semibold tracking-wide text-offwhite/40">
             AAST · 2026

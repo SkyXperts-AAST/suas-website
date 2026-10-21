@@ -6,7 +6,7 @@ import { PageHero, PageSection, PageShell } from "@/components/layout/PageShell"
 export const metadata: Metadata = {
   title: "Contact | SkyXperts",
   description:
-    "Reach the SkyXperts SUAS team — email a lead directly or send us a message.",
+    "Reach the SkyXperts team: email a lead directly or send us a message.",
 };
 
 export default function ContactPage() {

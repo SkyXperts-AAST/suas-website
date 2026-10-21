@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LoopVideo from "@/components/media/LoopVideo";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { PageShell } from "@/components/layout/PageShell";
@@ -61,27 +62,54 @@ export default async function SeasonPage({ params }: Props) {
         </div>
       </header>
 
-      {season.competitions.length ? (
+      {season.competitions.length || season.media ? (
         <section className="mx-auto max-w-6xl px-6 py-16">
-          <SectionHeading eyebrow="Results" title="Competitions" align="left" />
-          <ul className="mt-8 grid gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 md:grid-cols-2">
-            {season.competitions.map((c) => (
-              <li key={`${c.name}-${c.edition}`} className="bg-navy p-6 md:p-8">
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">{c.edition}</p>
-                <p className="mt-2 font-display text-3xl text-offwhite">{c.name}</p>
-                <ul className="mt-4 space-y-1 text-offwhite/75">
-                  {c.results.map((r) => (
-                    <li key={r}>{r}</li>
-                  ))}
-                </ul>
-                {c.vehicle && getVehicle(c.vehicle) ? (
-                  <Link href={`/fleet/${c.vehicle}`} className="mt-4 inline-block font-mono text-xs uppercase tracking-[0.14em] text-offwhite/50 hover:text-accent">
-                    Flown with {getVehicle(c.vehicle)!.name} →
-                  </Link>
-                ) : null}
-              </li>
-            ))}
-          </ul>
+          <div
+            className={
+              season.media
+                ? `grid gap-10 md:items-start ${season.media.shape === "wide" ? "" : "md:grid-cols-[1.5fr_1fr]"}`
+                : ""
+            }
+          >
+            <div>
+              <SectionHeading eyebrow="Results" title="Competitions" align="left" />
+              <ul className={`mt-8 grid gap-px overflow-hidden rounded-md border border-white/10 bg-white/10 ${season.media ? "" : "md:grid-cols-2"}`}>
+                {season.competitions.map((c) => (
+                  <li key={`${c.name}-${c.edition}`} className="bg-navy p-6 md:p-8">
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">{c.edition}</p>
+                    <p className="mt-2 font-display text-3xl text-offwhite">{c.name}</p>
+                    {c.detail ? <p className="mt-2 text-sm text-offwhite/55">{c.detail}</p> : null}
+                    <ul className="mt-4 space-y-1 text-offwhite/75">
+                      {c.results.map((r) => (
+                        <li key={r}>{r}</li>
+                      ))}
+                    </ul>
+                    {c.vehicle && getVehicle(c.vehicle) ? (
+                      <Link href={`/fleet/${c.vehicle}`} className="mt-4 inline-block font-mono text-xs uppercase tracking-[0.14em] text-offwhite/50 hover:text-accent">
+                        Flown with {getVehicle(c.vehicle)!.name} →
+                      </Link>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {season.media ? (
+              <LoopVideo
+                src={season.media.video}
+                poster={season.media.poster}
+                caption={season.media.caption ? `${season.media.caption} Tap for sound.` : "Tap for sound."}
+                controls
+                className="mx-auto w-full max-w-sm md:max-w-none"
+                aspect={
+                  season.media.shape === "vertical"
+                    ? "aspect-[9/16]"
+                    : season.media.shape === "square"
+                      ? "aspect-square"
+                      : "aspect-video"
+                }
+              />
+            ) : null}
+          </div>
         </section>
       ) : null}
 
@@ -107,9 +135,9 @@ export default async function SeasonPage({ params }: Props) {
                 <PersonCard person={r.person} role={r.role} />
               </li>
             ))}
-            {season.mentors.map((p) => (
-              <li key={`m-${p.id}`}>
-                <PersonCard person={p} role="Mentor" />
+            {season.mentors.map((m) => (
+              <li key={`m-${m.person.id}`}>
+                <PersonCard person={m.person} role={m.role} />
               </li>
             ))}
           </ul>

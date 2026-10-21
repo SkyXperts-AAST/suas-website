@@ -36,7 +36,8 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "SkyXperts",
-  description: "SkyXperts SUAS team website",
+  description:
+    "SkyXperts UAVs Club at AAST: a student team designing, building and flying autonomous aircraft.",
   icons: {
     icon: "/skyxperts-x.png",
     apple: "/skyxperts-x.png",

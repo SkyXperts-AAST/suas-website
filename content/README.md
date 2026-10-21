@@ -30,7 +30,7 @@ authors: [fares-fathy] # optional, ids from people.yml
 summary: "One or two sentences shown on cards and in link previews."
 cover: "/journal/night-flight/cover.jpg"   # optional, image under public/
 coverAlt: "Storm hovering at dusk"
-tags: ["night ops", "SUAS 2027"]
+tags: ["night ops", "ICMTC 2027"]
 ---
 
 Normal Markdown goes here. Paragraphs, **bold**, lists, links, and images:

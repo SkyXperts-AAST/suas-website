@@ -1,0 +1,16 @@
+slug: fixed-wing-trainer
+name: "Fixed-wing"
+nameTBA: true
+kind: fixed-wing
+status: active
+seasons: [2024-25]
+tagline: "High-wing fixed-wing"
+summary: >-
+  A high-wing fixed-wing used to build the team's fixed-wing flying and
+  design experience.
+photo: /media/fixedwing.webp
+video:
+  src: /media/fixedwing.mp4
+  poster: /media/fixedwing.jpg
+  caption: "On the AAST field."
+  vertical: true

@@ -18,6 +18,12 @@ export const metadata: Metadata = {
 
 export default function TeamPage() {
   const season = getCurrentSeason();
+  const facultyAdvisor = season.mentors.find(
+    (mentor) => mentor.role === "Faculty Advisor",
+  );
+  const mentors = season.mentors.filter(
+    (mentor) => mentor.role !== "Faculty Advisor",
+  );
 
   return (
     <PageShell>
@@ -94,13 +100,27 @@ export default function TeamPage() {
             align="left"
             intro="The founder and former members who still give their time: reviewing designs, running training and helping each sub-team when it gets stuck."
           />
-          <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-            {season.mentors.map((m, i) => (
-              <Reveal as="li" key={m.person.id} delay={(i % 5) * 70}>
-                <PersonCard person={m.person} role={m.role} />
-              </Reveal>
-            ))}
-          </ul>
+          {facultyAdvisor ? (
+            <Reveal className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+              <div className="col-span-2 flex justify-center sm:col-span-3 lg:col-span-5">
+                <div className="w-[calc((100%_-_1.25rem)_/_2)] sm:w-[calc((100%_-_2.5rem)_/_3)] lg:w-[calc((100%_-_5rem)_/_5)]">
+                  <PersonCard
+                    person={facultyAdvisor.person}
+                    role={facultyAdvisor.role}
+                  />
+                </div>
+              </div>
+            </Reveal>
+          ) : null}
+          {mentors.length ? (
+            <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+              {mentors.map((m, i) => (
+                <Reveal as="li" key={m.person.id} delay={(i % 5) * 70}>
+                  <PersonCard person={m.person} role={m.role} />
+                </Reveal>
+              ))}
+            </ul>
+          ) : null}
         </PageSection>
       ) : null}
 

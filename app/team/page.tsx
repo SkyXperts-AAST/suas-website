@@ -61,7 +61,7 @@ export default function TeamPage() {
         <Reveal className="mt-12">
           <OrgChart
             leadership={season.leadership}
-            mentors={season.mentors}
+            mentors={mentors}
             structure={season.structure}
           />
         </Reveal>
@@ -79,6 +79,22 @@ export default function TeamPage() {
         </div>
       </PageSection>
 
+      {facultyAdvisor ? (
+        <PageSection>
+          <SectionHeading
+            eyebrow="Advisory"
+            title="Faculty Advisor"
+            align="left"
+          />
+          <Reveal className="mx-auto mt-10 w-full max-w-[220px]">
+            <PersonCard
+              person={facultyAdvisor.person}
+              role={facultyAdvisor.role}
+            />
+          </Reveal>
+        </PageSection>
+      ) : null}
+
       {season.leadership.length ? (
         <PageSection>
           <SectionHeading eyebrow="Board" title="Leadership" align="left" />
@@ -92,7 +108,7 @@ export default function TeamPage() {
         </PageSection>
       ) : null}
 
-      {season.mentors.length ? (
+      {mentors.length ? (
         <PageSection>
           <SectionHeading
             eyebrow="Advisory"
@@ -100,27 +116,13 @@ export default function TeamPage() {
             align="left"
             intro="The founder and former members who still give their time: reviewing designs, running training and helping each sub-team when it gets stuck."
           />
-          {facultyAdvisor ? (
-            <Reveal className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-              <div className="col-span-2 flex justify-center sm:col-span-3 lg:col-span-5">
-                <div className="w-[calc((100%_-_1.25rem)_/_2)] sm:w-[calc((100%_-_2.5rem)_/_3)] lg:w-[calc((100%_-_5rem)_/_5)]">
-                  <PersonCard
-                    person={facultyAdvisor.person}
-                    role={facultyAdvisor.role}
-                  />
-                </div>
-              </div>
-            </Reveal>
-          ) : null}
-          {mentors.length ? (
-            <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
-              {mentors.map((m, i) => (
-                <Reveal as="li" key={m.person.id} delay={(i % 5) * 70}>
-                  <PersonCard person={m.person} role={m.role} />
-                </Reveal>
-              ))}
-            </ul>
-          ) : null}
+          <ul className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+            {mentors.map((m, i) => (
+              <Reveal as="li" key={m.person.id} delay={(i % 5) * 70}>
+                <PersonCard person={m.person} role={m.role} />
+              </Reveal>
+            ))}
+          </ul>
         </PageSection>
       ) : null}
 

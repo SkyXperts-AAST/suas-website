@@ -27,7 +27,8 @@ leadership:
 # Mentors listed here appear on the Team page. Use { person, role } to give
 # someone a role other than "Mentor".
 mentors:
-  - { person: mohamed-ragab, role: Founder & President }
+  - { person: prof-mohamed-abou-el-azm, role: Faculty Advisor }
+  - { person: mohamed-ragab, role: Founder }
   - ahmed-el-sayed
   - fares-fathy
   - abdelrahman-hikal

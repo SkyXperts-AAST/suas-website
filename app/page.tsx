@@ -46,8 +46,23 @@ export default function Home() {
     <main className="bg-navy">
       <Hero />
 
+      <section
+        aria-label="Arab Academy for Science, Technology and Maritime Transport"
+        className="flex justify-center px-6 py-8 sm:py-10"
+      >
+        <div className="relative h-48 w-48 sm:h-60 sm:w-60 md:h-64 md:w-64">
+          <Image
+            src="/aast-logo-white.webp"
+            alt="Arab Academy for Science, Technology and Maritime Transport"
+            fill
+            sizes="(max-width: 640px) 192px, (max-width: 768px) 240px, 256px"
+            className="object-contain"
+          />
+        </div>
+      </section>
+
       {/* At a glance */}
-      <section className="border-b border-white/10">
+      <section className="border-y border-white/10">
         <dl className="mx-auto grid max-w-6xl grid-cols-2 md:grid-cols-4">
           {stats.map((s, i) => (
             <div

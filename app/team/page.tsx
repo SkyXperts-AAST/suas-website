@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { PageSection, PageShell } from "@/components/layout/PageShell";
@@ -27,20 +26,8 @@ export default function TeamPage() {
 
   return (
     <PageShell>
-      {/* Hero: full team photo, title on the bottom edge */}
-      <section className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-navy sm:aspect-[16/9] md:max-h-[720px]">
-        <Image
-          src="/team/groupPhoto.jpg"
-          alt="The SkyXperts team"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent"
-        />
+      {/* Hero: title on the bottom edge */}
+      <section className="relative flex min-h-[28rem] w-full items-end overflow-hidden border-b border-white/10 bg-navy sm:min-h-[36rem] md:min-h-[42rem]">
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-6 pb-8 md:pb-12">
           <p className="eyebrow">{season.label} season</p>
           <h1 className="mt-3 text-5xl text-offwhite md:text-7xl">Our Team</h1>

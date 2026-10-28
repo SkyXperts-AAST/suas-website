@@ -48,16 +48,27 @@ export default function Home() {
 
       <section
         aria-label="Arab Academy for Science, Technology and Maritime Transport"
-        className="flex justify-center px-6 py-8 sm:py-10"
+        className="px-6 py-14 md:py-20"
       >
-        <div className="relative h-48 w-48 sm:h-60 sm:w-60 md:h-64 md:w-64">
-          <Image
-            src="/aast-logo-white.webp"
-            alt="Arab Academy for Science, Technology and Maritime Transport"
-            fill
-            sizes="(max-width: 640px) 192px, (max-width: 768px) 240px, 256px"
-            className="object-contain"
-          />
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center md:flex-row md:gap-12 md:text-left">
+          {/* The logo file has a caption baked in under the emblem; crop to the
+              emblem and set the name in the site's own type instead. */}
+          <div className="relative aspect-[520/330] w-64 shrink-0 sm:w-72 md:w-80">
+            <Image
+              src="/aast-logo-white.webp"
+              alt=""
+              fill
+              sizes="(max-width: 640px) 256px, (max-width: 768px) 288px, 320px"
+              className="object-cover object-top"
+            />
+          </div>
+          <div className="hidden h-32 w-px shrink-0 bg-white/15 md:block" />
+          <div>
+            <p className="eyebrow">Home institution</p>
+            <p className="mt-4 font-display text-3xl leading-tight text-offwhite sm:text-4xl">
+              Arab Academy for Science, Technology &amp; Maritime Transport
+            </p>
+          </div>
         </div>
       </section>
 

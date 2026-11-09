@@ -24,6 +24,20 @@ leadership:
     role: Team Leader
   - person: nour-allam
     role: Software Head
+  - person: darine-ahmed
+    role: Control Head
+  - person: omar-el-gedawy
+    role: Computer Vision Head
+  - person: abdelrahman-ashraf
+    role: Communication Head
+  - person: yasmin-ahmed
+    role: Website Development Head
+  - person: rahma-marei
+    role: Electrical Head
+  - person: ashraqat-hesham
+    role: Mechanical Head
+  - person: adham
+    role: Marketing Head
 # Mentors listed here appear on the Team page. Use { person, role } to give
 # someone a role other than "Mentor".
 mentors:
@@ -47,21 +61,29 @@ structure:
     teams:
       - id: control
         name: Control
-        lead: darine-elkilany
+        lead: darine-ahmed
         summary: >-
           Flight controller setup, PID tuning, waypoint navigation and
           ground-station operation.
       - id: computer-vision
         name: Computer Vision
+        lead: omar-el-gedawy
         summary: >-
           Detection and vision models: the code that finds a target from the
           air, on board, in real time.
       - id: web-dev
         name: Website Development
+        lead: yasmin-ahmed
         summary: "This website and the team's digital tools."
+      - id: communication
+        name: Communication
+        lead: abdelrahman-ashraf
+        summary: >-
+          Brings Control and Computer Vision together, integrating flight
+          control and visual perception so their work functions as one system.
   - id: electrical
     name: Electrical
-    lead: TBA
+    lead: rahma-marei
     summary: "Everything that powers, computes and communicates on board."
     teams:
       - id: electronics
@@ -81,7 +103,7 @@ structure:
           and endurance. Owned jointly with Mechanical.
   - id: mechanical
     name: Mechanical
-    lead: TBA
+    lead: ashraqat-hesham
     summary: "Everything that has to survive the flight it is asked to make."
     teams:
       - id: aerodynamics
@@ -102,7 +124,7 @@ structure:
           with Electrical.
   - id: marketing
     name: Marketing
-    lead: TBA
+    lead: adham
     summary: "Funding, partnerships and the team's public voice."
     teams:
       - id: sponsorship-media

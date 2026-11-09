@@ -14,8 +14,8 @@ photo: /media/storm-field.webp
 specs:
   - { label: "Configuration", value: "Quadcopter, X-config" }
   - { label: "Dimensions", value: "85 × 85 × 35 cm" }
-  - { label: "All-up weight", value: "6.75 kg" }
-  - { label: "Max thrust-to-weight", value: "4.09 : 1" }
+  - { label: "All-up weight", value: "5 kg" }
+  - { label: "Max thrust-to-weight", value: "5.52 : 1" }
   - { label: "Endurance", value: "~30 min" }
   - { label: "Frame", value: "Carbon fibre / fibreglass sandwich composite" }
 achievements:

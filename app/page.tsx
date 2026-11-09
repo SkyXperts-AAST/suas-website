@@ -258,6 +258,18 @@ export default function Home() {
       {/* Sponsors */}
       {sponsors.length ? (
         <section className="border-t border-white/10 py-16 md:py-20">
+          <div className="mx-auto mb-16 flex max-w-4xl flex-col items-center justify-center gap-6 px-6 text-center">
+            <h2 className="font-display text-4xl text-offwhite sm:text-5xl">
+              College of Engineering
+            </h2>
+            <Image
+              src="/sponsors/ric-logo-white.png"
+              alt="Regional Informatics Center logo"
+              width={355}
+              height={412}
+              className="h-72 w-auto sm:h-80"
+            />
+          </div>
           <p className="text-center">
             <span className="eyebrow-center">Backed by</span>
           </p>

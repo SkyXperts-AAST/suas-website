@@ -23,7 +23,6 @@ export default function TeamPage() {
   const mentors = season.mentors.filter(
     (mentor) => mentor.role !== "Faculty Advisor",
   );
-
   return (
     <PageShell>
       {/* Hero: title on the bottom edge */}
@@ -47,7 +46,9 @@ export default function TeamPage() {
         />
         <Reveal className="mt-12">
           <OrgChart
-            leadership={season.leadership}
+            leadership={season.leadership.filter(
+              (role) => role.role === "Team Leader" || role.role === "Software Head",
+            )}
             mentors={mentors}
             structure={season.structure}
           />

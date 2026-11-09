@@ -13,8 +13,8 @@ import SpecGrid, { SPEC_RULE } from "./SpecGrid";
 const DIMENSIONS = { value: "85×85×35 cm", label: "Dimensions (L x W x H)" };
 
 const STATS: ReadonlyArray<{ value: string; label: string }> = [
-  { value: "6.75 kg", label: "All-up weight" },
-  { value: "4.09:1", label: "Max T/W ratio" },
+  { value: "5 kg", label: "All-up weight" },
+  { value: "5.52:1", label: "Max T/W ratio" },
   { value: "~30 min", label: "Flight endurance" },
 ];
 

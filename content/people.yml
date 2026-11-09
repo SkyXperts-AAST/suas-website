@@ -23,8 +23,29 @@
 - id: nour-allam
   name: Nour Allam
 
+- id: rahma-marei
+  name: Rahma Marei
+
+- id: ashraqat-hesham
+  name: Ashraqat Hesham
+
+- id: adham
+  name: Adham
+
 - id: darine-elkilany
   name: Darine Elkilany
+
+- id: darine-ahmed
+  name: Darine Ahmed
+
+- id: omar-el-gedawy
+  name: Omar El Gedawy
+
+- id: abdelrahman-ashraf
+  name: Abdelrahman Ashraf
+
+- id: yasmin-ahmed
+  name: Yasmin Ahmed
 
 - id: abdelrahman-hikal
   name: Abdelrahman Hikal

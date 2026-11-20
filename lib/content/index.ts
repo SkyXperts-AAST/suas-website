@@ -145,6 +145,7 @@ export function getSeasons(): Season[] {
       summary: dept.summary ? str(dept.summary) : undefined,
       lead: isTBA(dept.lead) || !dept.lead ? undefined : person(str(dept.lead), file),
       leadTBA: isTBA(dept.lead),
+      coLead: dept.coLead ? person(str(dept.coLead), file) : undefined,
       teams: ((dept.teams as Record<string, unknown>[]) ?? []).map((team) => ({
         id: str(team.id),
         name: str(team.name),

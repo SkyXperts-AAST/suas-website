@@ -34,6 +34,8 @@ leadership:
     role: Website Development Head
   - person: rahma-marei
     role: Electrical Head
+  - person: ahd-atta
+    role: Electrical Co-Head
   - person: ashraqat-hesham
     role: Mechanical Head
   - person: adham
@@ -84,6 +86,7 @@ structure:
   - id: electrical
     name: Electrical
     lead: rahma-marei
+    coLead: ahd-atta
     summary: "Everything that powers, computes and communicates on board."
     teams:
       - id: electronics

@@ -50,6 +50,11 @@ export default function SubTeamGrid({ structure }: { structure: Department[] }) 
                 <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-offwhite/50">
                   {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head to be announced" : null}
                 </p>
+                {dept.coLead ? (
+                  <p className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-offwhite/50">
+                    Co-Head: {dept.coLead.name}
+                  </p>
+                ) : null}
               </div>
               {dept.teams.length && dept.summary ? (
                 <p className="max-w-md text-sm text-offwhite/60 md:text-right">{dept.summary}</p>

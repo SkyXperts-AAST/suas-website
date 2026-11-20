@@ -36,6 +36,7 @@ export type Department = {
   summary?: string;
   lead?: Person;
   leadTBA?: boolean;
+  coLead?: Person;
   teams: SubTeam[];
 };
 

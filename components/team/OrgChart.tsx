@@ -80,6 +80,9 @@ export default function OrgChart({
                   <p className="mt-1 text-xs text-offwhite/55">
                     {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head: to be announced" : null}
                   </p>
+                  {dept.coLead ? (
+                    <p className="mt-1 text-xs text-offwhite/55">Co-Head: {dept.coLead.name}</p>
+                  ) : null}
                 </Node>
                 {dept.teams.length ? (
                   <ul className="relative mt-0 flex w-full flex-col items-center">
@@ -121,6 +124,9 @@ export default function OrgChart({
               <p className="mt-1 text-xs text-offwhite/55">
                 {dept.lead ? `Head: ${dept.lead.name}` : dept.leadTBA ? "Head: to be announced" : null}
               </p>
+              {dept.coLead ? (
+                <p className="mt-1 text-xs text-offwhite/55">Co-Head: {dept.coLead.name}</p>
+              ) : null}
             </Node>
             {dept.teams.length ? (
               <ul className="mt-2 space-y-2 border-l border-white/10 pl-4">
